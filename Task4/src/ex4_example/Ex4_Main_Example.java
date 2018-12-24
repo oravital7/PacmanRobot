@@ -21,7 +21,7 @@ import Robot.Play;
 public class Ex4_Main_Example {
 	public static void main(String[] args) {
 		// 1) Create a "play" from a file (attached to Ex4)
-		String file_name = "data/Ex4_OOP_example1.csv";
+		String file_name = "data/Ex4_OOP_example7.csv";
 		Play play1 = new Play(file_name);
 		
 		// 2) Set your ID's - of all the group members
@@ -54,6 +54,8 @@ public class Ex4_Main_Example {
 			play1.rotate(36*i); 
 			System.out.println("***** "+i+"******");
 			
+			
+
 		// 7.2) get the current score of the game
 			String info = play1.getStatistics();
 			System.out.println(info);
