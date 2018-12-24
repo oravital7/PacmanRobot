@@ -23,7 +23,7 @@ public class Ex4_Main_Example {
 		// 1) Create a "play" from a file (attached to Ex4)
 		String file_name = "data/Ex4_OOP_example1.csv";
 		Play play1 = new Play(file_name);
-
+		
 		// 2) Set your ID's - of all the group members
 		play1.setIDs(1111,2222,3333);
 		
@@ -36,9 +36,11 @@ public class Ex4_Main_Example {
 		for(int i=0;i<board_data.size();i++) {
 			System.out.println(board_data.get(i));
 		}
+		
+		
 		System.out.println();
 		System.out.println("Init Player Location should be set using the bounding box info");
-		
+
 		// 5) Set the "player" init location - should be a valid location
 		play1.setInitLocation(32.1040,35.2061);
 		
