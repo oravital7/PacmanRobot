@@ -4,10 +4,9 @@ import Geom.Point3D;
 
 public class Blocks {
 
-	int ID;
-	Point3D p1;
-	Point3D p2;
-	double attribute;
+	private int ID;
+	private Point3D p1, p2;
+	private double attribute;
 
 	public Blocks (int ID, Point3D p1, Point3D p2, double attribute)
 	{

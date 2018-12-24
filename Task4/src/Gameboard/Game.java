@@ -14,7 +14,7 @@ public class Game {
 	private ArrayList<Pacman> pacmanArray;
 	private ArrayList<Blocks> blocksArray;
 	private ArrayList<Ghost> ghostArray;
-	private int maxIdPacman, maxIdFruit;
+	private int maxIdPacman, maxIdFruit, maxIdBlocks, maxIdGhost;
 	private Me me;
 	private PacmanComperator compare = new PacmanComperator();
 
@@ -24,7 +24,7 @@ public class Game {
 		pacmanArray = new ArrayList<Pacman>();
 		blocksArray = new ArrayList<Blocks>();
 		ghostArray = new ArrayList<Ghost>();
-		maxIdPacman=maxIdFruit=0;
+		maxIdGhost=maxIdBlocks=maxIdPacman=maxIdFruit=0;
 	}
 	
 	public void setMe (Me me)
@@ -34,7 +34,6 @@ public class Game {
 	
 	
 	public Me getMe() {
-		
 		return me;
 	}
 
@@ -59,6 +58,12 @@ public class Game {
 		if(f.getId()>maxIdFruit) maxIdFruit = f.getId();
 		fruitArray.add(f);
 	}
+	
+	public void addBlock(Blocks b)
+	{
+		if(b.getID() > maxIdBlocks) maxIdBlocks = b.getID();
+		blocksArray.add(b);
+	}
 /**
  * 
  * @param p - pacman
@@ -68,6 +73,12 @@ public class Game {
 		if(p.getId()>maxIdPacman) maxIdPacman = p.getId();
 		pacmanArray.add(p);
 		pacmanArray.sort(compare);
+	}
+	
+	public void addGhost(Ghost g)
+	{
+		if(g.getId() > maxIdGhost) maxIdGhost = g.getId();
+		ghostArray.add(g);
 	}
 /**
  * 

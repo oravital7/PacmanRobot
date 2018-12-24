@@ -17,8 +17,8 @@ import Geom.Point3D;
 public class Map {
 	
 	// final coords frame	
-	private final Point3D max = new Point3D(32.10569 ,35.21236);
-	private final Point3D min = new Point3D(32.1019, 35.20238);
+	private  Point3D max;
+	private  Point3D min;
 
 
 	private BufferedImage myImage;
@@ -28,6 +28,8 @@ public class Map {
 	 * to create only one
 	 */
 	private Map() {
+		min = new Point3D(32.1019, 35.20238);
+		max = new Point3D(32.10569 ,35.21236);
 		
 		try {
 			myImage = ImageIO.read(new File("Icon\\Ariel1.png")); // Get map from path
@@ -153,7 +155,25 @@ public class Map {
 		double result[] = calc.azimuth_elevation_dist(a, b); // Save the result
 		return result[0];
 	}
+	
+	public void setNewBounds(String s) {
+		String make[] =s.split(",");
+		
+		try {
+			double xMin = Double.parseDouble(make[2]);
+			double yMin = Double.parseDouble(make[3]);
+			min = new Point3D(xMin,yMin);
+			
+			double xMax = Double.parseDouble(make[5]);
+			double yMax = Double.parseDouble(make[6]);
+			max = new Point3D(xMax,yMax);
 
+		}
+		catch(NumberFormatException e) {
+			throw new RuntimeException("Unable read new Bounds!!! please try again");
+		}
+		
+	}
 
 	/**
 	 * Return our image map
