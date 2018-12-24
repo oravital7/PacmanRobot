@@ -19,7 +19,7 @@ public class Csv2Elem {
 	private Game game;
 	private ArrayList<ArrayList<String>> arr;
 
-	public Csv2Elem(File entry) {
+	public Csv2Elem(ArrayList<String> data) {
 		CsvReader  r = new CsvReader(entry.toString()); // Call to CsvReader class with correct File Path 
 		rows = r.get_rows();
 		arr = r.get_Array(); // Save arr
