@@ -2,6 +2,8 @@ package Gameboard;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import Geom.Point3D;
 /**
  * 
  * @author Dana Mor and Or Avital
@@ -11,8 +13,9 @@ public class Game {
 	private ArrayList<Fruit> fruitArray;
 	private ArrayList<Pacman> pacmanArray;
 	private ArrayList<Blocks> blocksArray;
+	private ArrayList<Ghost> ghostArray;
 	private int maxIdPacman, maxIdFruit;
-
+	private Me me;
 	private PacmanComperator compare = new PacmanComperator();
 
 	public Game()
@@ -20,7 +23,31 @@ public class Game {
 		fruitArray = new ArrayList<Fruit>();
 		pacmanArray = new ArrayList<Pacman>();
 		blocksArray = new ArrayList<Blocks>();
+		ghostArray = new ArrayList<Ghost>();
 		maxIdPacman=maxIdFruit=0;
+	}
+	
+	public void setMe (Me me)
+	{
+		this.me=me;
+	}
+	
+	
+	public Me getMe() {
+		
+		return me;
+	}
+
+	public ArrayList<Blocks> getBlocksArray() {
+		return blocksArray;
+	}
+
+	public ArrayList<Ghost> getGhostArray() {
+		return ghostArray;
+	}
+
+	public void setMaxIdFruit(int maxIdFruit) {
+		this.maxIdFruit = maxIdFruit;
 	}
 
 	/**
