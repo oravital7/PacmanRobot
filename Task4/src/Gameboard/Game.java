@@ -10,6 +10,7 @@ import java.util.Iterator;
 public class Game {
 	private ArrayList<Fruit> fruitArray;
 	private ArrayList<Pacman> pacmanArray;
+	private ArrayList<Blocks> blocksArray;
 	private int maxIdPacman, maxIdFruit;
 
 	private PacmanComperator compare = new PacmanComperator();
@@ -18,6 +19,7 @@ public class Game {
 	{
 		fruitArray = new ArrayList<Fruit>();
 		pacmanArray = new ArrayList<Pacman>();
+		blocksArray = new ArrayList<Blocks>();
 		maxIdPacman=maxIdFruit=0;
 	}
 
