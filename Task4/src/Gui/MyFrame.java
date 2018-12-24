@@ -1,25 +1,22 @@
 package Gui;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.geom.GeneralPath;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -30,7 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Coords.Map;
 
@@ -38,17 +34,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import File_format.Robot2Element;
 import File_format.Game2csv;
-import File_format.Game2kml;
+import Gameboard.Blocks;
 import Gameboard.Fruit;
 import Gameboard.Game;
 import Gameboard.Pacman;
 import Geom.Point3D;
-import Roads.PathData;
-import Roads.ShortestPathAlgo;
+import Robot.Play;
 
 /**
  * This class is responsible for the graphical
@@ -70,7 +64,8 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 	private JRadioButton PacmanRadio, FruitRadio, mouseRadio; // Radio button to switch between Pacman, Fruit and Mouse
 	private boolean running; // If is in animation progress avoid to do another commands
 	private AliveThread AT;
-	private Orien rotate;	
+	private Orien rotate;
+	private Play robot; 
 
 	public static void main(String[] args) {
 		new  MyFrame();
@@ -148,7 +143,7 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 		group.add(FruitRadio);
 
 		start();
-
+		
 		setSize(1200, 800);
 		setLocation(300, 50);
 		setVisible(true);
@@ -158,6 +153,10 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 	}
 
 	private void start() {
+		robot = new Play("data/Ex4_OOP_example9.csv");
+		Robot2Element next = new Robot2Element(robot.getBoard());
+		game = next.MakeElements();
+		
 		try {
 			fruitImg = ImageIO.read(new File("Icon\\Fruit.png"));
 			pacmanImg = ImageIO.read(new File("Icon\\pacman.png"));
@@ -206,29 +205,29 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 			return;
 		}
 
-		if(o==open) {
-			JFileChooser fc = new JFileChooser(); 
-			fc.setDialogTitle("Select a csv file only");
-			// Only csv file accepted
-			FileNameExtensionFilter restrict = new FileNameExtensionFilter(".csv", "csv"); 
-			fc.setFileFilter(restrict);
-			int s = fc.showOpenDialog(null); // Open a file Chooser dialog
-			if(s == JFileChooser.APPROVE_OPTION) { // The user select a csv file if doesn't do nothing
-				File f = fc.getSelectedFile();
-				Robot2Element cs = new Robot2Element(f);
-				AT.clear = false;
-				running = false;
-				game = cs.MakeElements(); // Translate a csv file into a new game
-				repaint();
-			}
-			return;
-		}
+//		if(o==open) {
+//			JFileChooser fc = new JFileChooser(); 
+//			fc.setDialogTitle("Select a csv file only");
+//			// Only csv file accepted
+//			FileNameExtensionFilter restrict = new FileNameExtensionFilter(".csv", "csv"); 
+//			fc.setFileFilter(restrict);
+//			int s = fc.showOpenDialog(null); // Open a file Chooser dialog
+//			if(s == JFileChooser.APPROVE_OPTION) { // The user select a csv file if doesn't do nothing
+//				File f = fc.getSelectedFile();
+//				Robot2Element cs = new Robot2Element(f);
+//				AT.clear = false;
+//				running = false;
+//				game = cs.MakeElements(); // Translate a csv file into a new game
+//				repaint();
+//			}
+//			return;
+//		}
 
 		if(o==savecsv || o==savekml) {
 			String name = JOptionPane.showInputDialog("Enter File name","Game"); // Ask user for file name
 			if(game!=null && name!=null) {
 				if(o==savecsv) new Game2csv(game,name); // csv commend so call to game2csv to create that
-				else new Game2kml(game,name); // else is a kml command
+//				else new Game2kml(game,name); // else is a kml command
 				// Send a successful message
 				JOptionPane.showMessageDialog(this,
 						"File '"+name+"' saved in source folder",
@@ -276,42 +275,41 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 						"Error while Playing - please enter Pacmans ",
 						JOptionPane.ERROR_MESSAGE);
 
-			else if(game != null) { // Ok let's start the game
-				running = true; // we are in progress
-				ShortestPathAlgo shp = new ShortestPathAlgo(game); // Calculate how much we could do for the shortest routes
-				String TotalTime = shp.getRunningTimeS();
-				String totalWeightOfFruit = ""+shp.getTotalWeight();
-				String TotalResult = shp.getTotalResult();
-
-				repaint();
-
-				String[] speedGame = { "RealTime", "Fast X16", "Faster X32","Cool!(recommend) X64" };
-				int selected =  JOptionPane.showOptionDialog(this,
-						"Just select the game speed you prefer (real time \n"
-								+ "may be slow and exhausting)",
-								"Game speed",
-								JOptionPane.YES_NO_CANCEL_OPTION,
-								JOptionPane.QUESTION_MESSAGE, new ImageIcon("Icon\\pacman.png"),
-								speedGame, speedGame[0]);
-
-				switch(selected) {
-				case 1 : selected = 6;
-				break;
-
-				case 2 : selected = 3;
-				break;
-
-				case 3 : selected = 1;
-				break;
-
-				default : selected = 100;
-				}
-
-				AT.setNewThreads(game, TotalTime,totalWeightOfFruit,TotalResult); // Create a new "Watch Thread"
-				for(Pacman pac : game.getPacmanArray()) { // Open a new thread for each pacman
-					new Animate(this,pac,AT,selected).start();
-				}
-			}
+//			else if(game != null) { // Ok let's start the game
+//				running = true; // we are in progress
+//				String TotalTime = shp.getRunningTimeS();
+//				String totalWeightOfFruit = ""+shp.getTotalWeight();
+//				String TotalResult = shp.getTotalResult();
+//
+//				repaint();
+//
+//				String[] speedGame = { "RealTime", "Fast X16", "Faster X32","Cool!(recommend) X64" };
+//				int selected =  JOptionPane.showOptionDialog(this,
+//						"Just select the game speed you prefer (real time \n"
+//								+ "may be slow and exhausting)",
+//								"Game speed",
+//								JOptionPane.YES_NO_CANCEL_OPTION,
+//								JOptionPane.QUESTION_MESSAGE, new ImageIcon("Icon\\pacman.png"),
+//								speedGame, speedGame[0]);
+//
+//				switch(selected) {
+//				case 1 : selected = 6;
+//				break;
+//
+//				case 2 : selected = 3;
+//				break;
+//
+//				case 3 : selected = 1;
+//				break;
+//
+//				default : selected = 100;
+//				}
+//
+//				AT.setNewThreads(game, TotalTime,totalWeightOfFruit,TotalResult); // Create a new "Watch Thread"
+//				for(Pacman pac : game.getPacmanArray()) { // Open a new thread for each pacman
+//					new Animate(this,pac,AT,selected).start();
+//				}
+//			}
 
 		}
 	}
@@ -340,6 +338,8 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 				// Get the current game elements arrays
 				ArrayList<Pacman> pacArr = game.getPacmanArray();
 				ArrayList<Fruit> fruitArr =  game.getFruitArray();
+				ArrayList<Blocks> blocksArr = game.getBlocksArray();
+				
 				Point3D p;
 				// Ratio for scaling the Pacmans and fruit animation
 				double ratioH = getHeight()/600.0;
@@ -351,33 +351,24 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 						g.drawImage(fruitImg, (int)p.x(), (int)p.y(), (int)(17*ratioW), (int)(17*ratioH), this);
 					}
 				}
+				
+				for(Blocks b : blocksArr) {
+					System.out.println(b);
+					Point3D p1 = map.coord2pixel(b.getP1(), getWidth(), getHeight());
+					Point3D p2 = map.coord2pixel(b.getP2(), getWidth(), getHeight());
+					Rectangle rect= new Rectangle((int)p1.x(),(int)p1.y());
+					rect.add(p2.x(),p2.y());
+					
+					g.fillRect(rect.x, rect.y, rect.width, rect.height);
+				}
 
-				for(Pacman pacman : pacArr) { // Move all pacman array and draw the lines points if exists for each
-					Iterator<PathData> it = pacman.getPath().getIterator();
-					PathData pd =it.next();
-					p = pd.getPoint();
-					p = map.coord2pixel(p, getWidth(), getHeight()); // get the current path point and convert to pixel
-
-					GeneralPath path = new GeneralPath(); 
-					path.moveTo(p.x(),p.y()); // Start point initialization
-
-					while(it.hasNext()) { // Move all the points path for that pacman
-						pd = it.next();
-						p = pd.getPoint();
-						p = map.coord2pixel(p, getWidth(), getHeight()); // convert to pixels
-						path.lineTo(p.x(), p.y()); // Add it to path deawing
-					}
-					g2d.setColor(pd.getColor());
-					g2d.setStroke(new BasicStroke(2.5f));
-					g2d.draw(path); // Finally draw path object
-				}				
 
 				for(Pacman pacman : pacArr) { // Move all pacman array and draw them
 
 					p = map.coord2pixel(pacman.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
-					AffineTransformOp op = rotate.getTransform(pacman.getOrien()); // Save a transform rotate
+//					AffineTransformOp op = rotate.getTransform(pacman.getOrien()); // Save a transform rotate
 					// Draw with a correct rotate
-					g2d.drawImage(op.filter(pacmanImg, null), (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
+					g2d.drawImage(pacmanImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 
 				}
 			}

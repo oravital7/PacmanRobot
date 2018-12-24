@@ -1,5 +1,8 @@
 package Gameboard;
 
+import java.awt.Rectangle;
+
+import Coords.Map;
 import Geom.Point3D;
 
 public class Blocks {
@@ -10,6 +13,7 @@ public class Blocks {
 
 	public Blocks (int ID, Point3D p1, Point3D p2, double attribute)
 	{
+		Map map = Map.map();
 		this.ID=ID;
 		this.p1=p1;
 		this.p2=p2;

@@ -39,7 +39,7 @@ public class Robot2Element {
 			double y = convert2Double(make[3]);
 			double z = convert2Double(make[4]);
 			double attribute = convert2Double(make[5]);
-
+			
 			Point3D p = new Point3D(x,y,z);
 
 
