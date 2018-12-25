@@ -141,4 +141,12 @@ public class Game {
 		return maxIdFruit;
 	}
 	
+	public void clear()
+	{
+		fruitArray.removeAll(fruitArray);
+		pacmanArray.removeAll(pacmanArray);
+		blocksArray.removeAll(blocksArray);
+		ghostArray.removeAll(ghostArray);
+		maxIdGhost=maxIdBlocks=maxIdPacman=maxIdFruit=0;
+	}
 }

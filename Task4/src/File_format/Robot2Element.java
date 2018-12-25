@@ -18,11 +18,9 @@ import Geom.Point3D;
  */
 public class Robot2Element {
 	private Game game;
-	private ArrayList<String> data;
 
-	public Robot2Element(ArrayList<String> data) {
-		this.data = data;
-		game = new Game();
+	public Robot2Element(Game game) {
+		this.game = game;
 	}
 
 	/**
@@ -31,7 +29,8 @@ public class Robot2Element {
 	 * 
 	 * @return
 	 */
-	public Game MakeElements() {
+	public void MakeElements(ArrayList<String> data) {
+		game.clear();
 		for(String s : data) {
 			String make[] = s.split(",");
 			int id = convert2Int(make[1]);
@@ -82,7 +81,6 @@ public class Robot2Element {
 			}
 
 		}
-		return game;
 	}
 
 	/**

@@ -150,7 +150,7 @@ public class Map {
 	 * @param maxY
 	 * @return
 	 */
-	public double anglePoints(Point3D a, Point3D b,int maxX, int maxY) {
+	public double anglePoints(Point3D a, Point3D b) {
 		MyCoords calc = MyCoords.myCoords(); 
 		double result[] = calc.azimuth_elevation_dist(a, b); // Save the result
 		return result[0];

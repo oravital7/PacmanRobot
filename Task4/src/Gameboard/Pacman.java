@@ -8,11 +8,13 @@ import Geom.Point3D;
  *
  */
 public class Pacman extends Character {
-	private double radius; 
+	private double radius, orientation; 
 
 	public Pacman(Point3D point, int id, double speed, double radius) {
 		super(point,id,speed);
 		this.radius = radius; // Radius eaten
+		this.orientation = 0; // Start orientation with 0 angle
+
 	}
 	
 	/**
@@ -27,6 +29,14 @@ public class Pacman extends Character {
 
 	public double getRadius() {
 		return radius;
+	}
+	
+	public double getOrien() {
+		return orientation;
+	}
+
+	public void setOrien(double angle) {
+		orientation = angle;
 	}
 
 }
