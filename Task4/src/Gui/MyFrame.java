@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -27,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Coords.Map;
 
@@ -40,6 +42,8 @@ import File_format.Game2csv;
 import Gameboard.Blocks;
 import Gameboard.Fruit;
 import Gameboard.Game;
+import Gameboard.Ghost;
+import Gameboard.Me;
 import Gameboard.Pacman;
 import Geom.Point3D;
 import Robot.Play;
@@ -58,14 +62,14 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 	private JMenuItem open,savekml,savecsv,clear,play,Exit;
 	private Game game; // Current game
 	private Map map; // Our image & converts
-	private BufferedImage pacmanImg, fruitImg;
+	private BufferedImage pacmanImg, fruitImg, ghostImg,meImg;
 	private BackGroundPanel panel; // Our Panel where all the game is displayed
-	private Cursor Fruit,Pacman; // Change icon mouse accord selection
-	private JRadioButton PacmanRadio, FruitRadio, mouseRadio; // Radio button to switch between Pacman, Fruit and Mouse
+	private Cursor Fruit,Pacman, Me; // Change icon mouse accord selection
+	private JRadioButton PacmanRadio, FruitRadio, mouseRadio, meRadio; // Radio button to switch between Pacman, Fruit and Mouse
 	private boolean running; // If is in animation progress avoid to do another commands
 	private AliveThread AT;
 	private Orien rotate;
-	private Play robot; 
+	private Play playS; 
 
 	public static void main(String[] args) {
 		new  MyFrame();
@@ -114,7 +118,7 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 
 		GameMenu.add(play);
 		GameMenu.add(clear);
-		GameMenu.addActionListener(this);;
+		GameMenu.addActionListener(this);
 		menuBar.add(GameMenu);
 
 		JLabel mouse = new JLabel(new ImageIcon("Icon\\mouse.png"));
@@ -135,12 +139,25 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 		FruitRadio.addActionListener(this);
 		menuBar.add(Fruit);
 		menuBar.add(FruitRadio);
+		
+//		JLabel Ghost = new JLabel(new ImageIcon("Icon\\ghost.png"));
+//		GhostRadio = new JRadioButton("Fruit");
+//		GhostRadio.addActionListener(this);
+//		menuBar.add(Ghost);
+//		menuBar.add(GhostRadio);
+		
+		JLabel Me = new JLabel(new ImageIcon("Icon\\me.png"));
+		meRadio = new JRadioButton("Me");
+		meRadio.addActionListener(this);
+		menuBar.add(Me);
+		menuBar.add(meRadio);
 
 		setJMenuBar(menuBar);
 		ButtonGroup group = new ButtonGroup(); // Create a groupButton To synchronize the buttons
 		group.add(mouseRadio);
 		group.add(PacmanRadio);
 		group.add(FruitRadio);
+		group.add(meRadio);
 
 		start();
 		
@@ -153,19 +170,23 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 	}
 
 	private void start() {
-		robot = new Play("data/Ex4_OOP_example9.csv");
-		Robot2Element next = new Robot2Element(robot.getBoard());
-		game = next.MakeElements();
+		//robot = new Play("data/Ex4_OOP_example9.csv");
+		//Robot2Element next = new Robot2Element(robot.getBoard());
+		//game = next.MakeElements();
 		
 		try {
-			fruitImg = ImageIO.read(new File("Icon\\Fruit.png"));
+			fruitImg = ImageIO.read(new File("Icon\\fruit.png"));
 			pacmanImg = ImageIO.read(new File("Icon\\pacman.png"));
+			ghostImg = ImageIO.read(new File("Icon\\ghost.png"));
+			meImg = ImageIO.read(new File("Icon\\me.png"));
 			rotate = new Orien(pacmanImg);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		Fruit = Toolkit.getDefaultToolkit().createCustomCursor(fruitImg, new Point(0, 0), "Fruit");
 		Pacman = Toolkit.getDefaultToolkit().createCustomCursor(pacmanImg, new Point(0, 0), "Pacman");
+		Me=Toolkit.getDefaultToolkit().createCustomCursor(meImg, new Point(0, 0), "Me");
+//		Ghost = Toolkit.getDefaultToolkit().createCustomCursor(ghostImg, new Point(0, 0), "Ghost");
 	}
 
 	/**
@@ -205,23 +226,24 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 			return;
 		}
 
-//		if(o==open) {
-//			JFileChooser fc = new JFileChooser(); 
-//			fc.setDialogTitle("Select a csv file only");
-//			// Only csv file accepted
-//			FileNameExtensionFilter restrict = new FileNameExtensionFilter(".csv", "csv"); 
-//			fc.setFileFilter(restrict);
-//			int s = fc.showOpenDialog(null); // Open a file Chooser dialog
-//			if(s == JFileChooser.APPROVE_OPTION) { // The user select a csv file if doesn't do nothing
-//				File f = fc.getSelectedFile();
-//				Robot2Element cs = new Robot2Element(f);
-//				AT.clear = false;
-//				running = false;
-//				game = cs.MakeElements(); // Translate a csv file into a new game
-//				repaint();
-//			}
-//			return;
-//		}
+		if(o==open) {
+			JFileChooser fc = new JFileChooser(); 
+			fc.setDialogTitle("Select a csv file only");
+			// Only csv file accepted
+			FileNameExtensionFilter restrict = new FileNameExtensionFilter(".csv", "csv"); 
+			fc.setFileFilter(restrict);
+			int s = fc.showOpenDialog(null); // Open a file Chooser dialog
+			if(s == JFileChooser.APPROVE_OPTION) { // The user select a csv file if doesn't do nothing
+				File f = fc.getSelectedFile();
+				Play playS = new Play(f.getAbsolutePath());
+				Robot2Element cs = new Robot2Element(playS.getBoard());
+				AT.clear = false;
+				running = false;
+				game = cs.MakeElements(); // Translate a csv file into a new game
+				repaint();
+			}
+			return;
+		}
 
 		if(o==savecsv || o==savekml) {
 			String name = JOptionPane.showInputDialog("Enter File name","Game"); // Ask user for file name
@@ -250,6 +272,11 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 		}
 		if(o==FruitRadio) { // Fruit choose, change cursor
 			setCursor(Fruit);
+			displayCoord.setVisible(false);
+			return;
+		}
+		if(o==meRadio) { // Fruit choose, change cursor
+			setCursor(Me);
 			displayCoord.setVisible(false);
 			return;
 		}
@@ -339,6 +366,8 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 				ArrayList<Pacman> pacArr = game.getPacmanArray();
 				ArrayList<Fruit> fruitArr =  game.getFruitArray();
 				ArrayList<Blocks> blocksArr = game.getBlocksArray();
+				ArrayList<Ghost> ghostArr = game.getGhostArray();
+				Me me = game.getMe();
 				
 				Point3D p;
 				// Ratio for scaling the Pacmans and fruit animation
@@ -371,8 +400,16 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 //					AffineTransformOp op = rotate.getTransform(pacman.getOrien()); // Save a transform rotate
 					// Draw with a correct rotate
 					g2d.drawImage(pacmanImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
-
 				}
+				
+				for(Ghost ghost : ghostArr) { // Move all pacman array and draw them
+
+					p = map.coord2pixel(ghost.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
+					g2d.drawImage(ghostImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
+				}
+				
+				p = map.coord2pixel(me.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
+				g2d.drawImage(meImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 			}
 
 		}
