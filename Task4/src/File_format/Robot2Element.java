@@ -38,41 +38,53 @@ public class Robot2Element {
 			double y = convert2Double(make[3]);
 			double z = convert2Double(make[4]);
 			double attribute = convert2Double(make[5]);
-			
+
 			Point3D p = new Point3D(x,y,z);
 
-
 			if(make[0].toUpperCase().contains("B")) {
+				if(!game.init) {
 				double x2 = convert2Double(make[5]);
 				double y2 = convert2Double(make[6]);
 				double z2 = convert2Double(make[7]);
-
-				Point3D p2 = new Point3D(x2,y2,z2);
-				attribute = convert2Double(make[8]);
-				Blocks b = new Blocks(id,p,p2,attribute);
-				game.addBlock(b);
+					Point3D p2 = new Point3D(x2,y2,z2);
+					attribute = convert2Double(make[8]);
+					Blocks b = new Blocks(id,p,p2,attribute);
+					game.addBlock(b);
+				}
 			}
 
 			else if(make[0].toUpperCase().contains("P")) {
 				double radius = convert2Double(make[6]);
 
-				Pacman pc = new Pacman(p, id, attribute, radius);
-				
-				game.addPacman(pc);
+				if(game.init) {
+					game.updatePacman(id, p);
+				}
+				else {
+					Pacman pc = new Pacman(p, id, attribute, radius);
+					game.addPacman(pc);
+				}
 			}
-			
+
 			else if(make[0].toUpperCase().contains("G")) {
 				double radius = convert2Double(make[6]);
-
-				Ghost g = new Ghost(p, id, attribute, radius);
-				
-				game.addGhost(g);
+				if(game.init) {
+					game.updateGhost(id, p);		
+				}
+				else {
+					Ghost g = new Ghost(p, id, attribute, radius);
+					game.addGhost(g);
+				}
 
 			}
 
 			else if(make[0].toUpperCase().contains("F")) {
-				Fruit f = new Fruit(p, id,attribute);
-				game.addFruit(f);
+				if(game.init) {
+					game.updateFruit(id, p);
+				}
+				else {
+					Fruit f = new Fruit(p, id,attribute);
+					game.addFruit(f);
+				}
 			}
 
 			else  {
@@ -81,6 +93,7 @@ public class Robot2Element {
 			}
 
 		}
+		game.init=true;
 	}
 
 	/**

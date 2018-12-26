@@ -15,7 +15,7 @@ public class Game {
 //	private ArrayList<Pacman> pacmanArray;
 //	private ArrayList<Blocks> blocksArray;
 //	private ArrayList<Ghost> ghostArray;
-	
+	public boolean init;
 	HashMap<Integer, Fruit > fruitArray;
 	HashMap<Integer, Pacman > pacmanArray;
 	HashMap<Integer, Blocks > blocksArray;
@@ -34,6 +34,7 @@ public class Game {
 		pacmanArray = new HashMap<>();
 		blocksArray = new HashMap<>();
 		ghostArray = new HashMap<>();
+		init=false;
 		maxIdGhost=maxIdBlocks=maxIdPacman=maxIdFruit=0;
 	}
 	
@@ -134,6 +135,22 @@ public class Game {
 	public int getMaxIdFruit() {
 		return maxIdFruit;
 	}
+	
+	public void updateGhost(int id,Point3D point) {
+		Ghost g = ghostArray.get(id);
+		g.setPoint(point);
+	}
+	public void updatePacman(int id,Point3D point) {
+		Pacman p = pacmanArray.get(id);
+		p.setPoint(point);
+		p.destroyed = true;
+	}
+	public void updateFruit(int id,Point3D point) {
+		Fruit f = fruitArray.get(id);
+		f.setPoint(point);
+		f.destroyed = true;
+	}
+	
 	
 	public void clear()
 	{
