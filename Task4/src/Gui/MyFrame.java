@@ -66,12 +66,12 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 	private Map map; // Our image & converts
 	private BufferedImage pacmanImg, fruitImg, ghostImg,meImg;
 	private BackGroundPanel panel; // Our Panel where all the game is displayed
-	private Cursor Fruit,Pacman, Me; // Change icon mouse accord selection
-	private JRadioButton PacmanRadio, FruitRadio, mouseRadio, meRadio; // Radio button to switch between Pacman, Fruit and Mouse
+	private Cursor  Me; // Change icon mouse accord selection
+	private JRadioButton mouseRadio, meRadio; // Radio button to switch between Pacman, Fruit and Mouse
 	private boolean running, stepByStepB,playB; // If is in animation progress avoid to do another commands
 	private Orien rotate;
 	private Play playS; 
-	private double angle;
+	private double angle=90;
 	private Animate animate;
 	Robot2Element cs;
 
@@ -138,24 +138,6 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 		menuBar.add(mouse);
 		menuBar.add(mouseRadio);
 
-		JLabel pacman = new JLabel(new ImageIcon("Icon\\pacman.png"));
-		PacmanRadio = new JRadioButton("Pacman");
-		PacmanRadio.addActionListener(this);
-		menuBar.add(pacman);
-		menuBar.add(PacmanRadio);
-
-		JLabel Fruit = new JLabel(new ImageIcon("Icon\\Fruit.png"));
-		FruitRadio = new JRadioButton("Fruit");
-		FruitRadio.addActionListener(this);
-		menuBar.add(Fruit);
-		menuBar.add(FruitRadio);
-
-		//		JLabel Ghost = new JLabel(new ImageIcon("Icon\\ghost.png"));
-		//		GhostRadio = new JRadioButton("Fruit");
-		//		GhostRadio.addActionListener(this);
-		//		menuBar.add(Ghost);
-		//		menuBar.add(GhostRadio);
-
 		JLabel Me = new JLabel(new ImageIcon("Icon\\me.png"));
 		meRadio = new JRadioButton("Me");
 		meRadio.addActionListener(this);
@@ -165,8 +147,6 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 		setJMenuBar(menuBar);
 		ButtonGroup group = new ButtonGroup(); // Create a groupButton To synchronize the buttons
 		group.add(mouseRadio);
-		group.add(PacmanRadio);
-		group.add(FruitRadio);
 		group.add(meRadio);
 
 		start();
@@ -189,8 +169,6 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Fruit = Toolkit.getDefaultToolkit().createCustomCursor(fruitImg, new Point(0, 0), "Fruit");
-		Pacman = Toolkit.getDefaultToolkit().createCustomCursor(pacmanImg, new Point(0, 0), "Pacman");
 		Me=Toolkit.getDefaultToolkit().createCustomCursor(meImg, new Point(0, 0), "Me");
 		//		Ghost = Toolkit.getDefaultToolkit().createCustomCursor(ghostImg, new Point(0, 0), "Ghost");
 	}
@@ -270,16 +248,6 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 //			return;
 //		}
 
-		if(o==PacmanRadio) { // Pacman choose, change cursor
-			setCursor(Pacman);
-			displayCoord.setVisible(false);
-			return;
-		}
-		if(o==FruitRadio) { // Fruit choose, change cursor
-			setCursor(Fruit);
-			displayCoord.setVisible(false);
-			return;
-		}
 		if(o==meRadio) { // Fruit choose, change cursor
 			setCursor(Me);
 			displayCoord.setVisible(false);
@@ -308,13 +276,16 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 						JOptionPane.ERROR_MESSAGE);
 
 			else if(game != null) { // Ok let's start the game
-				running=stepByStepB = true;
+				running = stepByStepB = true;
 				playS.start();
 			}
 			return;
 		}
 
 		if(o==play && !running) {
+			setCursor(null);
+			mouseRadio.setSelected(true);
+			meRadio.setEnabled(false);
 			animate = new Animate(this,playS,cs);
 			animate.start();
 			running = true;
@@ -347,7 +318,7 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 				Graphics2D g2d = (Graphics2D) g; // the 2d drawing java paint
 				// Get the current game elements arrays
 				HashMap<Integer, Pacman > pacArr = game.getPacmanArray();
-				HashMap<Integer, Fruit >fruitArr =  game.getFruitArray();
+				HashMap<Integer, Fruit > fruitArr =  game.getFruitArray();
 				HashMap<Integer, Blocks > blocksArr = game.getBlocksArray();
 				HashMap<Integer, Ghost > ghostArr = game.getGhostArray();
 				Me me = game.getMe();
@@ -408,7 +379,7 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 			System.out.println("Geograpich coords: ("+p+')'); // Print geo corrds as well
 			if(!running) {
 				playS.setInitLocation(p.x(), p.y());
-				game.setMe(new Me(p,0,2));
+				game.getMe().setPoint(p);
 			}
 			else if(stepByStepB) {
 				angle = map.anglePoints(game.getMe().getPoint(), p);
@@ -418,9 +389,7 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 				for(int i=0;i<board_data.size();i++) {
 					System.out.println("board: "+board_data.get(i));
 				}
-				for (int i = 0; i < game.getPacmanArray().size(); i++) {
-					System.out.println("game:"+ game.getPacmanArray().get(0).getPoint());
-				}
+
 				repaint();
 
 			}
@@ -445,7 +414,7 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e) {}
+		public void mousePressed(MouseEvent e) {mouseClicked(e);}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {}
