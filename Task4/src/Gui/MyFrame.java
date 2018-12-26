@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -27,7 +28,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -41,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import File_format.Robot2Element;
+import File_format.StringTranslate;
 import Gameboard.Blocks;
 import Gameboard.Fruit;
 import Gameboard.Game;
@@ -55,10 +59,10 @@ import Robot.Play;
  *  representation of the game and user experience
  *
  */
-public class MyFrame extends JFrame implements ActionListener, Serializable  {
+public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	private static final long serialVersionUID = 2344533353395219312L;
 
-	private JLabel displayCoord; // Label for hover mouse (show current pixles)
+	private JLabel displayCoord, score, timeLeft,totalTime,ghostKill, outOfbox; // Label for hover mouse (show current pixles)
 	private JMenuBar menuBar;
 	private JMenu File, GameMenu;
 	private JMenuItem open,savekml,savecsv,clear,stepByStep,Exit,play,automatic;
@@ -68,26 +72,60 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 	private BackGroundPanel panel; // Our Panel where all the game is displayed
 	private Cursor  Me; // Change icon mouse accord selection
 	private JRadioButton mouseRadio, meRadio; // Radio button to switch between Pacman, Fruit and Mouse
-	private boolean running, stepByStepB,playB; // If is in animation progress avoid to do another commands
+	boolean running, stepByStepB,playB, openedGame; // If is in animation progress avoid to do another commands
 	private Orien rotate;
 	private Play playS; 
 	private double angle=90;
 	private Animate animate;
 	Robot2Element cs;
-
+	StringTranslate trans;
 	public static void main(String[] args) {
 		new  MyFrame();
 	}
 
 	public MyFrame() {
-		playB=stepByStepB=running = false; // We start with no progress(game running animation)
+
+		openedGame=playB=stepByStepB=running = false; // We start with no progress(game running animation)
 		displayCoord = new JLabel();
 		displayCoord.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		displayCoord.setForeground(Color.white);
 		add(displayCoord);
+		
+		score = new JLabel();
+		score.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		score.setForeground(Color.white);
+		score.setBounds(4, 10, 150, 20);
+		
+		timeLeft = new JLabel();
+		timeLeft.setForeground(Color.white);
+		timeLeft.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		timeLeft.setBounds(4, 30, 150, 20);
 
+		totalTime = new JLabel();
+		totalTime.setForeground(Color.white);
+		totalTime.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		totalTime.setBounds(4, 50, 170, 20);
+
+		ghostKill = new JLabel();
+		ghostKill.setForeground(Color.white);
+		ghostKill.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		ghostKill.setBounds(3, 70, 150, 20);
+
+		outOfbox = new JLabel();
+		outOfbox.setForeground(Color.white);
+		outOfbox.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		outOfbox.setBounds(3, 90, 150, 20);
+		
+		add(score);
+		add(timeLeft);
+		add(totalTime);
+		add(ghostKill);
+		add(outOfbox);
+		
+		trans = new StringTranslate();
 		map = Map.map();
 		panel = new BackGroundPanel();
+        
 		add(panel);
 
 		game = null;
@@ -148,7 +186,7 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 		ButtonGroup group = new ButtonGroup(); // Create a groupButton To synchronize the buttons
 		group.add(mouseRadio);
 		group.add(meRadio);
-
+		
 		start();
 
 		setSize(1200, 800);
@@ -170,14 +208,19 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 			e.printStackTrace();
 		}
 		Me=Toolkit.getDefaultToolkit().createCustomCursor(meImg, new Point(0, 0), "Me");
-		//		Ghost = Toolkit.getDefaultToolkit().createCustomCursor(ghostImg, new Point(0, 0), "Ghost");
 	}
 
 	/**
 	 * Didn't find if repaint is a synchronized method
 	 * so for double check this method ensures that
 	 */
-	public synchronized void update() {
+	public synchronized void updater() {
+		trans.setString(playS.getStatistics());
+		score.setText(trans.getScore());		
+		totalTime.setText(trans.getTotalTime());
+		timeLeft.setText("TimeLeft: "+trans.getTimeLeft());
+		ghostKill.setText(trans.getGhostKill());
+		outOfbox.setText(trans.getOutOfBox());
 		repaint();
 	}
 
@@ -187,12 +230,12 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 	 * @param fruitWeight
 	 * @param TotalResult
 	 */
-	public void Result(String TotalTime,String fruitWeight, String TotalResult) {
-		running = false; // Change running to false that we finish right now the current game
+	public void Result() {
+		openedGame=playB=stepByStepB=running = false; // Change running to false that we finish right now the current game
 		// content of the message
 		JOptionPane.showMessageDialog(this,
-				"Total running Time: "+TotalTime+"\nFruit weight: "+fruitWeight+"\nGame result:\n"+TotalResult,
-				"Game result:\n ", 
+				playS.getStatistics(),
+				"Game Finish\n ", 
 				JOptionPane.INFORMATION_MESSAGE); 
 	}
 
@@ -219,34 +262,18 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 			if(s == JFileChooser.APPROVE_OPTION) { // The user select a csv file if doesn't do nothing
 				File f = fc.getSelectedFile();
 				playS = new Play(f.getAbsolutePath());
+				openedGame=true;
+				map.setNewBounds(playS.getBoundingBox());
+				meRadio.setEnabled(true);
 				running = false;
 				game = new Game();
+				angle=90;
 				cs = new Robot2Element(game);
 				cs.MakeElements(playS.getBoard()); // Translate a csv file into a new game
 				repaint();
 			}
 			return;
 		}
-
-//		if(o==savecsv || o==savekml) {
-//			String name = JOptionPane.showInputDialog("Enter File name","Game"); // Ask user for file name
-//			if(game!=null && name!=null) {
-//				if(o==savecsv) new Game2csv(game,name); // csv commend so call to game2csv to create that
-//				//				else new Game2kml(game,name); // else is a kml command
-//				// Send a successful message
-//				JOptionPane.showMessageDialog(this,
-//						"File '"+name+"' saved in source folder",
-//						"Saved successfully", 
-//						JOptionPane.INFORMATION_MESSAGE);
-//				return;
-//			}
-//			if(game==null && name!=null) // if try save a empty game send a error
-//				JOptionPane.showMessageDialog(this,
-//						"Error: Unable save an empty game",
-//						"Error while saving",
-//						JOptionPane.ERROR_MESSAGE);
-//			return;
-//		}
 
 		if(o==meRadio) { // Fruit choose, change cursor
 			setCursor(Me);
@@ -258,7 +285,7 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 			return;
 		}
 
-		if(o==stepByStep && !running) {
+		if(o==stepByStep) {
 			setCursor(null);
 			mouseRadio.setSelected(true); // return to mouse selection
 
@@ -282,8 +309,9 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 			return;
 		}
 
-		if(o==play && !running) {
+		if(o==play) {
 			setCursor(null);
+			stepByStepB = false;
 			mouseRadio.setSelected(true);
 			meRadio.setEnabled(false);
 			animate = new Animate(this,playS,cs);
@@ -300,7 +328,7 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 	 * for each command such as Clicks, drag and etc
 	 *
 	 */
-	private class BackGroundPanel extends JPanel implements MouseInputListener, Serializable {
+	private class BackGroundPanel extends JPanel implements MouseInputListener ,Serializable {
 		private static final long serialVersionUID = -3626966327917598406L;
 
 		public BackGroundPanel() {
@@ -348,11 +376,10 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 				AffineTransformOp op;
 
 				for(Pacman pacman : pacArr.values()) { // Move all pacman array and draw them
-					op = rotate.getTransform(pacman.getOrien()); // Save a transform rotate
 					p = map.coord2pixel(pacman.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
 					// Draw with a correct rotate
 					if(pacman.destroyed)
-					g2d.drawImage(op.filter(pacmanImg, null), (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
+					g2d.drawImage(pacmanImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 
 				}
 
@@ -365,7 +392,14 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 				p = map.coord2pixel(me.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
 				op = rotate.getTransform(me.getOrien()); // Save a transform rotate
 				g2d.drawImage(op.filter(meImg, null), (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
+				
+				if(running) {
+				g2d.setColor(new Color(1f,0f,0.7f,.2f ));
+				g2d.fillRect(3, 3, 145, 110);
+				}
+
 			}
+			
 
 		}
 
@@ -377,27 +411,23 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 			Point3D p = new Point3D(x,y);
 			p = map.pixel2coord(p, getWidth(), getHeight());
 			System.out.println("Geograpich coords: ("+p+')'); // Print geo corrds as well
-			if(!running) {
+			if(!running && openedGame) {
 				playS.setInitLocation(p.x(), p.y());
 				game.getMe().setPoint(p);
+				repaint();
 			}
+			
 			else if(stepByStepB) {
 				angle = map.anglePoints(game.getMe().getPoint(), p);
 				playS.rotate(angle);
 				cs.MakeElements(playS.getBoard());
-				ArrayList<String> board_data = playS.getBoard();
-				for(int i=0;i<board_data.size();i++) {
-					System.out.println("board: "+board_data.get(i));
-				}
-
-				repaint();
-
+				updater();
 			}
+			
 			else if(playB) {
 				angle = map.anglePoints(game.getMe().getPoint(), p);
 				animate.updateAngle(angle);
-			}
-			repaint();
+			}	
 		}
 
 
@@ -414,7 +444,7 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e) {mouseClicked(e);}
+		public void mousePressed(MouseEvent e) {}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {}

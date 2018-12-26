@@ -79,7 +79,7 @@ public class Robot2Element {
 
 			else if(make[0].toUpperCase().contains("F")) {
 				if(game.init) {
-					game.updateFruit(id, p);
+					game.updateFruit(id);
 				}
 				else {
 					Fruit f = new Fruit(p, id,attribute);
@@ -94,6 +94,10 @@ public class Robot2Element {
 
 		}
 		game.init=true;
+	}
+	
+	public int numOfFruite() {
+		return game.numOfFruits();
 	}
 
 	/**

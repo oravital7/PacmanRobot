@@ -1,6 +1,8 @@
 package Gui;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Timer;
 
 import Coords.Map;
 import File_format.Robot2Element;
@@ -21,39 +23,44 @@ public class Animate extends Thread  {
 	private Play playS;
 	private double angle;
 	Robot2Element cs;
-	
+	boolean keepGoing;
 	
 
 	public Animate(MyFrame frame, Play playS, Robot2Element cs) {
 		this.frame = frame;
 		this.playS=playS;
-		this.angle=0;
 		this.cs = cs;
+		keepGoing = true;
+		if(!frame.running)
 		playS.start();
 	}
 	
 	@Override
 	public void run() {
-		int i=0;
-		while(i<1000)
+		Timer time = new Timer();
+		TaskTime task = new TaskTime(this,playS);
+		time.schedule(task, 500*85, 1000);
+		while(keepGoing && cs.numOfFruite()>0)
 		{
 			playS.rotate(angle);
 			cs.MakeElements(playS.getBoard());			
-			frame.update();
-			
+			frame.updater();
 			try {
-				Thread.sleep(100);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+		time.cancel();
+		frame.Result();
 	}
+	
+	
 	
 	public void updateAngle(double angle)
 	{
 		this.angle =angle;
 	}
 	
-
 	
 }

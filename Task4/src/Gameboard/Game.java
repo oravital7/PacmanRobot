@@ -11,21 +11,13 @@ import Geom.Point3D;
  * this class represent a game - a collections of Pacmans and fruits.
  */
 public class Game {
-//	private ArrayList<Fruit> fruitArray;
-//	private ArrayList<Pacman> pacmanArray;
-//	private ArrayList<Blocks> blocksArray;
-//	private ArrayList<Ghost> ghostArray;
 	public boolean init;
 	HashMap<Integer, Fruit > fruitArray;
 	HashMap<Integer, Pacman > pacmanArray;
 	HashMap<Integer, Blocks > blocksArray;
 	HashMap<Integer, Ghost > ghostArray;
 
-	
-
-
-	
-	private int maxIdPacman, maxIdFruit, maxIdBlocks, maxIdGhost;
+	private int  numOfFruits;
 	private Me me;
 
 	public Game()
@@ -34,16 +26,16 @@ public class Game {
 		pacmanArray = new HashMap<>();
 		blocksArray = new HashMap<>();
 		ghostArray = new HashMap<>();
+		numOfFruits=0;
 		init=false;
-		maxIdGhost=maxIdBlocks=maxIdPacman=maxIdFruit=0;
 	}
-	
+
 	public void setMe (Me me)
 	{
 		this.me=me;
 	}
-	
-	
+
+
 	public Me getMe() {
 		return me;
 	}
@@ -52,10 +44,7 @@ public class Game {
 		return ghostArray;
 	}
 
-	public void setMaxIdFruit(int maxIdFruit) {
-		this.maxIdFruit = maxIdFruit;
-	}
-	
+
 	public HashMap<Integer, Blocks > getBlocksArray() {
 		return blocksArray;
 	}
@@ -66,76 +55,51 @@ public class Game {
 	 */
 	public void addFruit(Fruit f)
 	{
-		if(f.getId()>maxIdFruit) maxIdFruit = f.getId();
+		numOfFruits++;
 		fruitArray.put(f.getId(),f);
 	}
-	
+
 	public void addBlock(Blocks b)
 	{
-		if(b.getID() > maxIdBlocks) maxIdBlocks = b.getID();
 		blocksArray.put(b.getID(),b);
-	}
-/**
- * 
- * @param p - pacman
- */
-	public void addPacman(Pacman p)
-	{
-		if(p.getId()>maxIdPacman) maxIdPacman = p.getId();
-		pacmanArray.put(p.getId(),p);
-	}
-	
-	public void addGhost(Ghost g)
-	{
-		if(g.getId() > maxIdGhost) maxIdGhost = g.getId();
-		ghostArray.put(g.getId(), g);
-	}
-/**
- * 
- * @return  number Of Fruits
- */
-	public int numOfFruits()
-	{
-		return fruitArray.size();
-	}
-/**
- * 
- * @return number Of Pacman
- */
-	public int numOfpacmans()
-	{
-		return pacmanArray.size();
-	}
-
-/**
- * 
- * @return the array of the fruits
- */
-	public HashMap<Integer, Fruit >  getFruitArray() {
-		return fruitArray;
-	}
-/**
- * 
- * @return the array of the pacmans
- */
-	public HashMap<Integer, Pacman >  getPacmanArray() {
-		return pacmanArray;
-	}
-/**
- * 
- * @return the id of the pacman
- */
-	public int getMaxIdPacman() {
-		return maxIdPacman;
 	}
 	/**
 	 * 
-	 * @return the id of the fruit
-	 */	
-	public int getMaxIdFruit() {
-		return maxIdFruit;
+	 * @param p - pacman
+	 */
+	public void addPacman(Pacman p)
+	{
+		pacmanArray.put(p.getId(),p);
 	}
-	
+
+	public void addGhost(Ghost g)
+	{
+		ghostArray.put(g.getId(), g);
+	}
+	/**
+	 * 
+	 * @return  number Of Fruits
+	 */
+	public int numOfFruits()
+	{
+		return numOfFruits;
+	}
+
+	/**
+	 * 
+	 * @return the array of the fruits
+	 */
+	public HashMap<Integer, Fruit >  getFruitArray() {
+		return fruitArray;
+	}
+	/**
+	 * 
+	 * @return the array of the pacmans
+	 */
+	public HashMap<Integer, Pacman >  getPacmanArray() {
+		return pacmanArray;
+	}
+
 	public void updateGhost(int id,Point3D point) {
 		Ghost g = ghostArray.get(id);
 		g.setPoint(point);
@@ -145,13 +109,12 @@ public class Game {
 		p.setPoint(point);
 		p.destroyed = true;
 	}
-	public void updateFruit(int id,Point3D point) {
+	public void updateFruit(int id) {
 		Fruit f = fruitArray.get(id);
-		f.setPoint(point);
 		f.destroyed = true;
+		numOfFruits++;
 	}
-	
-	
+
 	public void clear()
 	{
 		for(Fruit f : fruitArray.values()) {
@@ -160,6 +123,6 @@ public class Game {
 		for(Pacman p : pacmanArray.values()) {
 			p.destroyed=false;
 		}
-		maxIdGhost=maxIdBlocks=maxIdPacman=maxIdFruit=0;
+		numOfFruits=0;
 	}
 }

@@ -63,21 +63,6 @@ class GameTest {
 	}
 
 	@Test
-	void testNumOfpacmans() {
-		int radius = 1, speed =1, id=1;
-		for(int i=1; i<20; i++) { // Let's check on frame 600*600
-			int x = (int)(Math.random()*600);
-			int y = (int)(Math.random()*600);
-
-			Point3D point = map.pixel2coord(new Point3D(x,y), 600, 600);
-			Pacman pacman= new Pacman(point, id, speed, radius);
-			game.addPacman(pacman);
-			assertEquals(game.numOfpacmans(), i);
-		}
-
-	}
-
-	@Test
 	void testNumOffruits() {
 		game = new Game();
 		int weight =1, id=1;
