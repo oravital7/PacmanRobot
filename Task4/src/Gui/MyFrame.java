@@ -38,9 +38,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import File_format.Robot2Element;
-import File_format.Game2csv;
 import Gameboard.Blocks;
 import Gameboard.Fruit;
 import Gameboard.Game;
@@ -69,7 +69,6 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 	private Cursor Fruit,Pacman, Me; // Change icon mouse accord selection
 	private JRadioButton PacmanRadio, FruitRadio, mouseRadio, meRadio; // Radio button to switch between Pacman, Fruit and Mouse
 	private boolean running, stepByStepB,playB; // If is in animation progress avoid to do another commands
-	private AliveThread AT;
 	private Orien rotate;
 	private Play playS; 
 	private double angle;
@@ -83,7 +82,6 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 
 	public MyFrame() {
 		playB=stepByStepB=running = false; // We start with no progress(game running animation)
-		AT = new AliveThread(this);
 		displayCoord = new JLabel();
 		displayCoord.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		displayCoord.setForeground(Color.white);
@@ -229,7 +227,6 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 		// reset the game for new one
 		if(o==clear) {
 			game = null;
-			AT.clear = false;
 			running = false; // If you click Clean at run time
 			repaint(); 
 			return;
@@ -245,7 +242,6 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 			if(s == JFileChooser.APPROVE_OPTION) { // The user select a csv file if doesn't do nothing
 				File f = fc.getSelectedFile();
 				playS = new Play(f.getAbsolutePath());
-				AT.clear = false;
 				running = false;
 				game = new Game();
 				cs = new Robot2Element(game);
@@ -255,25 +251,25 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 			return;
 		}
 
-		if(o==savecsv || o==savekml) {
-			String name = JOptionPane.showInputDialog("Enter File name","Game"); // Ask user for file name
-			if(game!=null && name!=null) {
-				if(o==savecsv) new Game2csv(game,name); // csv commend so call to game2csv to create that
-				//				else new Game2kml(game,name); // else is a kml command
-				// Send a successful message
-				JOptionPane.showMessageDialog(this,
-						"File '"+name+"' saved in source folder",
-						"Saved successfully", 
-						JOptionPane.INFORMATION_MESSAGE);
-				return;
-			}
-			if(game==null && name!=null) // if try save a empty game send a error
-				JOptionPane.showMessageDialog(this,
-						"Error: Unable save an empty game",
-						"Error while saving",
-						JOptionPane.ERROR_MESSAGE);
-			return;
-		}
+//		if(o==savecsv || o==savekml) {
+//			String name = JOptionPane.showInputDialog("Enter File name","Game"); // Ask user for file name
+//			if(game!=null && name!=null) {
+//				if(o==savecsv) new Game2csv(game,name); // csv commend so call to game2csv to create that
+//				//				else new Game2kml(game,name); // else is a kml command
+//				// Send a successful message
+//				JOptionPane.showMessageDialog(this,
+//						"File '"+name+"' saved in source folder",
+//						"Saved successfully", 
+//						JOptionPane.INFORMATION_MESSAGE);
+//				return;
+//			}
+//			if(game==null && name!=null) // if try save a empty game send a error
+//				JOptionPane.showMessageDialog(this,
+//						"Error: Unable save an empty game",
+//						"Error while saving",
+//						JOptionPane.ERROR_MESSAGE);
+//			return;
+//		}
 
 		if(o==PacmanRadio) { // Pacman choose, change cursor
 			setCursor(Pacman);
@@ -351,10 +347,10 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 			if(game != null) {
 				Graphics2D g2d = (Graphics2D) g; // the 2d drawing java paint
 				// Get the current game elements arrays
-				ArrayList<Pacman> pacArr = game.getPacmanArray();
-				ArrayList<Fruit> fruitArr =  game.getFruitArray();
-				ArrayList<Blocks> blocksArr = game.getBlocksArray();
-				ArrayList<Ghost> ghostArr = game.getGhostArray();
+				HashMap<Integer, Pacman > pacArr = game.getPacmanArray();
+				HashMap<Integer, Fruit >fruitArr =  game.getFruitArray();
+				HashMap<Integer, Blocks > blocksArr = game.getBlocksArray();
+				HashMap<Integer, Ghost > ghostArr = game.getGhostArray();
 				me = game.getMe();
 
 				Point3D p;
@@ -362,14 +358,13 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 				double ratioH = getHeight()/600.0;
 				double ratioW = getWidth()/800.0;
 
-				for(Fruit fruit : fruitArr) { // Move all fruit array and draw them
-					if(fruit.destroyed) { // if eaten don't draw
+				for(Fruit fruit : fruitArr.values()) { // Move all fruit array and draw them
 						p = map.coord2pixel(fruit.getPoint(), getWidth(), getHeight());	// Fruit point saved geograpic coord, so convert it
+						if(fruit.destroyed)
 						g.drawImage(fruitImg, (int)p.x(), (int)p.y(), (int)(17*ratioW), (int)(17*ratioH), this);
-					}
 				}
 
-				for(Blocks b : blocksArr) {			
+				for(Blocks b : blocksArr.values()) {			
 					g.setColor(Color.BLACK);
 					Point3D pUp = map.coord2pixel(b.getP1(), getWidth(), getHeight());
 					Point3D pDown = map.coord2pixel(b.getP2(), getWidth(), getHeight());
@@ -382,16 +377,16 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 
 				AffineTransformOp op;
 
-				for(Pacman pacman : pacArr) { // Move all pacman array and draw them
+				for(Pacman pacman : pacArr.values()) { // Move all pacman array and draw them
 					op = rotate.getTransform(pacman.getOrien()); // Save a transform rotate
 					p = map.coord2pixel(pacman.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
 					// Draw with a correct rotate
+					if(pacman.destroyed)
 					g2d.drawImage(op.filter(pacmanImg, null), (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 
 				}
 
-				for(Ghost ghost : ghostArr) { // Move all pacman array and draw them
-
+				for(Ghost ghost : ghostArr.values()) { // Move all pacman array and draw them
 					p = map.coord2pixel(ghost.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
 					g2d.drawImage(ghostImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 				}

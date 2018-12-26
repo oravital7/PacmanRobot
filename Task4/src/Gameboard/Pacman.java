@@ -9,12 +9,13 @@ import Geom.Point3D;
  */
 public class Pacman extends Character {
 	private double radius, orientation; 
-
+	public boolean destroyed;
+	
 	public Pacman(Point3D point, int id, double speed, double radius) {
 		super(point,id,speed);
 		this.radius = radius; // Radius eaten
 		this.orientation = 0; // Start orientation with 0 angle
-
+		destroyed = true;
 	}
 	
 	/**
