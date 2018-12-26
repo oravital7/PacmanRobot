@@ -74,7 +74,6 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 	private double angle;
 	private Animate animate;
 	Robot2Element cs;
-	Me me;
 
 	public static void main(String[] args) {
 		new  MyFrame();
@@ -186,7 +185,7 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 			pacmanImg = ImageIO.read(new File("Icon\\pacman.png"));
 			ghostImg = ImageIO.read(new File("Icon\\ghost.png"));
 			meImg = ImageIO.read(new File("Icon\\me.png"));
-			rotate = new Orien(pacmanImg);
+			rotate = new Orien(meImg);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -351,7 +350,7 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 				HashMap<Integer, Fruit >fruitArr =  game.getFruitArray();
 				HashMap<Integer, Blocks > blocksArr = game.getBlocksArray();
 				HashMap<Integer, Ghost > ghostArr = game.getGhostArray();
-				me = game.getMe();
+				Me me = game.getMe();
 
 				Point3D p;
 				// Ratio for scaling the Pacmans and fruit animation
@@ -391,12 +390,10 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 					g2d.drawImage(ghostImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 				}
 
-
+				me.setOrien(angle-90);
 				p = map.coord2pixel(me.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
 				op = rotate.getTransform(me.getOrien()); // Save a transform rotate
 				g2d.drawImage(op.filter(meImg, null), (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
-
-
 			}
 
 		}
@@ -425,7 +422,6 @@ public class MyFrame extends JFrame implements ActionListener, Serializable  {
 					System.out.println("game:"+ game.getPacmanArray().get(0).getPoint());
 				}
 				repaint();
-				//				game = cs.MakeElements(); // Translate a csv file into a new game
 
 			}
 			else if(playB) {

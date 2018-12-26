@@ -38,8 +38,7 @@ public class Animate extends Thread  {
 		while(i<1000)
 		{
 			playS.rotate(angle);
-			cs.MakeElements(playS.getBoard()); // Translate a csv file into a new game
-			
+			cs.MakeElements(playS.getBoard());			
 			frame.update();
 			
 			try {
