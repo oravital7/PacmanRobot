@@ -1,5 +1,6 @@
 package File_format;
 
+
 public class StringTranslate {
 	private String s[];
 	

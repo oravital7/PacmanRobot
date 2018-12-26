@@ -11,7 +11,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -28,9 +27,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -40,7 +37,6 @@ import Coords.Map;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import File_format.Robot2Element;
@@ -109,12 +105,12 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		ghostKill = new JLabel();
 		ghostKill.setForeground(Color.white);
 		ghostKill.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		ghostKill.setBounds(3, 70, 150, 20);
+		ghostKill.setBounds(0, 70, 150, 20);
 
 		outOfbox = new JLabel();
 		outOfbox.setForeground(Color.white);
 		outOfbox.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		outOfbox.setBounds(3, 90, 150, 20);
+		outOfbox.setBounds(0, 90, 150, 20);
 		
 		add(score);
 		add(timeLeft);

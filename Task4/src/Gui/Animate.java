@@ -37,10 +37,7 @@ public class Animate extends Thread  {
 	
 	@Override
 	public void run() {
-		Timer time = new Timer();
-		TaskTime task = new TaskTime(this,playS);
-		time.schedule(task, 500*85, 1000);
-		while(keepGoing && cs.numOfFruite()>0)
+		while(playS.isRuning())
 		{
 			playS.rotate(angle);
 			cs.MakeElements(playS.getBoard());			
@@ -51,7 +48,6 @@ public class Animate extends Thread  {
 				e.printStackTrace();
 			}
 		}
-		time.cancel();
 		frame.Result();
 	}
 	

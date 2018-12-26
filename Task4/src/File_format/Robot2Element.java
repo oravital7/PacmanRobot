@@ -95,10 +95,6 @@ public class Robot2Element {
 		}
 		game.init=true;
 	}
-	
-	public int numOfFruite() {
-		return game.numOfFruits();
-	}
 
 	/**
 	 * Parse to int
