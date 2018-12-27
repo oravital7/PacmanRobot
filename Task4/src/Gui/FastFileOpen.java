@@ -1,10 +1,13 @@
 package Gui;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -29,8 +32,10 @@ public class FastFileOpen extends JPanel implements ActionListener {
 		
 		 JList = new JComboBox<String>(FileString);
 		 JList.setBorder(black);
+		 JList.setBackground(Color.white);
+		 JList.setFont(new Font("Tahoma", Font.BOLD, 14));
 		 
-		JButton openFile = new JButton("Quick opening");
+		JButton openFile = new JButton("Quick opening",new ImageIcon("Icon\\disc.png"));
 		openFile.addActionListener(this);
 		add(JList);
 		add(openFile);

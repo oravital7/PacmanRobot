@@ -61,7 +61,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	private JLabel displayCoord, score, timeLeft,totalTime,ghostKill, outOfbox; // Label for hover mouse (show current pixles)
 	private JMenuBar menuBar;
 	private JMenu File, GameMenu;
-	private JMenuItem open,savekml,savecsv,clear,stepByStep,Exit,play,automatic;
+	private JMenuItem open, clear, stepByStep, Exit, play, automatic;
 	private Game game; // Current game
 	private Map map; // Our image & converts
 	private BufferedImage pacmanImg, fruitImg, ghostImg,meImg;
@@ -130,17 +130,11 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		File = new JMenu("File");
 		open = new JMenuItem("Open File...",new ImageIcon("Icon\\open.png"));
 		open.addActionListener(this);
-		savekml = new JMenuItem("Save As KML",new ImageIcon("Icon\\savek.png"));
-		savekml.addActionListener(this);
-		savecsv = new JMenuItem("Save As csv",new ImageIcon("Icon\\savec.png"));
-		savecsv.addActionListener(this);
 		Exit = new JMenuItem("Exit");
 		Exit.addActionListener(this);
 
 		File.setMnemonic(KeyEvent.VK_S);
 		File.add(open);
-		File.add(savekml);
-		File.add(savecsv);
 		File.add(Exit);
 
 		menuBar.add(File);
@@ -148,11 +142,11 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 
 		GameMenu = new JMenu("Game");
-		stepByStep = new JMenuItem("step By Step", new ImageIcon("Icon\\play.png")); // Invoke image icon
+		stepByStep = new JMenuItem("Play step By Step", new ImageIcon("Icon\\play.png")); // Invoke image icon
 		stepByStep.addActionListener(this);
-		play = new JMenuItem("play", new ImageIcon("Icon\\play.png")); // Invoke image icon
+		play = new JMenuItem("Play normal", new ImageIcon("Icon\\play.png")); // Invoke image icon
 		play.addActionListener(this);
-		automatic = new JMenuItem("automatic", new ImageIcon("Icon\\play.png")); // Invoke image icon
+		automatic = new JMenuItem("Automatic", new ImageIcon("Icon\\play.png")); // Invoke image icon
 		automatic.addActionListener(this);
 		clear = new JMenuItem("Clear", new ImageIcon("Icon\\clear.png"));
 		clear.addActionListener(this);
