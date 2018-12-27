@@ -1,15 +1,7 @@
 package Gui;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Timer;
 
-import Coords.Map;
 import File_format.Robot2Element;
-import Gameboard.Game;
-import Gameboard.Pacman;
-import Geom.Point3D;
-import Roads.PathData;
 import Robot.Play;
 
 /**
@@ -22,7 +14,7 @@ public class Animate extends Thread  {
 	private MyFrame frame; // Use Gui frame for repaint the frame
 	private Play playS;
 	private double angle;
-	Robot2Element cs;
+	private Robot2Element cs;
 	boolean keepGoing;
 	
 
@@ -31,13 +23,13 @@ public class Animate extends Thread  {
 		this.playS=playS;
 		this.cs = cs;
 		keepGoing = true;
-		if(!frame.running)
+		if(!playS.isRuning())
 		playS.start();
 	}
 	
 	@Override
 	public void run() {
-		while(playS.isRuning())
+		while(playS.isRuning() && keepGoing)
 		{
 			playS.rotate(angle);
 			cs.MakeElements(playS.getBoard());			
@@ -48,10 +40,9 @@ public class Animate extends Thread  {
 				e.printStackTrace();
 			}
 		}
+		if(keepGoing)
 		frame.Result();
 	}
-	
-	
 	
 	public void updateAngle(double angle)
 	{

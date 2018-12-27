@@ -65,33 +65,33 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	private Game game; // Current game
 	private Map map; // Our image & converts
 	private BufferedImage pacmanImg, fruitImg, ghostImg,meImg;
-	private BackGroundPanel panel; // Our Panel where all the game is displayed
 	private Cursor  Me; // Change icon mouse accord selection
 	private JRadioButton mouseRadio, meRadio; // Radio button to switch between Pacman, Fruit and Mouse
-	boolean running, stepByStepB,playB, openedGame; // If is in animation progress avoid to do another commands
+	private boolean stepByStepB,playB, openedGame; // If is in animation progress avoid to do another commands
 	private Orien rotate;
 	private Play playS; 
-	private double angle=90;
+	private double angle;
 	private Animate animate;
-	Robot2Element cs;
-	StringTranslate trans;
+	private Robot2Element cs;
+	private StringTranslate trans;
+	
 	public static void main(String[] args) {
 		new  MyFrame();
 	}
 
 	public MyFrame() {
 
-		openedGame=playB=stepByStepB=running = false; // We start with no progress(game running animation)
+		openedGame=playB=stepByStepB = false; // We start with no progress(game running animation)
 		displayCoord = new JLabel();
 		displayCoord.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		displayCoord.setForeground(Color.white);
 		add(displayCoord);
-		
+
 		score = new JLabel();
 		score.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		score.setForeground(Color.white);
 		score.setBounds(4, 10, 150, 20);
-		
+
 		timeLeft = new JLabel();
 		timeLeft.setForeground(Color.white);
 		timeLeft.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -111,17 +111,17 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		outOfbox.setForeground(Color.white);
 		outOfbox.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		outOfbox.setBounds(0, 90, 150, 20);
-		
+
 		add(score);
 		add(timeLeft);
 		add(totalTime);
 		add(ghostKill);
 		add(outOfbox);
-		
+
 		trans = new StringTranslate();
 		map = Map.map();
-		panel = new BackGroundPanel();
-        
+		BackGroundPanel panel = new BackGroundPanel();
+
 		add(panel);
 
 		game = null;
@@ -144,7 +144,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		File.add(Exit);
 
 		menuBar.add(File);
-
 		open.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 
@@ -183,6 +182,10 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		group.add(mouseRadio);
 		group.add(meRadio);
 		
+		FastFileOpen FastOpen = new FastFileOpen(this);
+		menuBar.add(FastOpen);
+
+
 		start();
 
 		setSize(1200, 800);
@@ -227,7 +230,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	 * @param TotalResult
 	 */
 	public void Result() {
-		openedGame=playB=stepByStepB=running = false; // Change running to false that we finish right now the current game
+		openedGame=playB=stepByStepB = false; // Change running to false that we finish right now the current game
 		// content of the message
 		JOptionPane.showMessageDialog(this,
 				playS.getStatistics(),
@@ -238,12 +241,14 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
+		System.out.println(e.getActionCommand());
 		if(o==Exit)
 			System.exit(2);
 		// reset the game for new one
 		if(o==clear) {
 			game = null;
-			running = false; // If you click Clean at run time
+			openedGame=false;
+			if(playB) animate.keepGoing=false;
 			repaint(); 
 			return;
 		}
@@ -257,16 +262,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			int s = fc.showOpenDialog(null); // Open a file Chooser dialog
 			if(s == JFileChooser.APPROVE_OPTION) { // The user select a csv file if doesn't do nothing
 				File f = fc.getSelectedFile();
-				playS = new Play(f.getAbsolutePath());
-				openedGame=true;
-				map.setNewBounds(playS.getBoundingBox());
-				meRadio.setEnabled(true);
-				running = false;
-				game = new Game();
-				angle=90;
-				cs = new Robot2Element(game);
-				cs.MakeElements(playS.getBoard()); // Translate a csv file into a new game
-				repaint();
+				openGameFile(f);
 			}
 			return;
 		}
@@ -291,16 +287,11 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 						"Error while Playing - please enter Pacmans and Fruits",
 						JOptionPane.ERROR_MESSAGE);
 
-			// If try to play a game with no pacmans send a error
-			else if(game.getFruitArray().size()>0&&game.getPacmanArray().size()==0)
-				JOptionPane.showMessageDialog(this,
-						"Error: Unable play game with no pacmans",
-						"Error while Playing - please enter Pacmans ",
-						JOptionPane.ERROR_MESSAGE);
-
 			else if(game != null) { // Ok let's start the game
-				running = stepByStepB = true;
-				playS.start();
+				stepByStepB = true;
+
+				if(playB) 	playB = animate.keepGoing=false;		
+				else playS.start();
 			}
 			return;
 		}
@@ -312,157 +303,172 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			meRadio.setEnabled(false);
 			animate = new Animate(this,playS,cs);
 			animate.start();
-			running = true;
 			playB = true;
 		}
-
-
 	}
 
-	/**
-	 * This class responsible to paint all our elements and listen to user 
-	 * for each command such as Clicks, drag and etc
-	 *
-	 */
-	private class BackGroundPanel extends JPanel implements MouseInputListener ,Serializable {
-		private static final long serialVersionUID = -3626966327917598406L;
+	public void openGameFile(File f) {
+		if(playB) animate.keepGoing=false;
+		playS = new Play(f.getAbsolutePath());
+		openedGame=true;
+		map.setNewBounds(playS.getBoundingBox());
+		meRadio.setEnabled(true);
+		game = new Game();
+		angle=90;
+		cs = new Robot2Element(game);
+		cs.MakeElements(playS.getBoard()); // Translate a csv file into a new game
+		repaint();
+	}
 
-		public BackGroundPanel() {
-			addMouseListener(this);
-			addMouseMotionListener(this);
-		}
 
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
+/**
+ * This class responsible to paint all our elements and listen to user 
+ * for each command such as Clicks, drag and etc
+ *
+ */
+private class BackGroundPanel extends JPanel implements MouseInputListener ,Serializable {
+	private static final long serialVersionUID = -3626966327917598406L;
 
-			// Draw our map as background
-			g.drawImage(map.getMap(), 0, 0, getWidth(), getHeight(), this);
+	public BackGroundPanel() {
+		addMouseListener(this);
+		addMouseMotionListener(this);
+	}
 
-			if(game != null) {
-				Graphics2D g2d = (Graphics2D) g; // the 2d drawing java paint
-				// Get the current game elements arrays
-				HashMap<Integer, Pacman > pacArr = game.getPacmanArray();
-				HashMap<Integer, Fruit > fruitArr =  game.getFruitArray();
-				HashMap<Integer, Blocks > blocksArr = game.getBlocksArray();
-				HashMap<Integer, Ghost > ghostArr = game.getGhostArray();
-				Me me = game.getMe();
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 
-				Point3D p;
-				// Ratio for scaling the Pacmans and fruit animation
-				double ratioH = getHeight()/600.0;
-				double ratioW = getWidth()/800.0;
+		// Draw our map as background
+		g.drawImage(map.getMap(), 0, 0, getWidth(), getHeight(), this);
 
-				for(Fruit fruit : fruitArr.values()) { // Move all fruit array and draw them
-						p = map.coord2pixel(fruit.getPoint(), getWidth(), getHeight());	// Fruit point saved geograpic coord, so convert it
-						if(fruit.destroyed)
-						g.drawImage(fruitImg, (int)p.x(), (int)p.y(), (int)(17*ratioW), (int)(17*ratioH), this);
-				}
+		if(game != null) {
+			Graphics2D g2d = (Graphics2D) g; // the 2d drawing java paint
+			// Get the current game elements arrays
+			HashMap<Integer, Pacman > pacArr = game.getPacmanArray();
+			HashMap<Integer, Fruit > fruitArr =  game.getFruitArray();
+			HashMap<Integer, Blocks > blocksArr = game.getBlocksArray();
+			HashMap<Integer, Ghost > ghostArr = game.getGhostArray();
+			Me me = game.getMe();
 
-				for(Blocks b : blocksArr.values()) {			
-					g.setColor(Color.BLACK);
-					Point3D pUp = map.coord2pixel(b.getP1(), getWidth(), getHeight());
-					Point3D pDown = map.coord2pixel(b.getP2(), getWidth(), getHeight());
-					Rectangle r = new Rectangle();
-					r.x = (int) pUp.x();
-					r.y = (int) pUp.y();
-					r.add(pDown.x(),pDown.y());
-					g2d.fill(r);
-				}
+			Point3D p;
+			// Ratio for scaling the Pacmans and fruit animation
+			double ratioH = getHeight()/600.0;
+			double ratioW = getWidth()/800.0;
 
-				AffineTransformOp op;
+			for(Fruit fruit : fruitArr.values()) { // Move all fruit array and draw them
+				p = map.coord2pixel(fruit.getPoint(), getWidth(), getHeight());	// Fruit point saved geograpic coord, so convert it
+				if(fruit.destroyed)
+					g.drawImage(fruitImg, (int)p.x(), (int)p.y(), (int)(17*ratioW), (int)(17*ratioH), this);
+			}
 
-				for(Pacman pacman : pacArr.values()) { // Move all pacman array and draw them
-					p = map.coord2pixel(pacman.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
-					// Draw with a correct rotate
-					if(pacman.destroyed)
+			for(Blocks b : blocksArr.values()) {			
+				g.setColor(Color.black);
+				Point3D pUp = map.coord2pixel(b.getP1(), getWidth(), getHeight());
+				Point3D pDown = map.coord2pixel(b.getP2(), getWidth(), getHeight());
+
+				Rectangle r = new Rectangle(); 
+				r.x = (int) pUp.x();
+				r.y = (int) pUp.y();
+				r.add(pDown.x(),pDown.y());
+				g2d.fill(r);
+			}
+
+			AffineTransformOp op;
+
+			for(Pacman pacman : pacArr.values()) { // Move all pacman array and draw them
+				p = map.coord2pixel(pacman.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
+				// Draw with a correct rotate
+				if(pacman.destroyed)
 					g2d.drawImage(pacmanImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 
-				}
+			}
 
-				for(Ghost ghost : ghostArr.values()) { // Move all pacman array and draw them
-					p = map.coord2pixel(ghost.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
-					g2d.drawImage(ghostImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
-				}
+			for(Ghost ghost : ghostArr.values()) { // Move all pacman array and draw them
+				p = map.coord2pixel(ghost.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
+				g2d.drawImage(ghostImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
+			}
 
-				me.setOrien(angle-90);
-				p = map.coord2pixel(me.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
-				op = rotate.getTransform(me.getOrien()); // Save a transform rotate
-				g2d.drawImage(op.filter(meImg, null), (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
-				
-				if(running) {
+			me.setOrien(angle-90);
+			p = map.coord2pixel(me.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
+			op = rotate.getTransform(me.getOrien()); // Save a transform rotate
+			g2d.drawImage(op.filter(meImg, null), (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
+
+			if(playS.isRuning()) {
 				g2d.setColor(new Color(1f,0f,0.7f,.2f ));
 				g2d.fillRect(3, 3, 145, 110);
-				}
-
 			}
-			
 
 		}
+	}
 
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			int x = e.getX();
-			int y = e.getY();
-			System.out.println("Clicks: ("+x+", "+y+')'); // Print coords for each user clicks
-			Point3D p = new Point3D(x,y);
-			p = map.pixel2coord(p, getWidth(), getHeight());
-			System.out.println("Geograpich coords: ("+p+')'); // Print geo corrds as well
-			if(!running && openedGame) {
-				playS.setInitLocation(p.x(), p.y());
-				game.getMe().setPoint(p);
-				repaint();
-			}
-			
-			else if(stepByStepB) {
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
+		System.out.println("Clicks: ("+x+", "+y+')'); // Print coords for each user clicks
+		Point3D p = new Point3D(x,y);
+		p = map.pixel2coord(p, getWidth(), getHeight());
+		System.out.println("Geograpich coords: ("+p+')'); // Print geo corrds as well
+		if( openedGame && !playS.isRuning() ) {
+			playS.setInitLocation(p.x(), p.y());
+			game.getMe().setPoint(p);
+			repaint();
+		}
+
+		else if(stepByStepB) {
+			if(playS.isRuning()) {
 				angle = map.anglePoints(game.getMe().getPoint(), p);
 				playS.rotate(angle);
 				cs.MakeElements(playS.getBoard());
 				updater();
 			}
-			
-			else if(playB) {
-				angle = map.anglePoints(game.getMe().getPoint(), p);
-				animate.updateAngle(angle);
-			}	
-		}
-
-
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			if(mouseRadio.isSelected()) // If mouse selected & entert into frame turn on show coords near mouse
-				displayCoord.setVisible(true);
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) { // if mouse exit frame hide it
-			displayCoord.setVisible(false);
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {}
-
-		@Override
-		public void mouseDragged(MouseEvent e) { // Accept drag drawing, so when drag add it as character
-			mouseClicked(e);
-			try {
-				Thread.sleep(40);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
+			else {
+				Result();
 			}
 		}
 
-		@Override
-		public void mouseMoved(MouseEvent e) {
-			if(mouseRadio.isSelected()) { // If mouse moved print near mouse current coords
-				displayCoord.setBounds(e.getX(), e.getY(), 80, 55);
-				displayCoord.setText(e.getX()+", "+e.getY());
-			}
-		}
-
+		else if(playB) {
+			angle = map.anglePoints(game.getMe().getPoint(), p);
+			animate.updateAngle(angle);
+		}	
 	}
+
+
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(mouseRadio.isSelected()) // If mouse selected & entert into frame turn on show coords near mouse
+			displayCoord.setVisible(true);
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) { // if mouse exit frame hide it
+		displayCoord.setVisible(false);
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
+
+	@Override
+	public void mouseDragged(MouseEvent e) { // Accept drag drawing, so when drag add it as character
+		mouseClicked(e);
+		try {
+			Thread.sleep(40);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		if(mouseRadio.isSelected()) { // If mouse moved print near mouse current coords
+			displayCoord.setBounds(e.getX(), e.getY(), 80, 55);
+			displayCoord.setText(e.getX()+", "+e.getY());
+		}
+	}
+
+}
 
 }

@@ -1,0 +1,45 @@
+package Gui;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+
+public class FastFileOpen extends JPanel implements ActionListener {
+	private static final long serialVersionUID = -3397611530616842083L;
+	
+	private JComboBox<String> JList;
+	private MyFrame frame;
+	
+	public FastFileOpen(MyFrame frame) {
+		this.frame = frame;
+		Border black =  BorderFactory.createEtchedBorder(EtchedBorder.RAISED); 
+		
+		String[] FileString = {
+				"example1", "example2","example3", 
+				"example4", "example5", "example6",
+				"example7",	"example8","example9"
+				};
+		
+		 JList = new JComboBox<String>(FileString);
+		 JList.setBorder(black);
+		 
+		JButton openFile = new JButton("Quick opening");
+		openFile.addActionListener(this);
+		add(JList);
+		add(openFile);
+	}
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		File f = new File("data/Ex4_OOP_"+JList.getSelectedItem()+".csv");
+		frame.openGameFile(f);
+	}
+}
