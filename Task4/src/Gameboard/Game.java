@@ -10,11 +10,10 @@ import Geom.Point3D;
  */
 public class Game {
 	public boolean init;
-	HashMap<Integer, Fruit > fruitArray;
-	HashMap<Integer, Pacman > pacmanArray;
-	HashMap<Integer, Blocks > blocksArray;
-	HashMap<Integer, Ghost > ghostArray;
-
+	private HashMap<Integer, Fruit > fruitArray;
+	private HashMap<Integer, Pacman > pacmanArray;
+	private HashMap<Integer, Blocks > blocksArray;
+	private HashMap<Integer, Ghost > ghostArray;
 	private int  numOfFruits;
 	private Me me;
 
@@ -59,7 +58,7 @@ public class Game {
 
 	public void addBlock(Blocks b)
 	{
-		blocksArray.put(b.getID(),b);
+		blocksArray.put(b.getId(),b);
 	}
 	/**
 	 * 

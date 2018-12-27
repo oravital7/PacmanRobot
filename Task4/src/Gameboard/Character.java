@@ -9,7 +9,7 @@ public class Character {
 	private Point3D point; // Geographic point
 	
 	/**
-	 * This class represent a Characters of Pacman, Fruit
+	 * This class represent a Characters of Pacman, Fruit, Ghost and blocks
 	 * and all their common qualities
 	 * @param point
 	 * @param id

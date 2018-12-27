@@ -14,14 +14,4 @@ public class Fruit extends Character {
 		super(point,id, weight);
 		destroyed = true;
 	}
-	
-	/**
-	 * copy constructor
-	 * @param f - fruit
-	 */
-	public Fruit(Fruit f)
-	{
-		super(f.getPoint(),f.getId(),f.getAttribute());
-	}
-
 }

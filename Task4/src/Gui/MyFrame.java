@@ -366,8 +366,8 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 				for(Blocks b : blocksArr.values()) {			
 					g.setColor(Color.black);
-					Point3D pUp = map.coord2pixel(b.getP1(), getWidth(), getHeight());
-					Point3D pDown = map.coord2pixel(b.getP2(), getWidth(), getHeight());
+					Point3D pUp = map.coord2pixel(b.getPoint(), getWidth(), getHeight());
+					Point3D pDown = map.coord2pixel(b.getPoint2(), getWidth(), getHeight());
 
 					Rectangle r = new Rectangle(); 
 					r.x = (int) pUp.x();
