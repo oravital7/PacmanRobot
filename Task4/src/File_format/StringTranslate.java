@@ -9,9 +9,8 @@ public class StringTranslate {
 		this.s=s.split(",");
 	}
 	
-	public double getTimeLeft() {
-		String result[] = s[3].split(":"); 
-		return Double.parseDouble(result[1]);
+	public String getTimeLeft() {
+		return s[3].split(":")[1];
 	}
 	
 	public String getScore() {
@@ -19,14 +18,14 @@ public class StringTranslate {
 	}
 	
 	public String getTotalTime() {
-		return s[1];
+		return s[1].split(":")[1];
 	}
 	
 	public String getGhostKill() {
-		return s[4];
+		return s[4].split(":")[1];
 	}
 	
 	public String getOutOfBox() {
-		return s[5];
+		return s[5].split(":")[1];
 	}
 }
