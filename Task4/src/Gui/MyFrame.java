@@ -60,12 +60,11 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 	private JLabel displayCoord, score, timeLeft,totalTime,ghostKill, outOfbox; // Label for hover mouse (show current pixles)
 	private JMenuBar menuBar;
-	private JMenu File, GameMenu;
 	private JMenuItem open, clear, stepByStep, Exit, play, automatic;
 	private Game game; // Current game
 	private Map map; // Our image & converts
 	private BufferedImage pacmanImg, fruitImg, ghostImg,meImg;
-	private Cursor  Me; // Change icon mouse accord selection
+	private Cursor Me; // Change icon mouse accord selection
 	private JRadioButton mouseRadio, meRadio; // Radio button to switch between Pacman, Fruit and Mouse
 	private boolean stepByStepB,playB, openedGame, meB; // If is in animation progress avoid to do another commands
 	private Orien rotate;
@@ -127,7 +126,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		game = null;
 
 		menuBar = new JMenuBar();
-		File = new JMenu("File");
+		JMenu File = new JMenu("File");
 		open = new JMenuItem("Open File...",new ImageIcon("Icon\\open.png"));
 		open.addActionListener(this);
 		Exit = new JMenuItem("Exit");
@@ -141,7 +140,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		open.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 
-		GameMenu = new JMenu("Game");
+		JMenu GameMenu = new JMenu("Game");
 		stepByStep = new JMenuItem("Play step By Step", new ImageIcon("Icon\\play.png")); // Invoke image icon
 		stepByStep.addActionListener(this);
 		play = new JMenuItem("Play normal", new ImageIcon("Icon\\play.png")); // Invoke image icon
@@ -322,7 +321,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				"Error while Playing \nload map and insert your pacman",
 				"Error: Unable play the game",				
 				JOptionPane.ERROR_MESSAGE);
-
 	}
 
 
