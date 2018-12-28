@@ -67,7 +67,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	private BufferedImage pacmanImg, fruitImg, ghostImg,meImg;
 	private Cursor  Me; // Change icon mouse accord selection
 	private JRadioButton mouseRadio, meRadio; // Radio button to switch between Pacman, Fruit and Mouse
-	private boolean stepByStepB,playB, openedGame; // If is in animation progress avoid to do another commands
+	private boolean stepByStepB,playB, openedGame, meB; // If is in animation progress avoid to do another commands
 	private Orien rotate;
 	private Play playS; 
 	private double angle;
@@ -225,7 +225,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	 * @param TotalResult
 	 */
 	public void Result() {
-		openedGame=playB=stepByStepB = false; // Change running to false that we finish right now the current game
+		openedGame=playB=stepByStepB=meB = false; // Change running to false that we finish right now the current game
 		// content of the message
 		JOptionPane.showMessageDialog(this,
 				playS.getStatistics(),
@@ -276,7 +276,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		if(o==stepByStep) {
 			mouseRadio.doClick();
-			if(game == null) // if try to play a empty game send error
+			if(game == null||!meB) // if try to play a empty game send error
 				errorMessage();
 
 			else { // Ok let's start the game
@@ -288,7 +288,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		}
 
 		if(o==play) {
-			if(game == null)
+			if(game == null||!meB)
 				errorMessage();
 			else {
 				stepByStepB = false;
@@ -304,8 +304,9 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	public void openGameFile(File f) {
 		if(playB) animate.keepGoing=false;
 		playS = new Play(f.getAbsolutePath());
+		playS.setIDs(5555, 66666);
 		openedGame=true;
-		playB=stepByStepB=false;
+		playB=stepByStepB=meB=false;
 		map.setNewBounds(playS.getBoundingBox());
 		meRadio.setEnabled(true);
 		meRadio.doClick();
@@ -318,8 +319,8 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 	private void errorMessage() {
 		JOptionPane.showMessageDialog(this,
-				"Error: Unable play the game",
-				"Error while Playing - please first load map /n and insert your pacman",
+				"Error while Playing \nload map and insert your pacman",
+				"Error: Unable play the game",				
 				JOptionPane.ERROR_MESSAGE);
 
 	}
@@ -415,6 +416,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			if(openedGame && !playS.isRuning() ) {
 				playS.setInitLocation(p.x(), p.y());
 				game.getMe().setPoint(p);
+				meB=true;
 				repaint();
 			}
 
@@ -445,6 +447,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		@Override
 		public void mouseExited(MouseEvent e) { // if mouse exit frame hide it
 			displayCoord.setVisible(false);
+			setCursor(null);
 		}
 
 		@Override
