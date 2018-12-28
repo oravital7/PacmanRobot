@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
+import File_format.BoardArray;
 import File_format.Robot2Element;
 import File_format.StringTranslate;
 import Gameboard.Blocks;
@@ -380,11 +381,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 					Point3D pUp = map.coord2pixel(b.getPoint(), getWidth(), getHeight());
 					Point3D pDown = map.coord2pixel(b.getPoint2(), getWidth(), getHeight());
 
-					Rectangle r = new Rectangle(); 
-					r.x = (int) pUp.x();
-					r.y = (int) pUp.y();
-					r.add(pDown.x(),pDown.y());
-					g2d.fill(r);
+					g.fillRect((int)pUp.x(), (int)pDown.y(), (int)Math.abs(pDown.x()-pUp.x()), (int)Math.abs(pDown.y()-pUp.y()));
 				}
 
 				for(Pacman pacman : game.getPacmans()) { // Move all pacman array and draw them
@@ -415,6 +412,8 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			BoardArray stam = new BoardArray();
+			stam.build(game, getWidth(), getHeight());
 			int x = e.getX();
 			int y = e.getY();
 			System.out.println("Clicks: ("+x+", "+y+')'); // Print coords for each user clicks
