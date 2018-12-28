@@ -117,7 +117,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		trans = new StringTranslate();
 		map = Map.map();
-		BackGroundPanel panel = new BackGroundPanel();
+		BackGroundPanel panel = new BackGroundPanel(this);
 
 		add(panel);
 
@@ -329,8 +329,10 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	 */
 	private class BackGroundPanel extends JPanel implements MouseInputListener ,Serializable {
 		private static final long serialVersionUID = -3626966327917598406L;
-
-		public BackGroundPanel() {
+		private MyFrame f;
+		
+		public BackGroundPanel(MyFrame f) {
+			this.f=f;
 			addMouseListener(this);
 			addMouseMotionListener(this);
 		}
@@ -435,7 +437,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		@Override
 		public void mouseExited(MouseEvent e) { // if mouse exit frame hide it
 			displayCoord.setVisible(false);
-			setCursor(null);
+			f.setCursor(null);
 		}
 
 		@Override
