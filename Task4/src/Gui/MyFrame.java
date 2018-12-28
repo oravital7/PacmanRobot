@@ -58,11 +58,10 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	private static final long serialVersionUID = 2344533353395219312L;
 
 	private JLabel displayCoord, score, timeLeft,totalTime,ghostKill, outOfbox; // Label for hover mouse (show current pixles)
-	private JMenuBar menuBar;
 	private JMenuItem open, clear, stepByStep, Exit, play, automatic;
 	private Game game; // Current game
 	private Map map; // Our image & converts
-	private BufferedImage pacmanImg, fruitImg, ghostImg,meImg;
+	private BufferedImage pacmanImg, fruitImg, ghostImg, meImg;
 	private Cursor Me; // Change icon mouse accord selection
 	private JRadioButton mouseRadio, meRadio; // Radio button to switch between Pacman, Fruit and Mouse
 	private boolean stepByStepB,playB, openedGame, meB; // If is in animation progress avoid to do another commands
@@ -124,7 +123,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		game = null;
 
-		menuBar = new JMenuBar();
+		JMenuBar menuBar = new JMenuBar();
 		JMenu File = new JMenu("File");
 		open = new JMenuItem("Open File...",new ImageIcon("Icon\\open.png"));
 		open.addActionListener(this);
@@ -370,8 +369,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 					g2d.fill(r);
 				}
 
-				AffineTransformOp op;
-
 				for(Pacman pacman : game.getPacmans()) { // Move all pacman array and draw them
 					p = map.coord2pixel(pacman.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
 					// Draw with a correct rotate
@@ -385,8 +382,9 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				}
 
 				me.setOrien(angle-90);
+				
 				p = map.coord2pixel(me.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
-				op = rotate.getTransform(me.getOrien()); // Save a transform rotate
+				AffineTransformOp op = rotate.getTransform(me.getOrien()); // Save a transform rotate
 				g2d.drawImage(op.filter(meImg, null), (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 
 				if(playS.isRuning()) {
@@ -427,8 +425,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				animate.updateAngle(angle);
 			}	
 		}
-
-
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
