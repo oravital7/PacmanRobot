@@ -61,7 +61,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	private JMenuItem open, clear, stepByStep, Exit, play, automatic;
 	private Game game; // Current game
 	private Map map; // Our image & converts
-	private BufferedImage pacmanImg, fruitImg, ghostImg, meImg;
+	private BufferedImage pacmanImg, fruitImg, ghostImg, meImg, pacmanImgMenu;
 	private Cursor Me; // Change icon mouse accord selection
 	private JRadioButton mouseRadio, meRadio; // Radio button to switch between Pacman, Fruit and Mouse
 	private boolean stepByStepB,playB, openedGame, meB; // If is in animation progress avoid to do another commands
@@ -162,7 +162,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		menuBar.add(mouse);
 		menuBar.add(mouseRadio);
 
-		JLabel Me = new JLabel(new ImageIcon("Icon\\me.png"));
+		JLabel Me = new JLabel(new ImageIcon("Icon\\menu.png"));
 		meRadio = new JRadioButton("Me");
 		meRadio.addActionListener(this);
 		menuBar.add(Me);
@@ -194,6 +194,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			pacmanImg = ImageIO.read(new File("Icon\\pacman.png"));
 			ghostImg = ImageIO.read(new File("Icon\\ghost.png"));
 			meImg = ImageIO.read(new File("Icon\\me.png"));
+			pacmanImgMenu = ImageIO.read(new File("Icon\\menu.png"));
 			rotate = new Orien(meImg);
 		} catch (IOException e) {
 			e.printStackTrace();
