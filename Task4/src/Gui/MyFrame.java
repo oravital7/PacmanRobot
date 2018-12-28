@@ -214,6 +214,17 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		outOfbox.setText("Out of box: "+trans.getOutOfBox());
 		repaint();
 	}
+	/**
+	 * set the board to 0
+	 */
+	public synchronized void reUpdate() {
+		score.setText("Score: 0");		
+		totalTime.setText("Total Time: 0");
+		timeLeft.setText("Time Left: 0");
+		ghostKill.setText("Kill by ghost: 0");
+		outOfbox.setText("Out of box: 0");
+		repaint();
+	}
 
 	/**
 	 * Responsible to send a message, when the game finish
@@ -228,6 +239,11 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				playS.getStatistics(),
 				"Game Over!\n ", 
 				JOptionPane.INFORMATION_MESSAGE); 
+		game.clear();
+		game.getblocks().removeAll(game.getblocks());
+		game.getGhosts().removeAll(game.getGhosts());
+		reUpdate();
+		
 	}
 
 	@Override
@@ -244,7 +260,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				playB = false;
 				animate.keepGoing=false;
 			}
-			repaint(); 
+			reUpdate();
 			return;
 		}
 
@@ -312,7 +328,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		angle=90;
 		cs = new Robot2Element(game);
 		cs.MakeElements(playS.getBoard()); // Translate a csv file into a new game
-		repaint();
+		reUpdate();
 	}
 
 	private void errorMessage() {
