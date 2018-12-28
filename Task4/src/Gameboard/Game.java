@@ -1,5 +1,6 @@
 package Gameboard;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import Geom.Point3D;
@@ -9,7 +10,6 @@ import Geom.Point3D;
  * this class represent a game - a collections of Pacmans and fruits.
  */
 public class Game {
-	public boolean init;
 	private HashMap<Integer, Fruit > fruitArray;
 	private HashMap<Integer, Pacman > pacmanArray;
 	private HashMap<Integer, Blocks > blocksArray;
@@ -24,7 +24,6 @@ public class Game {
 		blocksArray = new HashMap<>();
 		ghostArray = new HashMap<>();
 		numOfFruits=0;
-		init=false;
 	}
 
 	public void setMe (Me me)
@@ -32,18 +31,23 @@ public class Game {
 		this.me=me;
 	}
 
-
 	public Me getMe() {
 		return me;
 	}
-
-	public HashMap<Integer, Ghost > getGhostArray() {
-		return ghostArray;
+	public Collection<Ghost> getGhosts() {
+		return ghostArray.values();
 	}
-
-
-	public HashMap<Integer, Blocks > getBlocksArray() {
-		return blocksArray;
+	
+	public Collection<Fruit> getFruits() {
+		return fruitArray.values();
+	}
+	
+	public Collection<Pacman> getPacmans() {
+		return pacmanArray.values();
+	}
+	
+	public Collection<Blocks> getblocks() {
+		return blocksArray.values();
 	}
 
 	/**
@@ -82,21 +86,6 @@ public class Game {
 		return numOfFruits;
 	}
 
-	/**
-	 * 
-	 * @return the array of the fruits
-	 */
-	public HashMap<Integer, Fruit >  getFruitArray() {
-		return fruitArray;
-	}
-	/**
-	 * 
-	 * @return the array of the pacmans
-	 */
-	public HashMap<Integer, Pacman >  getPacmanArray() {
-		return pacmanArray;
-	}
-
 	public void updateGhost(int id,Point3D point) {
 		Ghost g = ghostArray.get(id);
 		g.setPoint(point);
@@ -111,7 +100,11 @@ public class Game {
 		f.destroyed = true;
 		numOfFruits++;
 	}
-
+	
+	public boolean isEmpty() {
+		return fruitArray.isEmpty();
+	}
+	
 	public void clear()
 	{
 		for(Fruit f : fruitArray.values()) {

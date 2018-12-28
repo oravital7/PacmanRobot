@@ -37,7 +37,6 @@ import Coords.Map;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
 
 import File_format.Robot2Element;
 import File_format.StringTranslate;
@@ -346,10 +345,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			if(game != null) {
 				Graphics2D g2d = (Graphics2D) g; // the 2d drawing java paint
 				// Get the current game elements arrays
-				HashMap<Integer, Pacman > pacArr = game.getPacmanArray();
-				HashMap<Integer, Fruit > fruitArr =  game.getFruitArray();
-				HashMap<Integer, Blocks > blocksArr = game.getBlocksArray();
-				HashMap<Integer, Ghost > ghostArr = game.getGhostArray();
 				Me me = game.getMe();
 
 				Point3D p;
@@ -357,13 +352,13 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				double ratioH = getHeight()/600.0;
 				double ratioW = getWidth()/800.0;
 
-				for(Fruit fruit : fruitArr.values()) { // Move all fruit array and draw them
+				for(Fruit fruit : game.getFruits()) { // Move all fruit array and draw them
 					p = map.coord2pixel(fruit.getPoint(), getWidth(), getHeight());	// Fruit point saved geograpic coord, so convert it
 					if(fruit.destroyed)
 						g.drawImage(fruitImg, (int)p.x(), (int)p.y(), (int)(17*ratioW), (int)(17*ratioH), this);
 				}
 
-				for(Blocks b : blocksArr.values()) {			
+				for(Blocks b : game.getblocks()) {			
 					g.setColor(Color.black);
 					Point3D pUp = map.coord2pixel(b.getPoint(), getWidth(), getHeight());
 					Point3D pDown = map.coord2pixel(b.getPoint2(), getWidth(), getHeight());
@@ -377,15 +372,14 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 				AffineTransformOp op;
 
-				for(Pacman pacman : pacArr.values()) { // Move all pacman array and draw them
+				for(Pacman pacman : game.getPacmans()) { // Move all pacman array and draw them
 					p = map.coord2pixel(pacman.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
 					// Draw with a correct rotate
 					if(pacman.destroyed)
 						g2d.drawImage(pacmanImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
-
 				}
 
-				for(Ghost ghost : ghostArr.values()) { // Move all pacman array and draw them
+				for(Ghost ghost : game.getGhosts()) { // Move all pacman array and draw them
 					p = map.coord2pixel(ghost.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
 					g2d.drawImage(ghostImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 				}
