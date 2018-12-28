@@ -117,7 +117,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		trans = new StringTranslate();
 		map = Map.map();
-		BackGroundPanel panel = new BackGroundPanel(this);
+		BackGroundPanel panel = new BackGroundPanel();
 
 		add(panel);
 
@@ -329,10 +329,8 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	 */
 	private class BackGroundPanel extends JPanel implements MouseInputListener ,Serializable {
 		private static final long serialVersionUID = -3626966327917598406L;
-		private MyFrame f;
-		
-		public BackGroundPanel(MyFrame f) {
-			this.f=f;
+
+		public BackGroundPanel() {
 			addMouseListener(this);
 			addMouseMotionListener(this);
 		}
@@ -384,7 +382,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				}
 
 				me.setOrien(angle-90);
-				
+
 				p = map.coord2pixel(me.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
 				AffineTransformOp op = rotate.getTransform(me.getOrien()); // Save a transform rotate
 				g2d.drawImage(op.filter(meImg, null), (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
@@ -437,7 +435,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		@Override
 		public void mouseExited(MouseEvent e) { // if mouse exit frame hide it
 			displayCoord.setVisible(false);
-			f.setCursor(null);
+			mouseRadio.doClick();
 		}
 
 		@Override
