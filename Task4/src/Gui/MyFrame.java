@@ -239,6 +239,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		if(o==clear) {
 			game = null;
 			openedGame=stepByStepB = false;
+			meRadio.setEnabled(false);
 			if(playB) {
 				playB = false;
 				animate.keepGoing=false;
@@ -430,6 +431,8 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		public void mouseEntered(MouseEvent e) {
 			if(mouseRadio.isSelected()) // If mouse selected & entert into frame turn on show coords near mouse
 				displayCoord.setVisible(true);
+			if(meRadio.isEnabled())
+				meRadio.doClick();
 		}
 
 		@Override
