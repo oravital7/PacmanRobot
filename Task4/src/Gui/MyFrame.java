@@ -166,6 +166,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	 * so for double check this method ensures that
 	 */
 	public synchronized void updater() {
+		cs.MakeElements(playS.getBoard());
 		trans.setString(playS.getStatistics());
 		score.setText(trans.getScore());		
 		totalTime.setText("Total Time: "+trans.getTotalTime());
@@ -247,14 +248,16 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			return;
 		}
 
-		if(o==play) {
+		if(o==play && !playB) {
 			if(game == null||!meB)
 				errorMessage();
 			else {
 				setCursor(null);
 				displayCoord.setVisible(true);
 				stepByStepB = false;
-				animate = new Animate(this,playS,cs,angle);
+				animate = new Animate(this);
+				if(!playS.isRuning())
+					playS.start();
 				animate.start();
 				mouse=playB = true;
 			}
@@ -282,15 +285,21 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		reUpdate();
 	}
 
-	public void controlByKey(int angle) {
-		this.angle = angle;
-		if(playB) 
-			animate.updateAngle(angle);
-		else 
-			playS.rotate(angle);
+	public void controlByKey(double angle) {
+			this.angle = angle;
+			if(stepByStepB) 
+				rotate();
+	}
 
-		cs.MakeElements(playS.getBoard());
-		updater();
+	public void rotate() {
+		if(!playS.isRuning()) {
+			if(playB) animate.keepGoing = false;
+			Result();
+		}
+		else {
+			playS.rotate(angle);
+			updater();
+		}
 	}
 
 	public void keyStart() {
@@ -305,7 +314,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	 */
 	private class BackGroundPanel extends JPanel implements MouseInputListener ,Serializable {
 		private static final long serialVersionUID = -3626966327917598406L;
-		
+
 		private MyFrame f;
 		private BufferedImage pacmanImg, fruitImg, ghostImg, meImg;
 		private Cursor Me; // Change icon mouse accord selection
@@ -400,6 +409,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			Point3D p = new Point3D(x,y);
 			p = map.pixel2coord(p, getWidth(), getHeight());
 			System.out.println("Geograpich coords: ("+p+')'); // Print geo corrds as well
+			
 			if(openedGame && !playS.isRuning() ) {
 				boolean check = playS.setInitLocation(p.x(), p.y());
 				if(check) {
@@ -410,19 +420,8 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				repaint();
 			}
 
-			else if(stepByStepB) {
-				if(playS.isRuning()) {
-					angle = map.anglePoints(game.getMe().getPoint(), p);
-					playS.rotate(angle);
-					cs.MakeElements(playS.getBoard());
-					updater();
-				}
-				else Result();
-			}
-
-			else if(playB) {
-				angle = map.anglePoints(game.getMe().getPoint(), p);
-				animate.updateAngle(angle);
+			else if(meB) {
+				controlByKey(map.anglePoints(game.getMe().getPoint(), p));
 			}
 		}
 
