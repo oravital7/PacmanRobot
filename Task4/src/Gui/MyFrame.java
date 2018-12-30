@@ -335,7 +335,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 	private void errorMessage() {
 		JOptionPane.showMessageDialog(this,
-				"Error while Playing \nload map and insert your pacman",
+				"Error while Playing \n*Load map \n*Place the pacman in a valid location ",
 				"Error: Unable play the game",				
 				JOptionPane.ERROR_MESSAGE);
 	}
@@ -412,8 +412,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			BoardArray stam = new BoardArray();
-			stam.build(game, getWidth(), getHeight());
 			int x = e.getX();
 			int y = e.getY();
 			System.out.println("Clicks: ("+x+", "+y+')'); // Print coords for each user clicks
@@ -421,9 +419,9 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			p = map.pixel2coord(p, getWidth(), getHeight());
 			System.out.println("Geograpich coords: ("+p+')'); // Print geo corrds as well
 			if(openedGame && !playS.isRuning() ) {
-				playS.setInitLocation(p.x(), p.y());
-				game.getMe().setPoint(p);
-				meB=true;
+				meB = playS.setInitLocation(p.x(), p.y());
+				if(!meB) errorMessage();
+				else game.getMe().setPoint(p);
 				repaint();
 			}
 
