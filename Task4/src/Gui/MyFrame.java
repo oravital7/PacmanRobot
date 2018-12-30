@@ -6,18 +6,15 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -27,7 +24,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -38,10 +34,7 @@ import Coords.Map;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-import File_format.BoardArray;
 import File_format.Robot2Element;
 import File_format.StringTranslate;
 import Gameboard.Blocks;
@@ -52,7 +45,6 @@ import Gameboard.Me;
 import Gameboard.Pacman;
 import Geom.Point3D;
 import Robot.Play;
-import sun.jvm.hotspot.tools.SysPropsDumper;
 
 /**
  * This class is responsible for the graphical
@@ -119,7 +111,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		add(ghostKill);
 		add(outOfbox);
 
-		trans = new StringTranslate();
 		map = Map.map();
 		BackGroundPanel panel = new BackGroundPanel(this);
 
@@ -185,6 +176,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		trans = new StringTranslate();
 		Me=Toolkit.getDefaultToolkit().createCustomCursor(meImg, new Point(0, 0), "Me");
 	}
 
@@ -303,6 +295,22 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		reUpdate();
 	}
 
+	public void controlByKey(int angle) {
+		this.angle = angle;
+		if(playB) 
+			animate.updateAngle(angle);
+		else 
+			playS.rotate(angle);
+
+		cs.MakeElements(playS.getBoard());
+		updater();
+	}
+
+	public void keyStart() {
+		if(playB) stepByStep.doClick();
+		else play.doClick();
+	}
+
 	private void errorMessage() {
 		JOptionPane.showMessageDialog(this,
 				"Error while Playing \n*Load map \n*Place the pacman in a valid location ",
@@ -315,17 +323,16 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	 * for each command such as Clicks, drag and etc
 	 *
 	 */
-	private class BackGroundPanel extends JPanel implements MouseInputListener, KeyListener ,Serializable {
+	private class BackGroundPanel extends JPanel implements MouseInputListener ,Serializable {
 		private static final long serialVersionUID = -3626966327917598406L;
 		private MyFrame f;
-		private final Set<Integer> pressed = new HashSet<Integer>();
-		private boolean left,up,right,down;
 
 		public BackGroundPanel(MyFrame f) {
 			addMouseListener(this);
-			addMouseMotionListener(this);
-			addKeyListener(this);
-			left=up=right=down=false;
+			addMouseMotionListener(this);	
+
+			KeyObserve keys = new KeyObserve(f);
+			addKeyListener(keys);
 			this.f=f;
 		}
 
@@ -459,166 +466,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				displayCoord.setBounds(e.getX(), e.getY(), 80, 55);
 				displayCoord.setText(e.getX()+", "+e.getY());
 			}
-		}
-
-		@Override
-		public void keyTyped(KeyEvent e) {}
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			int x = e.getKeyCode();
-			if(x==KeyEvent.VK_SPACE) {
-				if(playB)
-					stepByStep.doClick();
-				else play.doClick();
-			}
-			if(playB || stepByStepB) {
-				pressed.add(x);
-				if(x==KeyEvent.VK_LEFT) left = true;
-				if(x==KeyEvent.VK_RIGHT) right = true;
-				if(x==KeyEvent.VK_UP)	 up = true;
-				if(x==KeyEvent.VK_DOWN) down = true;
-
-				if(left && up) {
-					angle=305;
-					if(playB) 
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-
-				}
-				else if(right && up) {
-					angle=45;
-					if(playB) 
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-
-				}
-				else if(right && down) {
-					angle=135;
-					if(playB) 
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-
-				}
-				else if(left && down) {
-					angle=225;
-					if(playB) 
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-
-				}
-				else if(left) {
-					angle=270;
-					if(playB) 
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-				}
-				else	if(right) {
-					angle=90;
-					if(playB)
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-				}
-				else if(up) {
-					angle=0;
-					if(playB)
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-				}
-				else if(down) {
-					angle=180;
-					if(playB)
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);					
-				}
-
-				cs.MakeElements(playS.getBoard());
-				updater();
-			}
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-			int x=e.getKeyCode();
-			if(x==KeyEvent.VK_LEFT) left = false;
-			if(x==KeyEvent.VK_RIGHT) right = false;
-			if(x==KeyEvent.VK_UP)	 up = false;
-			if(x==KeyEvent.VK_DOWN) down = false;
-
-			if(playB || stepByStepB) {
-				if(left && up) {
-					angle=305;
-					if(playB) 
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-
-				}
-				else if(right && up) {
-					angle=45;
-					if(playB) 
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-
-				}
-				else if(right && down) {
-					angle=135;
-					if(playB) 
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-
-				}
-				else if(left && down) {
-					angle=225;
-					if(playB) 
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-
-				}
-				else if(left) {
-					angle=270;
-					if(playB) 
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-				}
-				else	if(right) {
-					angle=90;
-					if(playB)
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-				}
-				else if(up) {
-					angle=0;
-					if(playB)
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);
-				}
-				else if(down) {
-					angle=180;
-					if(playB)
-						animate.updateAngle(angle);
-					else
-						playS.rotate(angle);					
-				}
-
-				cs.MakeElements(playS.getBoard());
-				updater();
-			}
-
 		}
 
 	}

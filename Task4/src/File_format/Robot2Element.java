@@ -9,7 +9,6 @@ import Gameboard.Ghost;
 import Gameboard.Me;
 import Gameboard.Pacman;
 import Geom.Point3D;
-import sun.jvm.hotspot.tools.SysPropsDumper;
 
 
 /**
