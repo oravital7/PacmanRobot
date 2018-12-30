@@ -36,7 +36,7 @@ public class Animate extends Thread  {
 			cs.MakeElements(playS.getBoard());			
 			frame.updater();
 			try {
-				Thread.sleep(50);
+				Thread.sleep(30);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
