@@ -1,6 +1,5 @@
 package Gameboard;
 
-import java.awt.Point;
 import java.util.Collection;
 import java.util.HashMap;
 

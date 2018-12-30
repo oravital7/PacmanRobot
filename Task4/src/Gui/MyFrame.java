@@ -219,7 +219,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	/**
 	 * set the board to 0
 	 */
-	public synchronized void reUpdate() {
+	private void reUpdate() {
 		score.setText("Score: 0");		
 		totalTime.setText("Total Time: 0");
 		timeLeft.setText("Time Left: 0");
@@ -241,9 +241,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				playS.getStatistics(),
 				"Game Over!\n ", 
 				JOptionPane.INFORMATION_MESSAGE); 
-		game.clear();
-		game.getblocks().removeAll(game.getblocks());
-		game.getGhosts().removeAll(game.getGhosts());
+		game = null;
 		reUpdate();
 		
 	}
@@ -419,9 +417,12 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			p = map.pixel2coord(p, getWidth(), getHeight());
 			System.out.println("Geograpich coords: ("+p+')'); // Print geo corrds as well
 			if(openedGame && !playS.isRuning() ) {
-				meB = playS.setInitLocation(p.x(), p.y());
-				if(!meB) errorMessage();
-				else game.getMe().setPoint(p);
+				boolean check = playS.setInitLocation(p.x(), p.y());
+				if(check) {
+					meB = true;
+					game.getMe().setPoint(p);
+				}
+				else errorMessage();
 				repaint();
 			}
 
