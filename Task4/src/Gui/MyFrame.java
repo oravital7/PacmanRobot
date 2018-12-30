@@ -57,11 +57,8 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	private JLabel displayCoord, score, timeLeft,totalTime,ghostKill, outOfbox; // Label for hover mouse (show current pixles)
 	private JMenuItem open, clear, stepByStep, Exit, play, automatic;
 	private Game game; // Current game
-	private Map map; // Our image & converts
-	private BufferedImage pacmanImg, fruitImg, ghostImg, meImg;
-	private Cursor Me; // Change icon mouse accord selection
 	private boolean stepByStepB,playB, openedGame, meB, mouse; // If is in animation progress avoid to do another commands
-	private Orien rotate;
+	private Map map; // Our image & converts
 	private Play playS; 
 	private double angle;
 	private Animate animate;
@@ -117,6 +114,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		add(panel);
 
 		game = null;
+		trans = new StringTranslate();
 
 		JMenuBar menuBar = new JMenuBar();
 		JMenu File = new JMenu("File");
@@ -155,30 +153,13 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		FastFileOpen FastOpen = new FastFileOpen(this);
 		menuBar.add(FastOpen);
 
-
-		start();
-
 		setSize(1200, 800);
 		setLocation(300, 50);
 		setVisible(true);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-
 	}
 
-	private void start() {
-		try {
-			fruitImg = ImageIO.read(new File("Icon\\fruit.png"));
-			pacmanImg = ImageIO.read(new File("Icon\\pacman.png"));
-			ghostImg = ImageIO.read(new File("Icon\\ghost.png"));
-			meImg = ImageIO.read(new File("Icon\\me.png"));
-			rotate = new Orien(meImg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		trans = new StringTranslate();
-		Me=Toolkit.getDefaultToolkit().createCustomCursor(meImg, new Point(0, 0), "Me");
-	}
 
 	/**
 	 * Didn't find if repaint is a synchronized method
@@ -280,6 +261,13 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		}
 	}
 
+	private void errorMessage() {
+		JOptionPane.showMessageDialog(this,
+				"Error while Playing \n*Load map \n*Place the pacman in a valid location ",
+				"Error: Unable play the game",				
+				JOptionPane.ERROR_MESSAGE);
+	}
+
 	public void openGameFile(File f) {
 		if(playB) animate.keepGoing=false;
 		playS = new Play(f.getAbsolutePath());
@@ -311,13 +299,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		else play.doClick();
 	}
 
-	private void errorMessage() {
-		JOptionPane.showMessageDialog(this,
-				"Error while Playing \n*Load map \n*Place the pacman in a valid location ",
-				"Error: Unable play the game",				
-				JOptionPane.ERROR_MESSAGE);
-	}
-
 	/**
 	 * This class responsible to paint all our elements and listen to user 
 	 * for each command such as Clicks, drag and etc
@@ -325,7 +306,11 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	 */
 	private class BackGroundPanel extends JPanel implements MouseInputListener ,Serializable {
 		private static final long serialVersionUID = -3626966327917598406L;
+		
 		private MyFrame f;
+		private BufferedImage pacmanImg, fruitImg, ghostImg, meImg;
+		private Cursor Me; // Change icon mouse accord selection
+		private Orien rotate;
 
 		public BackGroundPanel(MyFrame f) {
 			addMouseListener(this);
@@ -334,7 +319,22 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			KeyObserve keys = new KeyObserve(f);
 			addKeyListener(keys);
 			this.f=f;
+			start();
 		}
+
+		private void start() {
+			try {
+				fruitImg = ImageIO.read(new File("Icon\\fruit.png"));
+				pacmanImg = ImageIO.read(new File("Icon\\pacman.png"));
+				ghostImg = ImageIO.read(new File("Icon\\ghost.png"));
+				meImg = ImageIO.read(new File("Icon\\me.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			rotate = new Orien(meImg);
+			Me=Toolkit.getDefaultToolkit().createCustomCursor(meImg, new Point(0, 0), "Me");
+		}
+
 
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);

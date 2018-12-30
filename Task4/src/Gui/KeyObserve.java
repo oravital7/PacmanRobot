@@ -20,39 +20,40 @@ public class KeyObserve  implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int x = e.getKeyCode();
-		if(x==KeyEvent.VK_SPACE) {
+		
+		if(x==KeyEvent.VK_SPACE) 
 			f.keyStart();
-		}
+		
 
 		if(x==KeyEvent.VK_LEFT) left = true;
 		if(x==KeyEvent.VK_RIGHT) right = true;
 		if(x==KeyEvent.VK_UP)	 up = true;
 		if(x==KeyEvent.VK_DOWN) down = true;
 
-		if(left && up) {
+		if(left && up) 
 			f.controlByKey(305);
-		}
-		else if(right && up) {
+		
+		else if(right && up) 
 			f.controlByKey(45);
-		}
-		else if(right && down) {
+		
+		else if(right && down) 
 			f.controlByKey(135);
-		}
-		else if(left && down) {
+		
+		else if(left && down) 
 			f.controlByKey(225);
-		}
-		else if(left) {
+		
+		else if(left) 
 			f.controlByKey(270);
-		}
-		else	if(right) {
+		
+		else if(right) 
 			f.controlByKey(90);
-		}
-		else if(up) {
+		
+		else if(up) 
 			f.controlByKey(0);
-		}
-		else if(down) {
+		
+		else if(down) 
 			f.controlByKey(180);
-		}
+		
 	}
 
 	@Override
@@ -63,30 +64,30 @@ public class KeyObserve  implements KeyListener {
 		if(x==KeyEvent.VK_UP)	 up = false;
 		if(x==KeyEvent.VK_DOWN) down = false;
 
-		if(left && up) {
+		if(left && up) 
 			f.controlByKey(305);
-		}
-		else if(right && up) {
+		
+		else if(right && up) 
 			f.controlByKey(45);
-		}
-		else if(right && down) {
+		
+		else if(right && down) 
 			f.controlByKey(135);
-		}
-		else if(left && down) {
+		
+		else if(left && down) 
 			f.controlByKey(225);
-		}
-		else if(left) {
+		
+		else if(left) 
 			f.controlByKey(270);
-		}
-		else if(right) {
+		
+		else if(right) 
 			f.controlByKey(90);
-		}
-		else if(up) {
+		
+		else if(up) 
 			f.controlByKey(0);
-		}
-		else if(down) {
+		
+		else if(down) 
 			f.controlByKey(180);
-		}
+		
 	}
 
 }
