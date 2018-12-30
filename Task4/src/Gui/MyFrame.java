@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -37,6 +38,8 @@ import Coords.Map;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import File_format.BoardArray;
 import File_format.Robot2Element;
@@ -49,6 +52,7 @@ import Gameboard.Me;
 import Gameboard.Pacman;
 import Geom.Point3D;
 import Robot.Play;
+import sun.jvm.hotspot.tools.SysPropsDumper;
 
 /**
  * This class is responsible for the graphical
@@ -62,10 +66,9 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	private JMenuItem open, clear, stepByStep, Exit, play, automatic;
 	private Game game; // Current game
 	private Map map; // Our image & converts
-	private BufferedImage pacmanImg, fruitImg, ghostImg, meImg, pacmanImgMenu;
+	private BufferedImage pacmanImg, fruitImg, ghostImg, meImg;
 	private Cursor Me; // Change icon mouse accord selection
-	private JRadioButton mouseRadio, meRadio; // Radio button to switch between Pacman, Fruit and Mouse
-	private boolean stepByStepB,playB, openedGame, meB; // If is in animation progress avoid to do another commands
+	private boolean stepByStepB,playB, openedGame, meB, mouse; // If is in animation progress avoid to do another commands
 	private Orien rotate;
 	private Play playS; 
 	private double angle;
@@ -78,7 +81,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	}
 
 	public MyFrame() {
-
+		mouse = true;
 		openedGame=playB=stepByStepB = false; // We start with no progress(game running animation)
 		displayCoord = new JLabel();
 		displayCoord.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -118,7 +121,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		trans = new StringTranslate();
 		map = Map.map();
-		BackGroundPanel panel = new BackGroundPanel();
+		BackGroundPanel panel = new BackGroundPanel(this);
 
 		add(panel);
 
@@ -156,24 +159,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		GameMenu.addActionListener(this);
 		menuBar.add(GameMenu);
 
-		JLabel mouse = new JLabel(new ImageIcon("Icon\\mouse.png"));
-		mouseRadio = new JRadioButton("Pointer");
-		mouseRadio.setSelected(true);
-		mouseRadio.addActionListener(this);
-		menuBar.add(mouse);
-		menuBar.add(mouseRadio);
-
-		JLabel Me = new JLabel(new ImageIcon("Icon\\menu.png"));
-		meRadio = new JRadioButton("Me");
-		meRadio.addActionListener(this);
-		menuBar.add(Me);
-		menuBar.add(meRadio);
-
 		setJMenuBar(menuBar);
-		ButtonGroup group = new ButtonGroup(); // Create a groupButton To synchronize the buttons
-		group.add(mouseRadio);
-		group.add(meRadio);
-		meRadio.setEnabled(false);
 
 		FastFileOpen FastOpen = new FastFileOpen(this);
 		menuBar.add(FastOpen);
@@ -195,7 +181,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			pacmanImg = ImageIO.read(new File("Icon\\pacman.png"));
 			ghostImg = ImageIO.read(new File("Icon\\ghost.png"));
 			meImg = ImageIO.read(new File("Icon\\me.png"));
-			pacmanImgMenu = ImageIO.read(new File("Icon\\menu.png"));
 			rotate = new Orien(meImg);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -243,7 +228,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				JOptionPane.INFORMATION_MESSAGE); 
 		game = null;
 		reUpdate();
-		
+
 	}
 
 	@Override
@@ -254,11 +239,10 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		// reset the game for new one
 		if(o==clear) {
 			game = null;
-			openedGame=stepByStepB = false;
-			meRadio.setEnabled(false);
+			openedGame = stepByStepB = false;
+			mouse = true;
 			if(playB) {
-				playB = false;
-				animate.keepGoing=false;
+				playB=animate.keepGoing=false;
 			}
 			reUpdate();
 			return;
@@ -278,23 +262,12 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			return;
 		}
 
-		if(o==meRadio) { // Fruit choose, change cursor
-			setCursor(Me);
-			displayCoord.setVisible(false);
-			return;
-		}
-		if(o==mouseRadio) { // Mouse choose, change cursor
-			setCursor(null);
-			return;
-		}
-
 		if(o==stepByStep) {
-			mouseRadio.doClick();
 			if(game == null||!meB) // if try to play a empty game send error
 				errorMessage();
 
 			else { // Ok let's start the game
-				stepByStepB = true;
+				mouse=stepByStepB = true;
 				if(playB) 	playB = animate.keepGoing=false;		
 				else playS.start();
 			}
@@ -305,12 +278,12 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			if(game == null||!meB)
 				errorMessage();
 			else {
+				setCursor(null);
+				displayCoord.setVisible(true);
 				stepByStepB = false;
-				mouseRadio.doClick();
-				meRadio.setEnabled(false);
-				animate = new Animate(this,playS,cs);
+				animate = new Animate(this,playS,cs,angle);
 				animate.start();
-				playB = true;
+				mouse=playB = true;
 			}
 		}
 	}
@@ -322,8 +295,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		openedGame=true;
 		playB=stepByStepB=meB=false;
 		map.setNewBounds(playS.getBoundingBox());
-		meRadio.setEnabled(true);
-		meRadio.doClick();
+		mouse = false;
 		game = new Game();
 		angle=90;
 		cs = new Robot2Element(game);
@@ -338,18 +310,23 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				JOptionPane.ERROR_MESSAGE);
 	}
 
-
 	/**
 	 * This class responsible to paint all our elements and listen to user 
 	 * for each command such as Clicks, drag and etc
 	 *
 	 */
-	private class BackGroundPanel extends JPanel implements MouseInputListener ,Serializable {
+	private class BackGroundPanel extends JPanel implements MouseInputListener, KeyListener ,Serializable {
 		private static final long serialVersionUID = -3626966327917598406L;
+		private MyFrame f;
+		private final Set<Integer> pressed = new HashSet<Integer>();
+		private boolean left,up,right,down;
 
-		public BackGroundPanel() {
+		public BackGroundPanel(MyFrame f) {
 			addMouseListener(this);
 			addMouseMotionListener(this);
+			addKeyListener(this);
+			left=up=right=down=false;
+			this.f=f;
 		}
 
 		protected void paintComponent(Graphics g) {
@@ -410,6 +387,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			requestFocus();
 			int x = e.getX();
 			int y = e.getY();
 			System.out.println("Clicks: ("+x+", "+y+')'); // Print coords for each user clicks
@@ -439,21 +417,24 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			else if(playB) {
 				angle = map.anglePoints(game.getMe().getPoint(), p);
 				animate.updateAngle(angle);
-			}	
+			}
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			if(mouseRadio.isSelected()) // If mouse selected & entert into frame turn on show coords near mouse
+			if(mouse) { // If mouse selected & entert into frame turn on show coords near mouse
 				displayCoord.setVisible(true);
-			if(meRadio.isEnabled())
-				meRadio.doClick();
+			}
+			else {
+				displayCoord.setVisible(false);
+				f.setCursor(Me);
+			}
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) { // if mouse exit frame hide it
 			displayCoord.setVisible(false);
-			mouseRadio.doClick();
+			f.setCursor(null);
 		}
 
 		@Override
@@ -474,10 +455,170 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			if(mouseRadio.isSelected()) { // If mouse moved print near mouse current coords
+			if(mouse) { // If mouse moved print near mouse current coords
 				displayCoord.setBounds(e.getX(), e.getY(), 80, 55);
 				displayCoord.setText(e.getX()+", "+e.getY());
 			}
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			int x = e.getKeyCode();
+			if(x==KeyEvent.VK_SPACE) {
+				if(playB)
+					stepByStep.doClick();
+				else play.doClick();
+			}
+			if(playB || stepByStepB) {
+				pressed.add(x);
+				if(x==KeyEvent.VK_LEFT) left = true;
+				if(x==KeyEvent.VK_RIGHT) right = true;
+				if(x==KeyEvent.VK_UP)	 up = true;
+				if(x==KeyEvent.VK_DOWN) down = true;
+
+				if(left && up) {
+					angle=305;
+					if(playB) 
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+
+				}
+				else if(right && up) {
+					angle=45;
+					if(playB) 
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+
+				}
+				else if(right && down) {
+					angle=135;
+					if(playB) 
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+
+				}
+				else if(left && down) {
+					angle=225;
+					if(playB) 
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+
+				}
+				else if(left) {
+					angle=270;
+					if(playB) 
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+				}
+				else	if(right) {
+					angle=90;
+					if(playB)
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+				}
+				else if(up) {
+					angle=0;
+					if(playB)
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+				}
+				else if(down) {
+					angle=180;
+					if(playB)
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);					
+				}
+
+				cs.MakeElements(playS.getBoard());
+				updater();
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			int x=e.getKeyCode();
+			if(x==KeyEvent.VK_LEFT) left = false;
+			if(x==KeyEvent.VK_RIGHT) right = false;
+			if(x==KeyEvent.VK_UP)	 up = false;
+			if(x==KeyEvent.VK_DOWN) down = false;
+
+			if(playB || stepByStepB) {
+				if(left && up) {
+					angle=305;
+					if(playB) 
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+
+				}
+				else if(right && up) {
+					angle=45;
+					if(playB) 
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+
+				}
+				else if(right && down) {
+					angle=135;
+					if(playB) 
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+
+				}
+				else if(left && down) {
+					angle=225;
+					if(playB) 
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+
+				}
+				else if(left) {
+					angle=270;
+					if(playB) 
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+				}
+				else	if(right) {
+					angle=90;
+					if(playB)
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+				}
+				else if(up) {
+					angle=0;
+					if(playB)
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);
+				}
+				else if(down) {
+					angle=180;
+					if(playB)
+						animate.updateAngle(angle);
+					else
+						playS.rotate(angle);					
+				}
+
+				cs.MakeElements(playS.getBoard());
+				updater();
+			}
+
 		}
 
 	}

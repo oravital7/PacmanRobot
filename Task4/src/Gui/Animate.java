@@ -18,11 +18,12 @@ public class Animate extends Thread  {
 	boolean keepGoing;
 	
 
-	public Animate(MyFrame frame, Play playS, Robot2Element cs) {
+	public Animate(MyFrame frame, Play playS, Robot2Element cs,double angle) {
 		this.frame = frame;
 		this.playS=playS;
 		this.cs = cs;
 		keepGoing = true;
+		this.angle = angle;
 		if(!playS.isRuning())
 		playS.start();
 	}

@@ -34,7 +34,6 @@ public class FastFileOpen extends JPanel implements ActionListener {
 		 JList.setBorder(black);
 		 JList.setBackground(Color.white);
 		 JList.setFont(new Font("Tahoma", Font.BOLD, 14));
-		 
 		JButton openFile = new JButton("Quick opening",new ImageIcon("Icon\\disc.png"));
 		openFile.addActionListener(this);
 		add(JList);
