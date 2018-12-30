@@ -273,9 +273,8 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		playS = new Play(f.getAbsolutePath());
 		playS.setIDs(5555, 66666);
 		openedGame=true;
-		playB=stepByStepB=meB=false;
+		mouse=playB=stepByStepB=meB=false;
 		map.setNewBounds(playS.getBoundingBox());
-		mouse = false;
 		game = new Game();
 		angle=90;
 		cs = new Robot2Element(game);
