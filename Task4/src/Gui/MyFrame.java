@@ -101,7 +101,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		outOfbox.setForeground(Color.white);
 		outOfbox.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		outOfbox.setBounds(4, 90, 150, 20);
-
 		add(score);
 		add(timeLeft);
 		add(totalTime);
@@ -110,7 +109,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		map = Map.map();
 		BackGroundPanel panel = new BackGroundPanel(this);
-
 		add(panel);
 
 		game = null;
@@ -323,7 +321,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		public BackGroundPanel(MyFrame f) {
 			addMouseListener(this);
 			addMouseMotionListener(this);	
-
 			KeyObserve keys = new KeyObserve(f);
 			addKeyListener(keys);
 			this.f=f;

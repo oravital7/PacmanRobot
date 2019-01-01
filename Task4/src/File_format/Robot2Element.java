@@ -60,7 +60,7 @@ public class Robot2Element {
 			Me me = new Me(p,id,attribute);
 			game.setMe(me);
 		}
-		
+
 		else {
 			double radius = convert2Double(make[6]);
 
