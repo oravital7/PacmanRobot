@@ -14,4 +14,5 @@ public class Fruit extends Character {
 		super(point,id, weight);
 		destroyed = true;
 	}
+	
 }
