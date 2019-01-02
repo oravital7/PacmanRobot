@@ -6,7 +6,7 @@ public class Character {
 
 	private int id;
 	private double attribute; // Represent Speed for Pacman , Weight for fruit
-	private Point3D point; // Geographic point
+	protected Point3D point; // Geographic point
 	
 	/**
 	 * This class represent a Characters of Pacman, Fruit, Ghost and blocks

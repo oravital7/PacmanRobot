@@ -1,5 +1,10 @@
 package Geom;
+import java.awt.Rectangle;
 import java.util.ArrayList;
+
+import javax.sound.sampled.Line;
+
+import com.sun.org.apache.bcel.internal.generic.L2D;
 
 import graph.Graph;
 import graph.Graph_Algo;
@@ -14,6 +19,18 @@ import graph.Point3D;
  */
 public class Graph_Example {
 	public static void main(String[] a) {
+		
+		Rectangle r = new Rectangle();
+		r.x = 4;
+		r.y = 4;
+		r.width = 10;
+		r.height = 10;
+		
+		L2D l = new L2D();
+		
+		System.out.println(	r.contains(3, 3));
+		System.out.println(r.intersectsLine(1, 1, 3, 3));
+				
 		int size = 16;
 		double[] xx = {38,88,88,356,356,60,60,310,310,120,164,277,422,277,422,238};
 		double[] yy = {131,50,102,50,102,218,254,254,218,275,275,125,125,192,192,191};
