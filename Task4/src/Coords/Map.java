@@ -138,6 +138,8 @@ public class Map {
 	 */
 	public double distanceGpsPixles(Point3D a, Point3D b,int maxX, int maxY) {
 		MyCoords calc = MyCoords.myCoords(); 
+		a = pixel2coord(a, maxX, maxY);
+		b = pixel2coord(b, maxX, maxY);
 		double result[] = calc.azimuth_elevation_dist(a, b); // Save the result
 		return result[2];
 	}

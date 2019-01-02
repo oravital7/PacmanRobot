@@ -92,7 +92,11 @@ public class Graph_Example {
 
 		// This is the main call for computing all the shortest path from node 0 ("a")
 		Graph_Algo.dijkstra(G, source);
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 2723852a4b4919b5dd408affb8cab24fff51a560
 		Node b = G.getNodeByName(target);
 		System.out.println("***** Graph Demo for OOP_Ex4 *****");
 		System.out.println(b);

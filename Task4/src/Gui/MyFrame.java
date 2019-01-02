@@ -28,7 +28,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.MouseInputListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-
+import AutoAlgo.MainAlgo;
 import Coords.Map;
 
 import java.io.File;
@@ -57,13 +57,15 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	private JLabel displayCoord, score, timeLeft,totalTime,ghostKill, outOfbox; // Label for hover mouse (show current pixles)
 	private JMenuItem open, clear, stepByStep, Exit, play, automatic;
 	private Game game; // Current game
-	private boolean stepByStepB,playB, openedGame, meB, mouse; // If is in animation progress avoid to do another commands
+	private boolean stepByStepB,playB, openedGame, meB, mouse, autoB; // If is in animation progress avoid to do another commands
 	private Map map; // Our image & converts
 	private Play playS; 
 	private double angle;
 	private Animate animate;
+	private MainAlgo algo;
 	private Robot2Element cs;
 	private StringTranslate trans;
+	BackGroundPanel panel;
 
 	public static void main(String[] args) {
 		new  MyFrame();
@@ -108,7 +110,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		add(outOfbox);
 
 		map = Map.map();
-		BackGroundPanel panel = new BackGroundPanel(this);
+		panel = new BackGroundPanel(this);
 		add(panel);
 
 		game = null;
@@ -138,7 +140,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		automatic.addActionListener(this);
 		clear = new JMenuItem("Clear", new ImageIcon("Icon\\clear.png"));
 		clear.addActionListener(this);
-				
+
 		GameMenu.add(play);
 		GameMenu.add(stepByStep);
 		GameMenu.add(automatic);
@@ -259,6 +261,21 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				animate.start();
 				mouse=playB = true;
 			}
+			return;
+		}
+
+		if(o==automatic) {
+			if(game == null||!meB)
+				errorMessage();
+			else {
+				setCursor(null);
+				displayCoord.setVisible(true);
+				algo = new MainAlgo(this,game,panel.getWidth(),panel.getHeight());
+				if(!playS.isRuning())
+					playS.start();
+				algo.start();
+				autoB = mouse = true;
+			}
 		}
 	}
 
@@ -284,16 +301,21 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	}
 
 	public void controlByKey(double angle) {
-			this.angle = angle;
-			if(stepByStepB) 
-				rotate();
+		this.angle = angle;
+		if(stepByStepB || autoB) {
+			rotate();
+		}
 	}
 
 	public void rotate() {
 		if(!playS.isRuning()) {
 			if(playB) animate.keepGoing = false;
+			
+			if(autoB) algo.keepGoing = false;
+			
 			Result();
-		}
+			}
+		
 		else {
 			playS.rotate(angle);
 			updater();
@@ -406,7 +428,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			Point3D p = new Point3D(x,y);
 			p = map.pixel2coord(p, getWidth(), getHeight());
 			System.out.println("Geograpich coords: ("+p+')'); // Print geo corrds as well
-			
+
 			if(openedGame && !playS.isRuning() ) {
 				boolean check = playS.setInitLocation(p.x(), p.y());
 				if(check) {

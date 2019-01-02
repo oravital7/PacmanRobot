@@ -24,9 +24,9 @@ public class Blocks  extends Character {
 		this.point2 = p2;
 	}
 	
-	public Rectangle getRect() {
-			Point3D pUp = map.coord2pixel(point, 1200, 800);
-			Point3D pDown = map.coord2pixel(point2, 1200, 800);
+	public Rectangle getRect(int width, int height) {
+			Point3D pUp = map.coord2pixel(point, width, height);
+			Point3D pDown = map.coord2pixel(point2, width, height);
 
 			Rectangle r = new Rectangle(); 
 			r.x = (int) pUp.x();
