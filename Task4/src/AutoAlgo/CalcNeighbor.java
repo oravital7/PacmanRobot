@@ -2,6 +2,7 @@ package AutoAlgo;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -12,18 +13,21 @@ import Geom.Point3D;
 public class CalcNeighbor {
 
 	private Vertex source, target;
-	private	ArrayList<Blocks> blockArr;
+	private	Collection<Blocks> blockArr;
 	private ArrayList<Vertex> points;
 	private int id;
 	private HashMap<String, Point3D> hash;
+	private int height, width;
 
-	public CalcNeighbor(ArrayList<Blocks> blockArr, Vertex source, Vertex target) {
+	public CalcNeighbor(Collection<Blocks> blockArr, Vertex source, Vertex target,int width, int height) {
 		this.source = source;
 		this.target = target;
 		this.blockArr = blockArr;
 		points = new ArrayList<Vertex>();
 		hash = new HashMap<String, Point3D>();
 		id = 1;
+		this.height = height;
+		this.width = width;
 	}
 
 	public ArrayList<Vertex> getSkeleton() {
@@ -41,7 +45,7 @@ public class CalcNeighbor {
 	private void buildPointArray() {
 		points.add(source);
 		for(Blocks b : blockArr) {
-			Rectangle r = b.getRect();
+			Rectangle r = b.getRect(width,height);
 
 			points.add(createVrtex(r.getMaxX(),r.getMaxY()));
 			points.add(createVrtex(r.getMaxX(),r.getMinY()));
@@ -61,7 +65,7 @@ public class CalcNeighbor {
 	private boolean intersect(Point3D p,Point3D p2) {
 		boolean flag=true;
 		for(Blocks b : blockArr) {
-			Rectangle r = b.getRect();
+			Rectangle r = b.getRect(width,height);
 			flag = r.intersectsLine(p.x()-1, p.y()-1, p2.x()-1, p2.y()-1);
 			if(!flag) return false;
 		}

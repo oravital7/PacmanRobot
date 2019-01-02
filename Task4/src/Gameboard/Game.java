@@ -85,6 +85,11 @@ public class Game {
 	{
 		return numOfFruits;
 	}
+	
+	public boolean isExist(int  id) {
+		Fruit f = fruitArray.get(id);
+		return f.destroyed;
+	}
 
 	public void updateGhost(int id,Point3D point) {
 		Ghost g = ghostArray.get(id);
