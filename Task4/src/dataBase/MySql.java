@@ -32,7 +32,7 @@ public class MySql {
 	public ArrayList<Object[]> QueryWhereId(String id) {
 		String s = "WHERE FirstID = "+id;
 		try {
-			rs = stmt.executeQuery("SELECT * FROM logs "+s+ " ORDER BY point");
+			rs = stmt.executeQuery("SELECT * FROM logs "+s);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -41,7 +41,7 @@ public class MySql {
 
 	public ArrayList<Object[]> QueryAll() {
 		try {
-			rs = stmt.executeQuery("SELECT * FROM logs ORDER BY point");
+			rs = stmt.executeQuery("SELECT * FROM logs");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

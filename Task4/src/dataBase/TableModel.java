@@ -34,4 +34,9 @@ public class TableModel extends AbstractTableModel {
 		return data.get(row)[col];
 	}
 	
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		return getValueAt(0, columnIndex).getClass();
+	}
+	
 }

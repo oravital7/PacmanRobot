@@ -47,7 +47,6 @@ public class ButtonsPanel extends JPanel implements ActionListener {
 		add(JList);
 		add(openFile);
 		add(ScoreBoard);
-
 	}
 
 
