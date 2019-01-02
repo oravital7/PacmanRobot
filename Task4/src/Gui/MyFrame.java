@@ -138,7 +138,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		automatic.addActionListener(this);
 		clear = new JMenuItem("Clear", new ImageIcon("Icon\\clear.png"));
 		clear.addActionListener(this);
-
+				
 		GameMenu.add(play);
 		GameMenu.add(stepByStep);
 		GameMenu.add(automatic);
@@ -148,7 +148,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		setJMenuBar(menuBar);
 
-		FastFileOpen FastOpen = new FastFileOpen(this);
+		ButtonsPanel FastOpen = new ButtonsPanel(this);
 		menuBar.add(FastOpen);
 
 		setSize(1200, 800);

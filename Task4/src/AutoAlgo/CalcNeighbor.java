@@ -32,7 +32,7 @@ public class CalcNeighbor {
 		points.add(target.getPoint());
 	}
 	
-	private boolean instects(Point3D p,Point3D p2) {
+	private boolean intersect(Point3D p,Point3D p2) {
 		boolean flag=true;
 		for(Blocks b : blockArr) {
 			Rectangle r = b.getRect();
