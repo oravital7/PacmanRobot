@@ -1,9 +1,16 @@
 package AutoAlgo;
 
-public class GraphList {
 
+import graph.Graph;
+
+
+public class GraphList implements Set<Graph> {
+	private Set<Graph> GraphList;
+	
 	public GraphList() {
-		// TODO Auto-generated constructor stub
+		GraphList = new HashSet<Graph>();
+
 	}
 
+	
 }

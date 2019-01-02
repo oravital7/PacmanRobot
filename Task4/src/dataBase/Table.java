@@ -2,13 +2,14 @@ package dataBase;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-
-import com.sun.java.swing.action.ExitAction;
 
 public class Table {
 	private JFrame f;
@@ -22,7 +23,12 @@ public class Table {
 	
 	private void start() {
 		MySql mq = new MySql();
-		
+		try {
+			f.setIconImage(ImageIO.read(new File("Icon\\graph.png")));
+		} catch (IOException e) {
+			System.out.println("Unable load graph Image!!!");
+		}
+
 		JTable ourScore = new JTable(new TableModel(mq.QueryWhereId("5555")));
 		JTable allScore = new JTable(new TableModel(mq.QueryAll()));
 		ourScore.setAutoCreateRowSorter(true);

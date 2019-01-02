@@ -6,6 +6,7 @@ import javax.sound.sampled.Line;
 
 import com.sun.org.apache.bcel.internal.generic.L2D;
 
+import Gameboard.Blocks;
 import graph.Graph;
 import graph.Graph_Algo;
 import graph.Node;
@@ -25,7 +26,14 @@ public class Graph_Example {
 		r.y = 4;
 		r.width = 10;
 		r.height = 10;
+			boolean flag;
+				flag = r.intersectsLine(1-1, 1-1, 4-1, 4-1);
+				System.out.println(flag);
 		
+		System.out.println(r.getMaxX());
+		System.out.println(r.getMaxY());
+		System.out.println(r.getMinX());
+		System.out.println(r.getMinY());
 		L2D l = new L2D();
 		
 		System.out.println(	r.contains(3, 3));
@@ -94,4 +102,6 @@ public class Graph_Example {
 			System.out.print(","+shortestPath.get(i));
 		}
 	}
+	
+	
 }
