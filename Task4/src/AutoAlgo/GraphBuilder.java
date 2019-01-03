@@ -11,6 +11,7 @@ import Graph.Graph;
 import Graph.Graph_Algo;
 import Graph.Node;
 
+
 public class GraphBuilder {
 	private Vertex source, target;
 	private	Collection<Blocks> blockArr;
@@ -33,19 +34,19 @@ public class GraphBuilder {
 		buildGraph();
 		Graph_Algo.dijkstra(G, ""+source.getName());
 		node = G.getNodeByName(""+target.getName());
-		System.out.println(node.toString());
-		G.clear_meta_data();
-		return node.getDist();
+		double dist = node.getDist();
+		return dist;
 	}
 	
 	public Point3D[] getPath() {
 		ArrayList<String> path = node.getPath();
-		Point3D[] resultPath = new Point3D[path.size()+1];
+		Point3D[] resultPath = new Point3D[path.size()];
 		int i=0;
 		for(String s : path) {
+			if(!s.equals("0"))
 			resultPath[i++] = calc.getPoint(s);
 		}
-		resultPath[path.size()] = calc.getPoint(""+target.getName());
+		resultPath[path.size()-1] = calc.getPoint(""+target.getName());
 		return resultPath;
 	}
 
