@@ -389,7 +389,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 					g.setColor(Color.black);
 					Point3D pUp = map.coord2pixel(b.getPoint(), getWidth(), getHeight());
 					Point3D pDown = map.coord2pixel(b.getPoint2(), getWidth(), getHeight());
-
 					g.fillRect((int)pUp.x(), (int)pDown.y(), (int)Math.abs(pDown.x()-pUp.x()), (int)Math.abs(pDown.y()-pUp.y()));
 				}
 
