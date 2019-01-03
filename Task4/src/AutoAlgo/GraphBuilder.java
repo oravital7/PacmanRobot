@@ -75,11 +75,14 @@ public class GraphBuilder {
 				}
 			}
 		}
+
 	}
 
 	private double getDistance(String s, Point3D p) {
 		Point3D p2 = calc.getPoint(s);
 		Map map = Map.map();
+		System.out.println("p1: "+p+"p2: "+p2);
+
 		double dest = map.distanceGpsPixles(p, p2, width, height);
 		return dest;
 	}

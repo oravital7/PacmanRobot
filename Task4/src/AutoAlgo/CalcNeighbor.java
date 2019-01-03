@@ -2,6 +2,7 @@ package AutoAlgo;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -44,6 +45,7 @@ public class CalcNeighbor {
 
 	private void buildPointArray() {
 		points.add(source);
+		hash.put("0", source.getPoint());
 		for(Blocks b : blockArr) {
 			Rectangle r = b.getRect(width,height);
 
@@ -53,6 +55,7 @@ public class CalcNeighbor {
 			points.add(createVrtex(r.getMinX(),r.getMaxY()));
 		}
 		target.setName(points.size());
+		hash.put(""+points.size(), target.getPoint());
 		points.add(target);
 	}
 
@@ -62,12 +65,16 @@ public class CalcNeighbor {
 		return new Vertex(p,id++);
 	}
 
-	private boolean intersect(Point3D p,Point3D p2) {
+	private boolean isNeighbor(Point3D p,Point3D p2) {
 		boolean flag=true;
+		System.out.println("--------");
+		System.out.println("p: "+p+", p2: "+p2);
 		for(Blocks b : blockArr) {
 			Rectangle r = b.getRect(width,height);
+			System.out.println(r);
 			flag = r.intersectsLine(p.x()-1, p.y()-1, p2.x()-1, p2.y()-1);
-			if(!flag) return false;
+			System.out.println(flag);
+			if(flag) return false;
 		}
 		return true;
 	}
@@ -77,15 +84,20 @@ public class CalcNeighbor {
 		queue.add(source);
 		boolean visted[] = new boolean[points.size()];
 		while(!queue.isEmpty()) {
+			System.out.println("queue: "+queue);
 			Vertex current = queue.poll();
 			visted[current.getName()] = true;
 			for(Vertex v : points) {
-				if(!visted[v.getName()] && intersect(current.getPoint(), v.getPoint())) {
+				if(!visted[v.getName()] && isNeighbor(current.getPoint(), v.getPoint())) {
+					System.out.println(v.getName()+", "+v.getPoint());
 					current.addNeighbor(""+v.getName());
+					queue.add(v); // Update bug
 				}
 			}
-
 		}
+		
+		System.out.println("visted: "+Arrays.toString(visted));
+
 	}
 
 }

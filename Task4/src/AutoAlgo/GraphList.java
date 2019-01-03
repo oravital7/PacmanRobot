@@ -36,9 +36,10 @@ public class GraphList {
 		Vertex target;
 		double min = Integer.MAX_VALUE;
 		shortGraph = null;
-		
+		Point3D p;
 		for(Fruit f : game.getFruits()) {
-			target = new Vertex(f.getPoint(),-1);
+			p = map.coord2pixel(f.getPoint(), width, height);
+			target = new Vertex(p,-1);
 			GraphBuilder build = new GraphBuilder(source, target, game.getblocks(), width, height);
 			double dist = build.getDistancePath();
 			if(dist < min) {
