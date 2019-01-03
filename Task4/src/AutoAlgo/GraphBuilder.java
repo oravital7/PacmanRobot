@@ -1,16 +1,15 @@
 package AutoAlgo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
 import Coords.Map;
 import Gameboard.Blocks;
 import Geom.Point3D;
-import graph.Graph;
-import graph.Graph_Algo;
-import graph.Node;
+import Graph.Graph;
+import Graph.Graph_Algo;
+import Graph.Node;
 
 public class GraphBuilder {
 	private Vertex source, target;
@@ -74,7 +73,6 @@ public class GraphBuilder {
 				}
 			}
 		}
-
 	}
 
 	private double getDistance(String s, Point3D p) {
