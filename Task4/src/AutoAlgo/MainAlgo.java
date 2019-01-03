@@ -36,6 +36,12 @@ public class MainAlgo extends Thread {
 				while(game.isExist(id) &&  getDist(game.getMe().getPoint(),path[i]) > 0.5)  {
 					double angle = getAngle(game.getMe().getPoint(),path[i]);
 					f.controlByKey(angle);
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				i++;
 			}
