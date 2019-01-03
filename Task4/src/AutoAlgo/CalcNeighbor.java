@@ -81,18 +81,20 @@ public class CalcNeighbor {
 	private void addNeighbor() {
 		Queue<Vertex> queue = new LinkedList<Vertex>();
 		queue.add(source);
-		boolean visted[] = new boolean[points.size()];
+		//		boolean visted[] = new boolean[points.size()];
 		boolean wasInQueue[] = new boolean[points.size()];
 		wasInQueue[source.getName()] = true;
 		while(!queue.isEmpty()) {
 			Vertex current = queue.poll();
-			visted[current.getName()] = true;
-			for(Vertex v : points) {
-				if(!visted[v.getName()] && isNeighbor(current.getPoint(), v.getPoint())) {
-					current.addNeighbor(""+v.getName());
-					if(!wasInQueue[v.getName()]) {
-						wasInQueue[v.getName()] = true;
-						queue.add(v);
+			//	visted[current.getName()] = true;
+			if(!current.equals(target)) {
+				for(Vertex v : points) {
+					if(/*!visted[v.getName()] && */ v.getName()!=0 && !current.equals(v) &&  isNeighbor(current.getPoint(), v.getPoint())) {
+						current.addNeighbor(""+v.getName());
+						if(!wasInQueue[v.getName()]) {
+							wasInQueue[v.getName()] = true;
+							queue.add(v);
+						}
 					}
 				}
 			}

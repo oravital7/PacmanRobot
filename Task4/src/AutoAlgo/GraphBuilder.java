@@ -1,6 +1,7 @@
 package AutoAlgo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -32,8 +33,9 @@ public class GraphBuilder {
 	public double getDistancePath() {
 		buildGraph();
 		Graph_Algo.dijkstra(G, ""+source.getName());
-
-		node = G.getNodeByName(""+target);
+		node = G.getNodeByName(""+target.getName());
+		System.out.println(node.toString());
+		G.clear_meta_data();
 		return node.getDist();
 	}
 	
@@ -44,11 +46,11 @@ public class GraphBuilder {
 		for(String s : path) {
 			resultPath[i++] = calc.getPoint(s);
 		}
+		resultPath[path.size()] = calc.getPoint(""+target.getName());
 		return resultPath;
 	}
 
 	private void buildGraph() {
-		G.add(new Node(""+source.getName()));
 		calc = new CalcNeighbor(blockArr, source, target,width,height);
 		VetrexList = calc.getSkeleton();
 		for(Vertex v : VetrexList) {
@@ -63,13 +65,11 @@ public class GraphBuilder {
 
 	private void addEdge() {
 		for(Vertex v : VetrexList) {
-			System.out.println("Point: "+v.getPoint());
 			if(!v.isLonely()) {
 				Iterator<String> it = v.getIterator();	
 				String s;
 				while(it.hasNext()) {
 					s = it.next();
-				System.out.println("Nig: "+calc.getPoint(s));
 					G.addEdge(""+v.getName(),s ,getDistance(s,v.getPoint()));
 				}
 			}

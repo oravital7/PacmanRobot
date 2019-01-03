@@ -34,7 +34,6 @@ public class Graph_Example {
 		System.out.println(r.getMaxY());
 		System.out.println(r.getMinX());
 		System.out.println(r.getMinY());
-		L2D l = new L2D();
 		
 		System.out.println(	r.contains(3, 3));
 		System.out.println(r.intersectsLine(1, 1, 3, 3));
@@ -48,21 +47,24 @@ public class Graph_Example {
 		}
 		
 		Graph G = new Graph(); 
-		String source = "a";
-		String target = "b";
-		G.add(new Node(source)); // Node "a" (0)
-		for(int i=1;i<size-1;i++) {
+		String source = "0";
+		String target = "15";
+//		G.add(new Node(source)); // Node "a" (0)
+		for(int i=0;i<size;i++) {
 			Node d = new Node(""+i);
 			G.add(d);
 			pp[i] = new Point3D(xx[i], yy[i]);
 		}
 		G.add(new Node(target)); // Node "b" (15)
 		
-		G.addEdge("a","1",pp[0].distance2D(pp[1]));
-		G.addEdge("a","2",pp[0].distance2D(pp[2]));
-		G.addEdge("a","5",pp[0].distance2D(pp[5]));
-		G.addEdge("a","6",pp[0].distance2D(pp[6]));
-		
+		G.addEdge("0","1",pp[0].distance2D(pp[1]));
+		G.addEdge("0","2",pp[0].distance2D(pp[2]));
+		G.addEdge("0","5",pp[0].distance2D(pp[5]));
+		G.addEdge("0","6",pp[0].distance2D(pp[6]));
+		G.addEdge("1","0",pp[0].distance2D(pp[1]));
+		G.addEdge("2","0",pp[0].distance2D(pp[1]));
+		G.addEdge("5","0",pp[0].distance2D(pp[1]));
+
 		G.addEdge("1","2",pp[1].distance2D(pp[2]));
 		G.addEdge("1","3",pp[1].distance2D(pp[3]));
 		G.addEdge("3","4",pp[3].distance2D(pp[4]));
@@ -86,9 +88,9 @@ public class Graph_Example {
 		G.addEdge("4","12",pp[4].distance2D(pp[12]));
 		G.addEdge("3","12",pp[3].distance2D(pp[12]));
 		
-		G.addEdge("8","b",pp[8].distance2D(pp[15]));
-		G.addEdge("13","b",pp[13].distance2D(pp[15]));
-		G.addEdge("11","b",pp[11].distance2D(pp[15]));
+		G.addEdge("8","15",pp[8].distance2D(pp[15]));
+		G.addEdge("13","15",pp[13].distance2D(pp[15]));
+		G.addEdge("11","15",pp[11].distance2D(pp[15]));
 		 
 		// This is the main call for computing all the shortest path from node 0 ("a")
 		Graph_Algo.dijkstra(G, source);
