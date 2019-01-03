@@ -55,23 +55,22 @@ public class GraphBuilder {
 			if(!v.isLonely()) {
 				Node node = new Node(""+v.getName());
 				G.add(node);
-				
 			}
 		}
-		System.out.println(G.size());
 		G.add(new Node(""+target.getName()));
 		addEdge();
 	}
 
 	private void addEdge() {
 		for(Vertex v : VetrexList) {
+			System.out.println("Point: "+v.getPoint());
 			if(!v.isLonely()) {
 				Iterator<String> it = v.getIterator();	
 				String s;
 				while(it.hasNext()) {
 					s = it.next();
+				System.out.println("Nig: "+calc.getPoint(s));
 					G.addEdge(""+v.getName(),s ,getDistance(s,v.getPoint()));
-					System.out.println("Edge: "+v.getName()+","+s+", "+v.getPoint());
 				}
 			}
 		}
@@ -81,7 +80,6 @@ public class GraphBuilder {
 	private double getDistance(String s, Point3D p) {
 		Point3D p2 = calc.getPoint(s);
 		Map map = Map.map();
-		System.out.println("p1: "+p+"p2: "+p2);
 
 		double dest = map.distanceGpsPixles(p, p2, width, height);
 		return dest;
