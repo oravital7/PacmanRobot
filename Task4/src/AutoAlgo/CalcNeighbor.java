@@ -47,7 +47,7 @@ public class CalcNeighbor {
 		hash.put("0", source.getPoint());
 		for(Blocks b : blockArr) {
 			Rectangle r = b.getRect(width,height);
-
+			r.grow(2, 2);
 			points.add(createVrtex(r.getMaxX(),r.getMaxY()));
 			points.add(createVrtex(r.getMaxX(),r.getMinY()));
 			points.add(createVrtex(r.getMinX(),r.getMinY()));
@@ -68,7 +68,7 @@ public class CalcNeighbor {
 		boolean flag=true;
 		for(Blocks b : blockArr) {
 			Rectangle r = b.getRect(width,height);
-			r.grow(-1, -1);
+//			r.grow(-1, -1);
 			flag = r.intersectsLine(p.x(), p.y(), p2.x(),p2.y());
 			if(flag) return false;
 		}
