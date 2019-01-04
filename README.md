@@ -25,17 +25,14 @@ How to play
 The player import a CSV file, insert the location of the Pacman and then choose how he wants to play. 
 
 There are three options:
-- ### normal
+### normal
 The user is in charge of the direction of the pacman. 
 The user clicks on a point and the pacman start moving towords the direction of the click.
-- ### Step by step
+### Step by step
 The user is in charge of the direction of the pacman. 
 The user clicks on a point and the pacman moves one step towords the direction of the click.
-- ### Automatic
+### Automatic
 The automatic algo calculates the route of the pacman, and the game is played automatic
-
-
-
 
 Authomatic Algorithm - How does it work
 --------
@@ -58,9 +55,19 @@ This class calculates the neighbors of each vertex.
 For each vertex the algoritm checks if he can see other vertexes.
 if there is a straight line betwween them, it adds the vertex to the list of neighbors of the vertex.
 
+##### GraphBuilder
+This class builds a graph for a given source and desination,
+using the CalcNeighbor class.
+
+##### Graphlist
+This class calculates the shortest path from given graphs.
+
+##### MainAlgo
+This class implements thread.
+It calculates the shortest path from the pacman to each fruit on the board, and choose the closest fruit.
+If the fruit got eaten while the pacman was trying to reach it, the algorithm calculates another route the the current closest fruit.
 
 <img src="./Task4/Icon/autoAlgo.PNG" width="350" height="300">
-
 
 
 Class Diagram
