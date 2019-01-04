@@ -27,9 +27,6 @@ The player import a CSV file, and then press the play button
 
 The program calculates the fastest routes for each pacman, draws a line of the path, and write the total score of the game
 
-<img src="./Icon/gameWithScore.PNG" width="350" height="300">
-<img src="./Icon/gameWithoutScore.PNG" width="350" height="300">
-
 Authomatic Algorithm - How does it work
 --------
 The algorithm for authomatic play is based on Dijkstra's Algorithm.
@@ -39,24 +36,20 @@ If the fruit got eaten while the pacman was trying to reach it, the algorithm ca
 
 The algorithm is based on several classes:
 
-Line Class
-###
+##### Line Class
 This class repreasent a line. 
 
-Vertex Class
-###
+##### Vertex Class
 This class repreasent a vertex.
 Each vertex has a name, point, and list of all his neighbors.
 
-CalcNeighbor Class
-###
+##### CalcNeighbor Class
 This class calculates the neighbors  
-This 
+For each vertex the algoritm checks if he can see other vertexes.
+if there is a straight line betwween them, it adds the vertex to the list of neighbors of the vertex.
 
 
-
-
-<img src="./Icon/autoAlgo.PNG" width="350" height="300">
+<img src="./Task4/Icon/autoAlgo.PNG" width="350" height="300">
 
 
 
