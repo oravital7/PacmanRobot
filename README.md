@@ -67,12 +67,11 @@ This class implements thread.
 It calculates the shortest path from the pacman to each fruit on the board, and choose the closest fruit.
 If the fruit got eaten while the pacman was trying to reach it, the algorithm calculates another route the the current closest fruit.
 
-<img src="./Task4/Icon/autoAlgo.PNG" width="350" height="300">
+<img src="./Task4/Icon/autoAlgo.PNG" width="550" height="400">
 
 
 Class Diagram
 --------
-<img src="./Icon/ClassDiagram.jpg" width="650" height="600">
 
 &nbsp;
 &nbsp;
