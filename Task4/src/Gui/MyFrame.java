@@ -194,7 +194,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	 * @param TotalResult
 	 */
 	public void Result() {
-		openedGame=playB=stepByStepB=meB = false; // Change running to false that we finish right now the current game
+		openedGame=playB=stepByStepB=meB=autoB= false; // Change running to false that we finish right now the current game
 		// content of the message
 		JOptionPane.showMessageDialog(this,
 				playS.getStatistics(),
@@ -289,7 +289,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	public void openGameFile(File f) {
 		if(playB) animate.keepGoing=false;
 		playS = new Play(f.getAbsolutePath());
-		playS.setIDs(5555, 66666);
+		playS.setIDs(315392852, 311327076);
 		openedGame=true;
 		mouse=playB=stepByStepB=meB=false;
 		map.setNewBounds(playS.getBoundingBox());

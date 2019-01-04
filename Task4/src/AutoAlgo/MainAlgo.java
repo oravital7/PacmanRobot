@@ -26,7 +26,11 @@ public class MainAlgo extends Thread {
 			GraphList create = new GraphList(game, width, height);
 			Point3D path[] = create.getPath();
 			int id = create.getTargetId();
-			System.out.println(id);
+			
+			if(game.numOfFruits()==0) {
+				f.rotate();
+			}
+			
 			int i=0;
 			while(game.isExist(id) && getDist(game.getMe().getPoint(),path[path.length-1]) > 1) {
 				while(game.isExist(id) &&  getDist(game.getMe().getPoint(),path[i]) > 1)  {

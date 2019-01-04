@@ -1,8 +1,5 @@
 package AutoAlgo;
 
-
-
-
 import Coords.Map;
 import Gameboard.Fruit;
 import Gameboard.Game;
@@ -23,7 +20,6 @@ public class GraphList {
 
 	public Point3D[] getPath() {
 		GraphListBuilder();
-		//		Point3D[] path = shortGraph.getPath();	
 		return path;
 	}
 
@@ -34,7 +30,7 @@ public class GraphList {
 	private void GraphListBuilder() {
 		Map map = Map.map();
 		Point3D me = map.coord2pixel(game.getMe().getPoint(), width, height);
-		Vertex source = new Vertex(me, 0);
+		Vertex source;
 		Vertex target;
 		double min = Integer.MAX_VALUE;
 		Point3D p;
@@ -42,6 +38,7 @@ public class GraphList {
 			if(f.destroyed) {
 				p = map.coord2pixel(f.getPoint(), width, height);
 				target = new Vertex(p,-1);
+				source = new Vertex(me, 0);
 				GraphBuilder build = new GraphBuilder(source, target, game.getblocks(), width, height);
 				double dist = build.getDistancePath();
 				if(dist < min) {
