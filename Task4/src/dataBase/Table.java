@@ -18,6 +18,7 @@ public class Table {
 		f = new JFrame();
 		f.setTitle("Table Scores");
 		f.setSize(1000, 800);
+		f.setLocation(400, 50);
 		start();
 	}
 	

@@ -7,7 +7,7 @@ import javax.swing.table.AbstractTableModel;
 public class TableModel extends AbstractTableModel {
 	private static final long serialVersionUID = -2591792764959317565L;
 	
-	String column[] = {"FirstID","SecondID","ThirdID","LogTime","Point","SomeDouble"};
+	String column[] = {"First ID","Second ID","Third ID","Log Time","Points","Map Name"};
 	ArrayList<Object[]> data;
 
 	public TableModel(ArrayList<Object[]> data) {
