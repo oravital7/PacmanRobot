@@ -1,10 +1,7 @@
 package AutoAlgo;
 
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -50,7 +47,7 @@ public class CalcNeighbor {
 		hash.put("0", source.getPoint());
 		for(Blocks b : blockArr) {
 			Rectangle r = b.getRect(width,height);
-
+			r.grow(2, 2);
 			points.add(createVrtex(r.getMaxX(),r.getMaxY()));
 			points.add(createVrtex(r.getMaxX(),r.getMinY()));
 			points.add(createVrtex(r.getMinX(),r.getMinY()));
@@ -71,8 +68,8 @@ public class CalcNeighbor {
 		boolean flag=true;
 		for(Blocks b : blockArr) {
 			Rectangle r = b.getRect(width,height);
-			r.grow(-1, -1);
-			flag = r.intersectsLine((int)(p.x()), (int)(p.y()), (int)(p2.x()), (int)(p2.y()));
+//			r.grow(-1, -1);
+			flag = r.intersectsLine(p.x(), p.y(), p2.x(),p2.y());
 			if(flag) return false;
 		}
 		return true;
@@ -81,15 +78,13 @@ public class CalcNeighbor {
 	private void addNeighbor() {
 		Queue<Vertex> queue = new LinkedList<Vertex>();
 		queue.add(source);
-		//		boolean visted[] = new boolean[points.size()];
 		boolean wasInQueue[] = new boolean[points.size()];
 		wasInQueue[source.getName()] = true;
 		while(!queue.isEmpty()) {
 			Vertex current = queue.poll();
-			//	visted[current.getName()] = true;
 			if(!current.equals(target)) {
 				for(Vertex v : points) {
-					if(/*!visted[v.getName()] && */ v.getName()!=0 && !current.equals(v) &&  isNeighbor(current.getPoint(), v.getPoint())) {
+					if(v.getName()!=0 && !current.equals(v) && isNeighbor(current.getPoint(), v.getPoint())) {
 						current.addNeighbor(""+v.getName());
 						if(!wasInQueue[v.getName()]) {
 							wasInQueue[v.getName()] = true;

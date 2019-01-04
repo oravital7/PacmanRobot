@@ -1,11 +1,10 @@
 package AutoAlgo;
 
+
 import Coords.Map;
 import Gameboard.Game;
-import Gameboard.Me;
 import Geom.Point3D;
 import Gui.MyFrame;
-import jdk.javadoc.internal.doclets.toolkit.BaseConfiguration.Hidden;
 
 public class MainAlgo extends Thread {
 	private MyFrame f;
@@ -23,23 +22,20 @@ public class MainAlgo extends Thread {
 
 	@Override
 	public void run() {
-		Map map = Map.map();
 		while(keepGoing) {
 			GraphList create = new GraphList(game, width, height);
 			Point3D path[] = create.getPath();
-
 			int id = create.getTargetId();
+			System.out.println(id);
 			int i=0;
-
-			while(game.isExist(id) && getDist(game.getMe().getPoint(),path[path.length-1]) > 0.5) {
-				
-				while(game.isExist(id) &&  getDist(game.getMe().getPoint(),path[i]) > 0.5)  {
+			while(game.isExist(id) && getDist(game.getMe().getPoint(),path[path.length-1]) > 1) {
+				while(game.isExist(id) &&  getDist(game.getMe().getPoint(),path[i]) > 1)  {
 					double angle = getAngle(game.getMe().getPoint(),path[i]);
 					f.controlByKey(angle);
+					
 					try {
 						Thread.sleep(50);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
