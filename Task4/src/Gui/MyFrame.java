@@ -173,10 +173,11 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			if(playB) {
 				playB=animate.keepGoing = false;
 			}
+
 			if(autoB) {
 				autoB=algo.keepGoing = false;
 			}
-			
+
 			reUpdate();
 			return;
 		}
@@ -194,46 +195,46 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			}
 			return;
 		}
-		
-		
+
+
 		if(game == null|| !meB) {
 			errorMessage();
 			return;
 		}
 
 		if(o==stepByStep) {
-				mouse=stepByStepB = true;
-				if(playB) 	playB = animate.keepGoing=false;		
-				else playS.start();
+			mouse=stepByStepB = true;
+			if(playB) 	playB = animate.keepGoing=false;		
+			else playS.start();
 			return;
 		}
 
 		if(o==play && !playB) {
-				setCursor(null);
-				displayCoord.setVisible(true);
-				stepByStepB = false;
-				animate = new Animate(this);
-				if(!playS.isRuning())
-					playS.start();
-				animate.start();
-				mouse = playB = true;
-				
+			setCursor(null);
+			displayCoord.setVisible(true);
+			stepByStepB = false;
+			animate = new Animate(this);
+			if(!playS.isRuning())
+				playS.start();
+			animate.start();
+			mouse = playB = true;
+
 			return;
 		}
 
 		if(o==automatic && !autoB) {
-				algo = new MainAlgo(this, game,panel.getWidth(), panel.getHeight());
-				if(!playS.isRuning())
-					playS.start();
-				algo.start();
-				autoB = mouse = true;
+			algo = new MainAlgo(this, game,panel.getWidth(), panel.getHeight());
+			if(!playS.isRuning())
+				playS.start();
+			algo.start();
+			autoB = mouse = true;
 		}
 	}
 
 	public void openGameFile(File f) {
 		if(playB) animate.keepGoing = false;
 		if(autoB) algo.keepGoing = false;
-		
+
 		playS = new Play(f.getAbsolutePath());
 		playS.setIDs(315392852, 311327076);
 		openedGame=true;
@@ -257,10 +258,10 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		if(!playS.isRuning()) {
 			if(playB) animate.keepGoing = false;		
 			if(autoB) algo.keepGoing = false;
-		
+
 			Result();
-			}
-		
+		}
+
 		else {
 			playS.rotate(angle);
 			updater();
@@ -271,7 +272,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		if(playB) stepByStep.doClick();
 		else play.doClick();
 	}
-	
+
 	private void updater() {
 		cs.MakeElements(playS.getBoard());
 		trans.setString(playS.getStatistics());
@@ -289,7 +290,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				"Error: Unable play the game",				
 				JOptionPane.ERROR_MESSAGE);
 	}
-	
+
 	/**
 	 * Reset board
 	 */
@@ -318,8 +319,8 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		game = null;
 		reUpdate();
 	}
-	
-	
+
+
 	/**
 	 * This class responsible to paint all our elements and listen to user 
 	 * for each command such as Clicks, drag and etc

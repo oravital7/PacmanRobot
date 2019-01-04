@@ -32,6 +32,7 @@ public class Blocks  extends Character {
 			r.x = (int) pUp.x();
 			r.y = (int) pUp.y();
 			r.add(pDown.x(),pDown.y());
+
 			return r;
 	}
 	
