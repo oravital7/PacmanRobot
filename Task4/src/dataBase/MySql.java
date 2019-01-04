@@ -48,14 +48,14 @@ public class MySql {
 		return QueryDatabase();
 	}
 
-	private ArrayList<Object[]> QueryDatabase()    {
+	private ArrayList<Object[]> QueryDatabase()  {
 		ArrayList<Object[]> list = new ArrayList<Object[]>();
-		
+
 		try {
 			while (rs.next()) {				
 				Object[] o = {rs.getInt("FirstID"),rs.getInt("SecondID"),
 						rs.getInt("ThirdID"),rs.getTimestamp("LogTime"),
-						rs.getDouble("Point"),rs.getDouble("SomeDouble")};
+						rs.getDouble("Point"), translateFile(rs.getInt("SomeDouble"))};
 				list.add(o);
 			}
 
@@ -63,15 +63,38 @@ public class MySql {
 			e.printStackTrace();
 		}
 		return list;
+	}
 
+	private String translateFile(int x) {
+		switch(x) {
+		case 2128259830 : return "Example 1";
+
+		case 1149748017 : return "Example 2";
+
+		case -683317070 : return "Example 3";
+
+		case 1193961129 : return "Example 4";
+
+		case 1577914705 : return "Example 5";
+
+		case -1315066918 : return "Example 6";
+
+		case  -1377331871 : return "Example 7";
+
+		case 306711633 : return "Example 8";
+
+		case 919248096 : return "Example 9";
+		default : return "Unknown";
+		
+		}
 	}
 
 	public void closeConnection() {
 		try {
 			if(stmt!=null) stmt.close();
-			
+
 			if(rs!=null) rs.close();
-			
+
 			if(con!=null)  con.close();
 
 		} catch (SQLException e) {

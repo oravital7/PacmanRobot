@@ -23,6 +23,7 @@ public class Table {
 	
 	private void start() {
 		MySql mq = new MySql();
+		
 		try {
 			f.setIconImage(ImageIO.read(new File("Icon\\graph.png")));
 		} catch (IOException e) {
@@ -47,6 +48,7 @@ public class Table {
 		
 		f.add(splitPane);
 		f.setVisible(true);
+		mq.closeConnection();
 	}
 
 }
