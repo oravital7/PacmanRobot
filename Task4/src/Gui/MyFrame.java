@@ -65,7 +65,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	private MainAlgo algo;
 	private Robot2Element cs;
 	private StringTranslate trans;
-	BackGroundPanel panel;
+	private BackGroundPanel panel;
 
 	public static void main(String[] args) {
 		new  MyFrame();
@@ -160,51 +160,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
-
-	/**
-	 * Didn't find if repaint is a synchronized method
-	 * so for double check this method ensures that
-	 */
-	public synchronized void updater() {
-		cs.MakeElements(playS.getBoard());
-		trans.setString(playS.getStatistics());
-		score.setText(trans.getScore());		
-		totalTime.setText("Total Time: "+trans.getTotalTime());
-		timeLeft.setText("Time Left: "+trans.getTimeLeft());
-		ghostKill.setText("Kill by ghost: "+trans.getGhostKill());
-		outOfbox.setText("Out of box: "+trans.getOutOfBox());
-		repaint();
-	}
-	/**
-	 * set the board to 0
-	 */
-	private void reUpdate() {
-		score.setText("Score: 0");		
-		totalTime.setText("Total Time: 0");
-		timeLeft.setText("Time Left: 0");
-		ghostKill.setText("Kill by ghost: 0");
-		outOfbox.setText("Out of box: 0");
-		repaint();
-	}
-
-	/**
-	 * Responsible to send a message, when the game finish
-	 * @param TotalTime
-	 * @param fruitWeight
-	 * @param TotalResult
-	 */
-	public void Result() {
-		openedGame=playB=stepByStepB=meB=autoB= false; // Change running to false that we finish right now the current game
-		// content of the message
-		JOptionPane.showMessageDialog(this,
-				playS.getStatistics(),
-				"Game Over!\n ", 
-				JOptionPane.INFORMATION_MESSAGE); 
-		game = null;
-		reUpdate();
-
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -216,8 +171,12 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			openedGame = stepByStepB = false;
 			mouse = true;
 			if(playB) {
-				playB=animate.keepGoing=false;
+				playB=animate.keepGoing = false;
 			}
+			if(autoB) {
+				autoB=algo.keepGoing = false;
+			}
+			
 			reUpdate();
 			return;
 		}
@@ -235,23 +194,21 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			}
 			return;
 		}
+		
+		
+		if(game == null|| !meB) {
+			errorMessage();
+			return;
+		}
 
 		if(o==stepByStep) {
-			if(game == null||!meB) // if try to play a empty game send error
-				errorMessage();
-
-			else { // Ok let's start the game
 				mouse=stepByStepB = true;
 				if(playB) 	playB = animate.keepGoing=false;		
 				else playS.start();
-			}
 			return;
 		}
 
 		if(o==play && !playB) {
-			if(game == null||!meB)
-				errorMessage();
-			else {
 				setCursor(null);
 				displayCoord.setVisible(true);
 				stepByStepB = false;
@@ -259,39 +216,28 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				if(!playS.isRuning())
 					playS.start();
 				animate.start();
-				mouse=playB = true;
-			}
+				mouse = playB = true;
+				
 			return;
 		}
 
-		if(o==automatic) {
-			if(game == null||!meB)
-				errorMessage();
-			else {
-				setCursor(null);
-				displayCoord.setVisible(true);
-				algo = new MainAlgo(this,game,panel.getWidth(),panel.getHeight());
+		if(o==automatic && !autoB) {
+				algo = new MainAlgo(this, game,panel.getWidth(), panel.getHeight());
 				if(!playS.isRuning())
 					playS.start();
 				algo.start();
 				autoB = mouse = true;
-			}
 		}
 	}
 
-	private void errorMessage() {
-		JOptionPane.showMessageDialog(this,
-				"Error while Playing \n*Load map \n*Place the pacman in a valid location ",
-				"Error: Unable play the game",				
-				JOptionPane.ERROR_MESSAGE);
-	}
-
 	public void openGameFile(File f) {
-		if(playB) animate.keepGoing=false;
+		if(playB) animate.keepGoing = false;
+		if(autoB) algo.keepGoing = false;
+		
 		playS = new Play(f.getAbsolutePath());
 		playS.setIDs(315392852, 311327076);
 		openedGame=true;
-		mouse=playB=stepByStepB=meB=false;
+		mouse=playB=stepByStepB=meB=autoB=false;
 		map.setNewBounds(playS.getBoundingBox());
 		game = new Game();
 		angle=90;
@@ -309,10 +255,9 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 	public void rotate() {
 		if(!playS.isRuning()) {
-			if(playB) animate.keepGoing = false;
-			
+			if(playB) animate.keepGoing = false;		
 			if(autoB) algo.keepGoing = false;
-			
+		
 			Result();
 			}
 		
@@ -326,7 +271,55 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		if(playB) stepByStep.doClick();
 		else play.doClick();
 	}
+	
+	private void updater() {
+		cs.MakeElements(playS.getBoard());
+		trans.setString(playS.getStatistics());
+		score.setText(trans.getScore());		
+		totalTime.setText("Total Time: "+trans.getTotalTime());
+		timeLeft.setText("Time Left: "+trans.getTimeLeft());
+		ghostKill.setText("Kill by ghost: "+trans.getGhostKill());
+		outOfbox.setText("Out of box: "+trans.getOutOfBox());
+		repaint();
+	}
 
+	private void errorMessage() {
+		JOptionPane.showMessageDialog(this,
+				"Error while Playing \n*Load map \n*Place the pacman in a valid location ",
+				"Error: Unable play the game",				
+				JOptionPane.ERROR_MESSAGE);
+	}
+	
+	/**
+	 * Reset board
+	 */
+	private void reUpdate() {
+		score.setText("Score: 0");		
+		totalTime.setText("Total Time: 0");
+		timeLeft.setText("Time Left: 0");
+		ghostKill.setText("Kill by ghost: 0");
+		outOfbox.setText("Out of box: 0");
+		repaint();
+	}
+
+	/**
+	 * Responsible to send a message, when the game finish
+	 * @param TotalTime
+	 * @param fruitWeight
+	 * @param TotalResult
+	 */
+	private void Result() {
+		openedGame=playB=stepByStepB=meB=autoB= false; // Change running to false that we finish right now the current game
+		// content of the message
+		JOptionPane.showMessageDialog(this,
+				playS.getStatistics(),
+				"Game Over!\n ", 
+				JOptionPane.INFORMATION_MESSAGE); 
+		game = null;
+		reUpdate();
+	}
+	
+	
 	/**
 	 * This class responsible to paint all our elements and listen to user 
 	 * for each command such as Clicks, drag and etc
@@ -411,7 +404,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				g2d.drawImage(op.filter(meImg, null), (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 
 				if(playS.isRuning()) {
-					g2d.setColor(new Color(1f,0f,0.7f,.2f ));
+					g2d.setColor(new Color(1f,0f,.7f,.2f));
 					g2d.fillRect(3, 3, 155, 110);
 				}
 

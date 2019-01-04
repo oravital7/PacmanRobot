@@ -13,7 +13,6 @@ public class KeyObserve  implements KeyListener {
 		left=up=right=down=false;
 	}
 
-	//
 	@Override
 	public void keyTyped(KeyEvent e) {}
 

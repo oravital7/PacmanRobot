@@ -79,13 +79,13 @@ public class MySql {
 
 		case -1315066918 : return "Example 6";
 
-		case  -1377331871 : return "Example 7";
+		case -1377331871 : return "Example 7";
 
 		case 306711633 : return "Example 8";
 
 		case 919248096 : return "Example 9";
-		default : return "Unknown";
 		
+		default : return "Unknown";
 		}
 	}
 

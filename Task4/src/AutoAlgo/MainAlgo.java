@@ -22,6 +22,8 @@ public class MainAlgo extends Thread {
 
 	@Override
 	public void run() {
+		double angle;
+		
 		while(keepGoing) {
 			GraphList create = new GraphList(game, width, height);
 			Point3D path[] = create.getPath();
@@ -32,13 +34,13 @@ public class MainAlgo extends Thread {
 			}
 			
 			int i=0;
-			while(game.isExist(id) && getDist(game.getMe().getPoint(),path[path.length-1]) > 1) {
-				while(game.isExist(id) &&  getDist(game.getMe().getPoint(),path[i]) > 1)  {
-					double angle = getAngle(game.getMe().getPoint(),path[i]);
+			while(game.isExist(id) && keepGoing) {
+				while(game.isExist(id) &&  getDist(game.getMe().getPoint(),path[i]) > 1 && keepGoing)  {
+					angle = getAngle(game.getMe().getPoint(),path[i]);
 					f.controlByKey(angle);
 					
 					try {
-						Thread.sleep(50);
+						Thread.sleep(30);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

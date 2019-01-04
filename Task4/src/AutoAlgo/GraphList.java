@@ -30,8 +30,8 @@ public class GraphList {
 	private void GraphListBuilder() {
 		Map map = Map.map();
 		Point3D me = map.coord2pixel(game.getMe().getPoint(), width, height);
-		Vertex source;
-		Vertex target;
+		Vertex source,target;
+
 		double min = Integer.MAX_VALUE;
 		Point3D p;
 		for(Fruit f : game.getFruits()) {
