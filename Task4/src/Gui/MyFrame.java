@@ -218,6 +218,8 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			if(playB) {
 				playB=animate.keepGoing=false;
 			}
+			if(autoB)
+				playB=algo.keepGoing=false;
 			reUpdate();
 			return;
 		}

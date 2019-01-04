@@ -57,6 +57,7 @@ public class GraphBuilder {
 			if(!v.isLonely()) {
 				Node node = new Node(""+v.getName());
 				G.add(node);
+		
 			}
 		}
 		G.add(new Node(""+target.getName()));
