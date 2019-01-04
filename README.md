@@ -80,6 +80,7 @@ Class Diagram
 General info
 --------------
 Read more in Wiki:
+- Graphs: https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)
 - Dijkstra's Algorithm: https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 
 
