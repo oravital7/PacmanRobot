@@ -29,7 +29,7 @@ public class Table {
 			System.out.println("Unable load graph Image!!!");
 		}
 
-		JTable ourScore = new JTable(new TableModel(mq.QueryWhereId("5555")));
+		JTable ourScore = new JTable(new TableModel(mq.QueryWhereId("315392852")));
 		JTable allScore = new JTable(new TableModel(mq.QueryAll()));
 		ourScore.setAutoCreateRowSorter(true);
 		allScore.setAutoCreateRowSorter(true);

@@ -88,6 +88,7 @@ public class Game {
 	
 	public boolean isExist(int  id) {
 		Fruit f = fruitArray.get(id);
+		if(f==null) return false;
 		return f.destroyed;
 	}
 
