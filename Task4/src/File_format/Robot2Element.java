@@ -34,11 +34,11 @@ public class Robot2Element {
 		game.clear();
 		init = game.isEmpty();
 		for(String s : data) {
-			makeElements(s.split(","));
+			MakeElements(s.split(","));
 		}
 	}
 
-	private void makeElements(String make[]) {
+	private void MakeElements(String make[]) {
 		int id = convert2Int(make[1]);
 		double x = convert2Double(make[2]);
 		double y = convert2Double(make[3]);
@@ -113,7 +113,6 @@ public class Robot2Element {
 			game.addGhost(g);
 		}
 	}
-
 
 	/**
 	 * Parse to int

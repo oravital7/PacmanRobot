@@ -35,20 +35,21 @@ public class Table {
 		JTable allScore = new JTable(new TableModel(mq.QueryAll()));
 		ourScore.setAutoCreateRowSorter(true);
 		allScore.setAutoCreateRowSorter(true);
-
+		
 		ourScore.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		allScore.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		allScore.setBackground(Color.LIGHT_GRAY);
 		
 		JScrollPane scrollPane = new JScrollPane(ourScore);
 		JScrollPane scrollPane2 = new JScrollPane(allScore);
-		
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 				scrollPane, scrollPane2);
+		
 		splitPane.setResizeWeight(0.5);
 		
 		f.add(splitPane);
 		f.setVisible(true);
+
 		mq.closeConnection();
 	}
 

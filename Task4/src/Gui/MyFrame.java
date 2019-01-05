@@ -76,7 +76,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		openedGame=playB=stepByStepB = false; // We start with no progress(game running animation)
 		displayCoord = new JLabel();
 		displayCoord.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		displayCoord.setForeground(Color.white);
+		displayCoord.setForeground(Color.WHITE);
 		add(displayCoord);
 
 		score = new JLabel();
@@ -152,7 +152,8 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		ButtonsPanel FastOpen = new ButtonsPanel(this);
 		menuBar.add(FastOpen);
-
+		
+		setTitle("Pacman Game by Dana & Or");
 		setSize(1200, 800);
 		setLocation(300, 50);
 		setVisible(true);
@@ -349,6 +350,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				pacmanImg = ImageIO.read(new File("Icon\\pacman.png"));
 				ghostImg = ImageIO.read(new File("Icon\\ghost.png"));
 				meImg = ImageIO.read(new File("Icon\\me.png"));
+				f.setIconImage(meImg);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
