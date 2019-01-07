@@ -28,18 +28,25 @@ public class MainAlgo extends Thread {
 			GraphList create = new GraphList(game, width, height);
 			Point3D path[] = create.getPath();
 			int id = create.getTargetId();
-
-		//	System.out.println(id);
-
 			
 			if(game.numOfFruits()==0) {
 				f.rotate();
+<<<<<<< HEAD
 			}
 			int i=0;
 			while(game.isExist(id) && keepGoing) {
 				while(game.isExist(id) &&  getDist(game.getMe().getPoint(),path[i]) > 1 && keepGoing)  {
 					angle = getAngle(game.getMe().getPoint(),path[i]);
+=======
+			}		
+
+			int i=0;
+			while(game.isExist(id) && keepGoing) {
+				while(game.isExist(id) &&  getDist(game.getMe().getPoint(),path[i]) > 1 && keepGoing)  {
+					angle = getAngle(game.getMe().getPoint(),path[i]);
+>>>>>>> c3185f2e076ffc08e75b1d81e41dfaef20995c21
 					f.controlByKey(angle);
+					
 					try {
 						Thread.sleep(30);
 					} catch (InterruptedException e) {
@@ -54,6 +61,7 @@ public class MainAlgo extends Thread {
 	private double getDist(Point3D geo, Point3D pixel) {
 		Map map = Map.map();
 		geo = map.coord2pixel(geo, width, height);
+		
 		double dist = map.distanceGpsPixles(geo, pixel, width, height);
 		return dist;
 	}

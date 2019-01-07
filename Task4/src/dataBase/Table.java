@@ -32,7 +32,7 @@ public class Table {
 		}
 
 		JTable ourScore = new JTable(new TableModel(mq.QueryWhereId("315392852")));
-		JTable allScore = new JTable(new TableModel(mq.QueryAll()));
+		JTable allScore = new JTable(new TableModel(mq.QueryAllNotId("315392852")));
 		ourScore.setAutoCreateRowSorter(true);
 		allScore.setAutoCreateRowSorter(true);
 		

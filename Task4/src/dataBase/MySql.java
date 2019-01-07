@@ -39,9 +39,10 @@ public class MySql {
 		return QueryDatabase();
 	}
 
-	public ArrayList<Object[]> QueryAll() {
+	public ArrayList<Object[]> QueryAllNotId(String id) {
+		String s = "WHERE FirstID != "+id;
 		try {
-			rs = stmt.executeQuery("SELECT * FROM logs");
+			rs = stmt.executeQuery("SELECT * FROM logs "+s);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

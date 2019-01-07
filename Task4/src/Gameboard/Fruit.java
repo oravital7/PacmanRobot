@@ -1,5 +1,6 @@
 package Gameboard;
 
+
 import Geom.Point3D;
 /**
  * This class represents a Fruit Character
@@ -7,12 +8,11 @@ import Geom.Point3D;
  *
  */
 public class Fruit extends Character { 
-	
+
 	public boolean destroyed;
 
 	public Fruit(Point3D point, int id, double weight) {
 		super(point,id, weight);
 		destroyed = true;
 	}
-	
 }
