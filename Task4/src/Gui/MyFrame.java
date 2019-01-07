@@ -198,26 +198,18 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			}
 			return;
 		}
-<<<<<<< HEAD
-
-		if(o==automatic && !autoB && game!=null) {
-			algo = new MainAlgo(this, game,panel.getWidth(), panel.getHeight(),meB);
-			if(!playS.isRuning())
-				playS.start();
-=======
 		
 		if(o==automatic && !autoB && game!=null) {
 			algo = new MainAlgo(this, game,panel.getWidth(), panel.getHeight(),meB);
 			if(!playS.isRuning() && meB)
 				playS.start();
 			
->>>>>>> 7df3e8d5fa10a4d24a603bed94341a9adc77ee94
 			algo.start();
 			autoB = mouse = true;
 			return;
 		}
 
-		if(game == null || !meB) {
+		if(game == null|| !meB) {
 			errorMessage();
 			return;
 		}
@@ -241,10 +233,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 			return;
 		}
-<<<<<<< HEAD
-
-=======
->>>>>>> 7df3e8d5fa10a4d24a603bed94341a9adc77ee94
 	}
 
 	public void openGameFile(File f) {
@@ -347,12 +335,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				JOptionPane.INFORMATION_MESSAGE); 
 		game = null;
 		reUpdate();
-	}
-	
-	public void setMe(Point3D p) {
-		meB = true;
-		playS.setInitLocation(p.x(),p.y());
-		game.getMe().setPoint(p);
 	}
 
 
@@ -509,6 +491,5 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		}
 
 	}
-
 
 }

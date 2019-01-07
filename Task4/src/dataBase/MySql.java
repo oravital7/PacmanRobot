@@ -57,6 +57,7 @@ public class MySql {
 			points[map-1] = s+": "+point;
 		}
 		String result = Arrays.toString(points);
+		System.out.println(Arrays.toString(points));
 		return result.substring(1, result.length()-1);
 	}
 	

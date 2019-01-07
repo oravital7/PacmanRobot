@@ -5,28 +5,44 @@ import Gameboard.Fruit;
 import Gameboard.Game;
 import Geom.Point3D;
 
-
+/**
+ * 
+ * @author Dana Mor & Or Avital
+ * This class calculates the shortest path from given graphs
+ */
 public class GraphList {
 	private Game game;
 	private Point3D[] path;
 	private int width, height, FruitId;
-
+/**
+ * @param game the game
+ * @param width width of the frame
+ * @param height height of the frame
+ */
 	public GraphList(Game game,int width, int height) {
 		this.game = game;
 		this.width = width;
 		this.height = height;
 		FruitId=0;
 	}
-
+/**
+ * 
+ * @return path to the closest fruit
+ */
 	public Point3D[] getPath() {
 		GraphListBuilder();
 		return path;
 	}
-
+/**
+ * 
+ * @return Fruit Id
+ */
 	public int getTargetId() {
 		return FruitId;
 	}
-
+/**
+ * calculates the path for each fruit and create a path to the closest fruit
+ */
 	private void GraphListBuilder() {
 		Map map = Map.map();
 		Point3D me = map.coord2pixel(game.getMe().getPoint(), width, height);
