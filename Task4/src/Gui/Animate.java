@@ -7,7 +7,7 @@ package Gui;
  *
  */
 public class Animate extends Thread  {
-	private MyFrame frame; // Use Gui frame for repaint the frame
+	private MyFrame frame; 
 	boolean keepGoing;
 
 
