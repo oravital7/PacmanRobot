@@ -43,6 +43,12 @@ The Game when the game is over:
 
 <img src="./Task4/Icon/gameAfterPlay.PNG" width="350" height="300">
 
+Awesome features
+--------------
+The user can watch the table of his own scores vs. the scores of the rest of the users.
+
+<img src="./Task4/Icon/DBscoreBoard.PNG" width="350" height="300">
+
 General info
 --------------
 Read more in Wiki:
