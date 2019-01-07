@@ -2,19 +2,16 @@ package Gameboard;
 
 import Geom.Point3D;
 
+/**
+ * This class represent a Characters of Pacman, Fruit, Ghost,Me and blocks
+ * and all their common qualities
+ */
 public class Character {
 
 	private int id;
 	private double attribute; // Represent Speed for Pacman , Weight for fruit
 	protected Point3D point; // Geographic point
 	
-	/**
-	 * This class represent a Characters of Pacman, Fruit, Ghost and blocks
-	 * and all their common qualities
-	 * @param point
-	 * @param id
-	 * @param attribute
-	 */
 	public Character(Point3D point ,int id, double attribute) {
 		this.id = id;
 		this.attribute = attribute;

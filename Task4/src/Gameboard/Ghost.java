@@ -2,6 +2,10 @@ package Gameboard;
 
 import Geom.Point3D;
 
+/**
+ * represents a Ghost Character
+ * with Geographic point
+ */
 public class Ghost extends Character {
 	private double radius;
 	

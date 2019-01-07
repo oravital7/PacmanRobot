@@ -2,6 +2,11 @@ package Gameboard;
 
 import Geom.Point3D;
 
+/**
+ * represents a Me Character - our player
+ * with Geographic point and orientation
+ * 
+ */
 public class Me extends Character{
 	private double orientation;
 	

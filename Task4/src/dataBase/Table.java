@@ -13,6 +13,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 
+/**
+ * Responsible for displaying the results table and top scores 
+ */
 public class Table {
 	private JFrame f;
 	
@@ -24,6 +27,9 @@ public class Table {
 		start();
 	}
 	
+	/**
+	 * Extracts the data from MySql and builds the table
+	 */
 	private void start() {
 		MySql mq = new MySql();
 
@@ -32,7 +38,8 @@ public class Table {
 		} catch (IOException e) {
 			System.out.println("Unable load graph Image!!!");
 		}
-
+		
+		////////////////////  Create Tables ////////////////////
 		JTable ourScore = new JTable(new TableModel(mq.Query("315392852",true)));
 		JTable allScore = new JTable(new TableModel(mq.Query("315392852",false)));
 
@@ -49,6 +56,7 @@ public class Table {
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 				scrollPane, scrollPane2);
 		
+		///////////////// Pull the high scores /////////////////
 		String ourS = mq.getScore(true, "315392852");
 		String othersS = mq.getScore(false, "315392852");
 

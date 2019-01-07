@@ -10,6 +10,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Able to access to a database with certain queries 
+ *
+ */
 public class MySql {
 	private Connection con;
 	private Statement stmt;
@@ -17,6 +21,7 @@ public class MySql {
 	private HashMap<Integer, String> hash;
 
 	public MySql() {
+		// Create configuration connection
 		Properties properties = new Properties();
 		properties.setProperty("user", "student");
 		properties.setProperty("password", "student");
@@ -32,7 +37,89 @@ public class MySql {
 		}
 		creatKeys();
 	}
+	/**
+	 * Calculate high score of each examples maps
+	 * @param ourScore - true check only our score, false for others
+	 * @param id - which id to check
+	 * @return String that represent top scores
+	 */
+	public String getScore(boolean ourScore,String id) {
+		String points[] = new String[9];
+		
+		for(Integer map : hash.keySet()) {
+			double point = getScore(map,ourScore,id);
+			String s = hash.get(map); // Calculate high score for this map
+			map = Integer.parseInt(""+s.charAt(s.length()-1)); // Save in the right place such that example 1=[0], example 2 =[1] etc.
+			points[map-1] = s + ": "+point;
+		}
+		String result = Arrays.toString(points);
+		return result.substring(1, result.length()-1);
+	}
+	/**
+	 * change ResultSet accord specific id
+	 * @param id - which id to filter
+	 * @param myScore - if to include the id or not
+	 * @return ArrayList of data query
+	 */
+	public ArrayList<Object[]> Query(String id, boolean myScore) {
+		String s = "WHERE FirstID ";
+		if(myScore) s += "= ";
+		else s += "!= ";
 
+		s+=id;
+		
+		try {
+			rs = stmt.executeQuery("SELECT * FROM logs "+s);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return QueryDatabase();
+	}
+	/**
+	 * When we finish with the dataBase close connection
+	 */
+	public void closeConnection() {
+		try {
+			if(stmt!=null) stmt.close();
+
+			if(rs!=null) rs.close();
+
+			if(con!=null)  con.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Calculate high score for specific map
+	 * @param map - which map to run
+	 * @param ourScore - to include the id or not
+	 * @param id - id to calculate
+	 * @return double of top point for this map
+	 */
+	private double getScore(int map,boolean ourScore, String id) {
+		double point = 0;
+		String s = "WHERE FirstID ";
+
+		if(ourScore) s += "= ";
+		else s+= "!= ";
+		s+=id;
+		
+		try {
+			rs = stmt.executeQuery("SELECT MAX(Point) FROM logs "+s+" AND SomeDouble = "+map);
+			rs.next();
+			point = rs.getDouble(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return point;
+	}
+
+	/**
+	 * Connect each map to his name
+	 * Now we can quickly get the translate
+	 */
 	private void creatKeys() {
 		hash = new HashMap<Integer, String>();
 
@@ -46,65 +133,10 @@ public class MySql {
 		hash.put(306711633, "Example 8");
 		hash.put(919248096, "Example 9");		
 	}
-	
-	public String getScore(boolean ourScore,String id) {
-		String points[] = new String[9];
-
-		for(Integer map : hash.keySet()) {
-			double point = getScore(map,ourScore,id);
-			String s = hash.get(map);
-			map = Integer.parseInt(""+s.charAt(s.length()-1));
-			points[map-1] = s+": "+point;
-		}
-		String result = Arrays.toString(points);
-		return result.substring(1, result.length()-1);
-	}
-	
-	public ArrayList<Object[]> Query(String id, boolean myScore) {
-		String s = "WHERE FirstID ";
-		if(myScore) s += "= "+id;
-		else s += "!= "+id;
-
-		try {
-			rs = stmt.executeQuery("SELECT * FROM logs "+s);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return QueryDatabase();
-	}
-	
-	public void closeConnection() {
-		try {
-			if(stmt!=null) stmt.close();
-
-			if(rs!=null) rs.close();
-
-			if(con!=null)  con.close();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private double getScore(int map,boolean ourScore, String id) {
-		double point = 0;
-		String s = "WHERE FirstID ";
-
-		if(ourScore) s += "= 315392852";
-		else s+= "!= 315392852";
-		
-		try {
-			rs = stmt.executeQuery("SELECT MAX(Point) FROM logs "+s+" AND SomeDouble = "+map);
-			rs.next();
-			point = rs.getDouble(1);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return point;
-	}
-
-
+	/**
+	 * Just run on the result and insert into a ArrayList
+	 * @return ArrayList that represent this dataBase
+	 */
 	private ArrayList<Object[]> QueryDatabase()  {
 		ArrayList<Object[]> list = new ArrayList<Object[]>();
 
@@ -122,8 +154,11 @@ public class MySql {
 
 		return list;
 	}
-
-
+	/**
+	 * Show file name as a readable string name
+	 * @param map - map id
+	 * @return - String map name 
+	 */
 	private String translateFile(int map) {
 		if(hash.containsKey(map)) return hash.get(map);
 		return "Unknown";		

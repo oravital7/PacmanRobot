@@ -4,11 +4,15 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
+/**
+ * Represents a basic table that can sort by values 
+ * We can get any data and save them as table
+ */
 public class TableModel extends AbstractTableModel {
 	private static final long serialVersionUID = -2591792764959317565L;
 
-	String column[] = {"First ID","Second ID","Third ID","Log Time","Points","Map Name"};
-	ArrayList<Object[]> data;
+	private String column[] = {"First ID","Second ID","Third ID","Log Time","Points","Map Name"};
+	private ArrayList<Object[]> data;  // Data to present
 
 	public TableModel(ArrayList<Object[]> data) {
 		this.data = data;
