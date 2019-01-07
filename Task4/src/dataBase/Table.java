@@ -19,7 +19,7 @@ public class Table {
 	public Table() {
 		f = new JFrame();
 		f.setTitle("Table Scores");
-		f.setSize(1100, 800);
+		f.setSize(1120, 800);
 		f.setLocation(400, 50);
 		start();
 	}
@@ -52,8 +52,8 @@ public class Table {
 		String ourS = mq.getScore(true, "315392852");
 		String othersS = mq.getScore(false, "315392852");
 
-		JLabel our = new JLabel("Our High Scores- "+ourS);
-		JLabel others = new JLabel("High Scores- "+othersS);
+		JLabel our = new JLabel("Our High Scores     "+ourS);
+		JLabel others = new JLabel("Others High Scores "+othersS);
 		our.setFont(font);
 		others.setFont(font);
 
@@ -63,7 +63,6 @@ public class Table {
 		f.add(others);
 		f.add(splitPane);
 		f.setVisible(true);
-
 
 		mq.closeConnection();
 	}
