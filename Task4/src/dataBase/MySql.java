@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 
+import jdk.internal.module.ModuleHashes;
+
 public class MySql {
 	private Connection con;
 	private Statement stmt;
@@ -31,7 +33,6 @@ public class MySql {
 			e.printStackTrace();
 		}
 		creatKeys();
-
 	}
 
 	private void creatKeys() {
@@ -48,16 +49,17 @@ public class MySql {
 		hash.put(919248096, "Example 9");		
 	}
 	
-	public double[] getScore(boolean ourScore,String id) {
-		double points[] = new double[9];
-		
+	public String getScore(boolean ourScore,String id) {
+		String points[] = new String[9];
+
 		for(Integer map : hash.keySet()) {
 			double point = getScore(map,ourScore,id);
 			String s = hash.get(map);
 			map = Integer.parseInt(""+s.charAt(s.length()-1));
-			points[map-1] = point;
+			points[map-1] = s+": "+point;
 		}
-		return points;
+		String result = Arrays.toString(points);
+		return result.substring(1, result.length()-1);
 	}
 	
 	public ArrayList<Object[]> Query(String id, boolean myScore) {
@@ -73,7 +75,19 @@ public class MySql {
 
 		return QueryDatabase();
 	}
+	
+	public void closeConnection() {
+		try {
+			if(stmt!=null) stmt.close();
 
+			if(rs!=null) rs.close();
+
+			if(con!=null)  con.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private double getScore(int map,boolean ourScore, String id) {
 		double point = 0;
@@ -115,22 +129,6 @@ public class MySql {
 	private String translateFile(int map) {
 		if(hash.containsKey(map)) return hash.get(map);
 		return "Unknown";		
-	}
-
-
-
-	public void closeConnection() {
-		try {
-			if(stmt!=null) stmt.close();
-
-			if(rs!=null) rs.close();
-
-			if(con!=null)  con.close();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 }

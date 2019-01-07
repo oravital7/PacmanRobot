@@ -19,7 +19,7 @@ public class Table {
 	public Table() {
 		f = new JFrame();
 		f.setTitle("Table Scores");
-		f.setSize(1000, 800);
+		f.setSize(1100, 800);
 		f.setLocation(400, 50);
 		start();
 	}
@@ -39,7 +39,7 @@ public class Table {
 		ourScore.setAutoCreateRowSorter(true);
 		allScore.setAutoCreateRowSorter(true);
 		
-		Font font = new Font("Tahoma", Font.PLAIN, 15);
+		Font font = new Font("Tahoma", Font.PLAIN, 14);
 		ourScore.setFont(font);
 		allScore.setFont(font);
 		allScore.setBackground(Color.LIGHT_GRAY);
@@ -49,16 +49,18 @@ public class Table {
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 				scrollPane, scrollPane2);
 		
-		JLabel our = new JLabel("Our Scores: ");
-		JLabel other = new JLabel("Others Scores: ");
+		String ourS = mq.getScore(true, "315392852");
+		String othersS = mq.getScore(false, "315392852");
 
+		JLabel our = new JLabel("Our High Scores- "+ourS);
+		JLabel others = new JLabel("High Scores- "+othersS);
 		our.setFont(font);
-		other.setFont(font);
+		others.setFont(font);
 
 		splitPane.setResizeWeight(0.5);
 		f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
 		f.add(our);
-		f.add(other);
+		f.add(others);
 		f.add(splitPane);
 		f.setVisible(true);
 
