@@ -28,19 +28,7 @@ public class MainAlgo extends Thread {
 	@Override
 	public void run() {
 		double angle;
-		if(!me)
-		{
-			Iterator <Fruit>it = game.getFruits().iterator(); 
-			Fruit f;
-			double numOfFruits = game.getFruits().size();
-			int rand = (int)(Math.random()*(numOfFruits));
-			for (int i = 0; i < rand; i++) {
-				f = it.next();
-			}
-			
-		}
-		
-		
+				
 		while(keepGoing) {
 			GraphList create = new GraphList(game, width, height);
 			Point3D path[] = create.getPath();
@@ -72,6 +60,7 @@ public class MainAlgo extends Thread {
 	private double getDist(Point3D geo, Point3D pixel) {
 		Map map = Map.map();
 		geo = map.coord2pixel(geo, width, height);
+		System.out.println("dana אין akum'm'sdmmsjkmc'ajakeirgi!!!!");
 
 		double dist = map.distanceGpsPixles(geo, pixel, width, height);
 		return dist;

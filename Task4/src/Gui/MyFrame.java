@@ -205,6 +205,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				playS.start();
 			algo.start();
 			autoB = mouse = true;
+			return;
 		}
 
 		if(game == null || !meB) {
@@ -321,6 +322,12 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				JOptionPane.INFORMATION_MESSAGE); 
 		game = null;
 		reUpdate();
+	}
+	
+	public void setMe(Point3D p) {
+		meB = true;
+		playS.setInitLocation(p.x(),p.y());
+		game.getMe().setPoint(p);
 	}
 
 
