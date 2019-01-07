@@ -12,7 +12,7 @@ import Geom.Point3D;
 
 
 /**
- * 
+ * @author Dana Mor & Or Avital
  * This class creates the game
  *
  */

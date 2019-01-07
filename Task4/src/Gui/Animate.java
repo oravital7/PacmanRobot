@@ -1,6 +1,6 @@
 package Gui;
 
-/**
+/**@author Dana Mor & Or Avital
  * Responsible to update points of a single Pacman
  * accord path direction that solve by ShortestPathAlgo
  * Class extends thread so can work simultaneously

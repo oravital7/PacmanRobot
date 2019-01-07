@@ -1,6 +1,6 @@
 package Play;
 /**
- * 
+ * @author Dana Mor & Or Avital
  *This class translate string
  */
 
