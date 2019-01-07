@@ -69,6 +69,7 @@ If the fruit got eaten while the pacman was trying to reach it, the algorithm ca
 
 <img src="./Task4/Icon/autoAlgo.PNG" width="550" height="400">
 
+<img src="./Task4/Icon/1.JPG" width="550" height="400">
 
 Class Diagram
 --------
