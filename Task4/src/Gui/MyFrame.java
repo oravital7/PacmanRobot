@@ -35,8 +35,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
-import File_format.Robot2Element;
-import File_format.StringTranslate;
 import Gameboard.Blocks;
 import Gameboard.Fruit;
 import Gameboard.Game;
@@ -44,6 +42,8 @@ import Gameboard.Ghost;
 import Gameboard.Me;
 import Gameboard.Pacman;
 import Geom.Point3D;
+import Play.Robot2Element;
+import Play.StringTranslate;
 import Robot.Play;
 
 /**

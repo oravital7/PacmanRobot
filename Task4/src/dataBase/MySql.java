@@ -10,8 +10,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 
-import jdk.internal.module.ModuleHashes;
-
 public class MySql {
 	private Connection con;
 	private Statement stmt;
