@@ -36,9 +36,11 @@ The automatic algo calculates the route of the pacman, and the game is played au
 The player can choose weather to insert the pacman, or let the algorithm choose the start point of the pacman.
 
 The Game after choosing a map:
+
 <img src="./Task4/Icon/gameBeforePlay.PNG" width="350" height="300">
 
 The Game when the game is over:
+
 <img src="./Task4/Icon/gameAfterPlay.PNG" width="350" height="300">
 
 General info
