@@ -117,7 +117,9 @@ public class MyCoords implements coords_converter {
 			if(vec.y()<0)
 				azimut=360-azimut;
 		}
-
+		
+		if(Double.isNaN(azimut)) azimut = 0;
+		
 		double distance = distance3d(gps0,gps1);
 
 		double eleveation = Math.toDegrees(Math.asin(vec.z()/distance));

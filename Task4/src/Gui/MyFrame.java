@@ -198,7 +198,16 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			}
 			return;
 		}
-
+		
+		if(o==automatic && !autoB && game!=null) {
+			algo = new MainAlgo(this, game,panel.getWidth(), panel.getHeight(),meB);
+			if(!playS.isRuning() && meB)
+				playS.start();
+			
+			algo.start();
+			autoB = mouse = true;
+			return;
+		}
 
 		if(game == null|| !meB) {
 			errorMessage();
@@ -223,14 +232,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			mouse = playB = true;
 
 			return;
-		}
-
-		if(o==automatic && !autoB) {
-			algo = new MainAlgo(this, game,panel.getWidth(), panel.getHeight());
-			if(!playS.isRuning())
-				playS.start();
-			algo.start();
-			autoB = mouse = true;
 		}
 	}
 
@@ -274,6 +275,19 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 	public void keyStart() {
 		if(playB) stepByStep.doClick();
 		else play.doClick();
+	}
+	
+	public void setMe(Point3D p) {
+		boolean check = playS.setInitLocation(p.x(), p.y());
+		if(check) {
+			meB = true;
+			game.getMe().setPoint(p);
+		}
+		else errorMessage();
+		
+		if(autoB) playS.start();
+		
+		repaint();
 	}
 
 	private void updater() {
@@ -426,14 +440,8 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			p = map.pixel2coord(p, getWidth(), getHeight());
 			System.out.println("Geograpich coords: ("+p+')'); // Print geo corrds as well
 
-			if(openedGame && !playS.isRuning() ) {
-				boolean check = playS.setInitLocation(p.x(), p.y());
-				if(check) {
-					meB = true;
-					game.getMe().setPoint(p);
-				}
-				else errorMessage();
-				repaint();
+			if(openedGame && !playS.isRuning()) {
+				setMe(p);
 			}
 
 			else if(meB) {
