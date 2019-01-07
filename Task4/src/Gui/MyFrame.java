@@ -199,8 +199,15 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			return;
 		}
 
+		if(o==automatic && !autoB && game!=null) {
+			algo = new MainAlgo(this, game,panel.getWidth(), panel.getHeight(),meB);
+			if(!playS.isRuning())
+				playS.start();
+			algo.start();
+			autoB = mouse = true;
+		}
 
-		if(game == null|| !meB) {
+		if(game == null || !meB) {
 			errorMessage();
 			return;
 		}
@@ -225,13 +232,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			return;
 		}
 
-		if(o==automatic && !autoB) {
-			algo = new MainAlgo(this, game,panel.getWidth(), panel.getHeight());
-			if(!playS.isRuning())
-				playS.start();
-			algo.start();
-			autoB = mouse = true;
-		}
 	}
 
 	public void openGameFile(File f) {
@@ -483,5 +483,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		}
 
 	}
+
 
 }
