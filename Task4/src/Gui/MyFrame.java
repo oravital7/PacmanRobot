@@ -203,14 +203,14 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			return;
 		}
 
-		if(o==stepByStep) {
+		if(o==stepByStep && !autoB) {
 			mouse=stepByStepB = true;
 			if(playB) 	playB = animate.keepGoing=false;		
 			else playS.start();
 			return;
 		}
 
-		if(o==play && !playB) {
+		if(o==play && !playB && !autoB) {
 			setCursor(null);
 			displayCoord.setVisible(true);
 			stepByStepB = false;
@@ -354,6 +354,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
 			rotate = new Orien(meImg);
 			Me=Toolkit.getDefaultToolkit().createCustomCursor(meImg, new Point(0, 0), "Me");
 		}
@@ -361,12 +362,13 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-
+			
+			Graphics2D g2d = (Graphics2D)g;
+			
 			// Draw our map as background
 			g.drawImage(map.getMap(), 0, 0, getWidth(), getHeight(), this);
 
 			if(game != null) {
-				Graphics2D g2d = (Graphics2D) g; // the 2d drawing java paint
 				// Get the current game elements arrays
 				Me me = game.getMe();
 
@@ -381,34 +383,32 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 						g.drawImage(fruitImg, (int)p.x(), (int)p.y(), (int)(17*ratioW), (int)(17*ratioH), this);
 				}
 
-				for(Blocks b : game.getblocks()) {			
-					g.setColor(Color.black);
-					Point3D pUp = map.coord2pixel(b.getPoint(), getWidth(), getHeight());
-					Point3D pDown = map.coord2pixel(b.getPoint2(), getWidth(), getHeight());
-					g.fillRect((int)pUp.x(), (int)pDown.y(), (int)Math.abs(pDown.x()-pUp.x()), (int)Math.abs(pDown.y()-pUp.y()));
+				for(Blocks b : game.getblocks()) {
+					g2d.setColor(Color.black);
+					g2d.fill(b.getRect(getWidth(), getHeight()));
 				}
 
 				for(Pacman pacman : game.getPacmans()) { // Move all pacman array and draw them
 					p = map.coord2pixel(pacman.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
 					// Draw with a correct rotate
 					if(pacman.destroyed)
-						g2d.drawImage(pacmanImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
+						g.drawImage(pacmanImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 				}
 
 				for(Ghost ghost : game.getGhosts()) { // Move all pacman array and draw them
 					p = map.coord2pixel(ghost.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
-					g2d.drawImage(ghostImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
+					g.drawImage(ghostImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 				}
 
 				me.setOrien(angle-90);
 
 				p = map.coord2pixel(me.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
 				AffineTransformOp op = rotate.getTransform(me.getOrien()); // Save a transform rotate
-				g2d.drawImage(op.filter(meImg, null), (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
+				g.drawImage(op.filter(meImg, null), (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 
 				if(playS.isRuning()) {
-					g2d.setColor(new Color(1f,0f,.7f,.2f));
-					g2d.fillRect(3, 3, 155, 110);
+					g.setColor(new Color(1f,0f,.7f,.2f));
+					g.fillRect(3, 3, 155, 110);
 				}
 
 			}

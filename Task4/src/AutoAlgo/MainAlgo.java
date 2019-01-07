@@ -53,6 +53,7 @@ public class MainAlgo extends Thread {
 	private double getDist(Point3D geo, Point3D pixel) {
 		Map map = Map.map();
 		geo = map.coord2pixel(geo, width, height);
+		
 		double dist = map.distanceGpsPixles(geo, pixel, width, height);
 		return dist;
 	}

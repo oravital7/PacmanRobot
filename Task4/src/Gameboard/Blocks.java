@@ -5,8 +5,8 @@ import java.awt.Rectangle;
 import Coords.Map;
 import Geom.Point3D;
 
-public class Blocks  extends Character {
-	Map map = Map.map();
+public class Blocks extends Character {
+	private Map map = Map.map();
 	
 	private Point3D point2;
 	
@@ -34,6 +34,5 @@ public class Blocks  extends Character {
 			r.add(pDown.x(),pDown.y());
 
 			return r;
-	}
-	
+	}	
 }
