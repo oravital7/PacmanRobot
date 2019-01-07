@@ -6,9 +6,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
-
 import Gameboard.Blocks;
 import Geom.Point3D;
+
+/**
+ * @author Dana Mor & Or Avital
+ * This class calculates the neighbors of each vertex.
+ */
 
 public class CalcNeighbor {
 
@@ -18,7 +22,14 @@ public class CalcNeighbor {
 	private int id;
 	private HashMap<String, Point3D> hash;
 	private int height, width;
-
+/**
+ * 
+ * @param blockArr block array 
+ * @param source source vertex
+ * @param target target vertex
+ * @param width width of the frame
+ * @param height height of the frame
+ */
 	public CalcNeighbor(Collection<Blocks> blockArr, Vertex source, Vertex target,int width, int height) {
 		this.source = source;
 		this.target = target;
@@ -30,18 +41,29 @@ public class CalcNeighbor {
 		this.width = width;
 	}
 
+	/**
+	 * 
+	 * @return 
+	 */
 	public ArrayList<Vertex> getSkeleton() {
 		buildPointArray();
 		addNeighbor();
 
 		return points;
 	}
-
+	/**
+	 * 
+	 * @param key id of the vertex
+	 * @return point of the vertex
+	 */
 	public Point3D getPoint(String key) {
 		Point3D p = hash.get(key);
 		return p;
 	}
 
+	/**
+	 * creates the array of all the vertexes in the game
+	 */
 	private void buildPointArray() {
 		points.add(source);
 		hash.put(""+source.getName(), source.getPoint());
@@ -57,13 +79,22 @@ public class CalcNeighbor {
 		hash.put(""+points.size(), target.getPoint());
 		points.add(target);
 	}
-
+	/**
+	 * 
+	 * @param x x coordinate
+	 * @param y y coordinate
+	 * @return vertex
+	 */
 	private Vertex createVrtex(double x,double y) {
 		Point3D p = new Point3D(x,y);
 		hash.put(""+id, p);
 		return new Vertex(p,id++);
 	}
-
+	/**
+	 * @param p1 point
+	 * @param p2 point
+	 * @return true if two vertexes are neighbors and false if they aren't
+	 */
 	private boolean isNeighbor(Point3D p1,Point3D p2) {
 		boolean flag = true;
 		for(Blocks b : blockArr) {
@@ -73,17 +104,19 @@ public class CalcNeighbor {
 		}
 		return true;
 	}
-
+	/**
+	 * add neighbors for each vertex
+	 */
 	private void addNeighbor() {
 		Queue<Vertex> queue = new LinkedList<Vertex>();
 		boolean wasInQueue[] = new boolean[points.size()];
 
 		queue.add(source);	
 		wasInQueue[source.getName()] = true;
-		
+
 		while(!queue.isEmpty()) {
 			Vertex current = queue.poll();
-			
+
 			if(!current.equals(target)) {
 				for(Vertex v : points) {
 					if(v.getName()!=0 && !current.equals(v) && isNeighbor(current.getPoint(), v.getPoint())) {

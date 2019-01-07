@@ -8,13 +8,24 @@ import Gameboard.Fruit;
 import Gameboard.Game;
 import Geom.Point3D;
 import Gui.MyFrame;
-
+/**
+ * 
+ * @author Dana Mor & Or Avital
+ * Calculates the shortest path from the pacman to each fruit on the board, and choose the closest fruit.
+ */
 public class MainAlgo extends Thread {
 	private MyFrame f;
 	private int width, height;
 	private Game game;
 	public boolean keepGoing,me;
-
+/**
+ * 
+ * @param f frame
+ * @param game the game
+ * @param width width of the frame
+ * @param height height of the frame
+ * @param me start point of the path
+ */
 	public MainAlgo(MyFrame f, Game game,int width, int height, boolean me) {
 		this.f = f;
 		this.width = width;
@@ -23,7 +34,9 @@ public class MainAlgo extends Thread {
 		keepGoing = true;
 		this.me = me;
 	}
-
+/**
+ * 
+ */
 	@Override
 	public void run() {
 		double angle;

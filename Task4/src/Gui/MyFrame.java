@@ -250,14 +250,19 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		cs.MakeElements(playS.getBoard()); // Translate a csv file into a new game
 		reUpdate();
 	}
-
+/**
+ * whenever a key is pressed the pacman rotates
+ * @param angle of the pacman in order to reach the fruit
+ */
 	public void controlByKey(double angle) {
 		this.angle = angle;
 		if(stepByStepB || autoB) {
 			rotate();
 		}
 	}
-
+/**
+ * rotates the pacman
+ */
 	public void rotate() {
 		if(!playS.isRuning()) {
 			if(playB) animate.keepGoing = false;		

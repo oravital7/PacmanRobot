@@ -43,11 +43,9 @@ If the fruit got eaten while the pacman was trying to reach it, the algorithm ca
 
 The algorithm is based on several classes:
 
-##### Line Class
-This class repreasent a line. 
 
 ##### Vertex Class
-This class repreasent a vertex.
+This class represent a vertex.
 Each vertex has a name, point, and list of all his neighbors.
 
 ##### CalcNeighbor Class
@@ -56,7 +54,7 @@ For each vertex the algoritm checks if he can see other vertexes.
 if there is a straight line betwween them, it adds the vertex to the list of neighbors of the vertex.
 
 ##### GraphBuilder
-This class builds a graph for a given source and desination,
+This class builds a graph for a given source and destination,
 using the CalcNeighbor class.
 
 ##### Graphlist

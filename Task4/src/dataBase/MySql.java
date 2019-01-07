@@ -133,6 +133,7 @@ public class MySql {
 		hash.put(306711633, "Example 8");
 		hash.put(919248096, "Example 9");		
 	}
+
 	/**
 	 * Just run on the result and insert into a ArrayList
 	 * @return ArrayList that represent this dataBase
