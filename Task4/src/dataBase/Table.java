@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -17,27 +19,29 @@ public class Table {
 	public Table() {
 		f = new JFrame();
 		f.setTitle("Table Scores");
-		f.setSize(1000, 800);
+		f.setSize(1100, 800);
 		f.setLocation(400, 50);
 		start();
 	}
 	
 	private void start() {
 		MySql mq = new MySql();
-		
+
 		try {
 			f.setIconImage(ImageIO.read(new File("Icon\\graph.png")));
 		} catch (IOException e) {
 			System.out.println("Unable load graph Image!!!");
 		}
 
-		JTable ourScore = new JTable(new TableModel(mq.QueryWhereId("315392852")));
-		JTable allScore = new JTable(new TableModel(mq.QueryAllNotId("315392852")));
+		JTable ourScore = new JTable(new TableModel(mq.Query("315392852",true)));
+		JTable allScore = new JTable(new TableModel(mq.Query("315392852",false)));
+
 		ourScore.setAutoCreateRowSorter(true);
 		allScore.setAutoCreateRowSorter(true);
 		
-		ourScore.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		allScore.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		Font font = new Font("Tahoma", Font.PLAIN, 14);
+		ourScore.setFont(font);
+		allScore.setFont(font);
 		allScore.setBackground(Color.LIGHT_GRAY);
 		
 		JScrollPane scrollPane = new JScrollPane(ourScore);
@@ -45,10 +49,21 @@ public class Table {
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 				scrollPane, scrollPane2);
 		
+		String ourS = mq.getScore(true, "315392852");
+		String othersS = mq.getScore(false, "315392852");
+
+		JLabel our = new JLabel("Our High Scores- "+ourS);
+		JLabel others = new JLabel("High Scores- "+othersS);
+		our.setFont(font);
+		others.setFont(font);
+
 		splitPane.setResizeWeight(0.5);
-		
+		f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
+		f.add(our);
+		f.add(others);
 		f.add(splitPane);
 		f.setVisible(true);
+
 
 		mq.closeConnection();
 	}

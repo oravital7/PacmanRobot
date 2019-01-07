@@ -75,33 +75,35 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		mouse = true;
 		openedGame=playB=stepByStepB = false; // We start with no progress(game running animation)
 		displayCoord = new JLabel();
-		displayCoord.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		Font font = new Font("Tahoma", Font.PLAIN, 17);
+		
+		displayCoord.setFont(font);
 		displayCoord.setForeground(Color.WHITE);
 		add(displayCoord);
 
 		score = new JLabel();
-		score.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		score.setFont(font);
 		score.setForeground(Color.white);
 		score.setBounds(4, 10, 150, 20);
 
 		timeLeft = new JLabel();
 		timeLeft.setForeground(Color.white);
-		timeLeft.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		timeLeft.setFont(font);
 		timeLeft.setBounds(4, 30, 150, 20);
 
 		totalTime = new JLabel();
 		totalTime.setForeground(Color.white);
-		totalTime.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		totalTime.setFont(font);
 		totalTime.setBounds(4, 50, 170, 20);
 
 		ghostKill = new JLabel();
 		ghostKill.setForeground(Color.white);
-		ghostKill.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		ghostKill.setFont(font);
 		ghostKill.setBounds(4, 70, 150, 20);
 
 		outOfbox = new JLabel();
 		outOfbox.setForeground(Color.white);
-		outOfbox.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		outOfbox.setFont(font);
 		outOfbox.setBounds(4, 90, 150, 20);
 		add(score);
 		add(timeLeft);
