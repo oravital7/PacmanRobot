@@ -7,9 +7,9 @@ import java.util.Iterator;
 import Coords.Map;
 import Gameboard.Blocks;
 import Geom.Point3D;
-import Graph.Graph;
-import Graph.Graph_Algo;
-import Graph.Node;
+import graph.Graph;
+import graph.Graph_Algo;
+import graph.Node;
 
 
 public class GraphBuilder {

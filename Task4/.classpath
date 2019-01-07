@@ -9,5 +9,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="Ex4_v0.2.jar"/>
+	<classpathentry kind="lib" path="Graph_v0.11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
