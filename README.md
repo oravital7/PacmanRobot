@@ -25,7 +25,7 @@ How to play
 The player import a CSV file, insert the location of the Pacman and then choose how he wants to play. 
 
 There are three options:
-### normal
+### Normal
 The user is in charge of the direction of the pacman. 
 The user clicks on a point and the pacman start moving towords the direction of the click.
 ### Step by step
