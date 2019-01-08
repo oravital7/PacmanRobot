@@ -234,7 +234,10 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			return;
 		}
 	}
-
+	/**
+	 * Open a new game from csv  file
+	 * @param f - File to load
+	 */
 	public void openGameFile(File f) {
 		if(playB) animate.keepGoing = false;
 		if(autoB) algo.keepGoing = false;
@@ -276,12 +279,17 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			updater();
 		}
 	}
-
+	/**
+	 * remote start game(by pressing space)
+	 */
 	public void keyStart() {
 		if(playB) stepByStep.doClick();
 		else play.doClick();
 	}
-
+	/**
+	 * Remote set Me player and start game if needed
+	 * @param p - point to set
+	 */
 	public void setMe(Point3D p) {
 		boolean check = playS.setInitLocation(p.x(), p.y());
 		if(check) {
@@ -294,7 +302,9 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		repaint();
 	}
-
+	/**
+	 * Update the scores table each round
+	 */
 	private void updater() {
 		cs.MakeElements(playS.getBoard());
 		trans.setString(playS.getStatistics());
@@ -305,7 +315,9 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		outOfbox.setText("Out of box: "+trans.getOutOfBox());
 		repaint();
 	}
-
+	/**
+	 * If something goes wrong
+	 */
 	private void errorMessage() {
 		JOptionPane.showMessageDialog(this,
 				"Error while Playing \n*Load map \n*Place the pacman in a valid location ",
@@ -398,25 +410,25 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				double ratioH = getHeight()/600.0;
 				double ratioW = getWidth()/800.0;
 
-				for(Fruit fruit : game.getFruits()) { // Move all fruit array and draw them
+				for(Fruit fruit : game.getFruits()) { // Move on fruit hash and draw them
 					p = map.coord2pixel(fruit.getPoint(), getWidth(), getHeight());	// Fruit point saved geograpic coord, so convert it
 					if(fruit.destroyed)
 						g.drawImage(fruitImg, (int)p.x(), (int)p.y(), (int)(17*ratioW), (int)(17*ratioH), this);
 				}
 
-				for(Blocks b : game.getblocks()) {
+				for(Blocks b : game.getblocks()) { // Move on Blocks values and draw them
 					g2d.setColor(Color.black);
 					g2d.fill(b.getRect(getWidth(), getHeight()));
 				}
 
-				for(Pacman pacman : game.getPacmans()) { // Move all pacman array and draw them
+				for(Pacman pacman : game.getPacmans()) { // Move on pacman values and draw them
 					p = map.coord2pixel(pacman.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
-					// Draw with a correct rotate
+
 					if(pacman.destroyed)
 						g.drawImage(pacmanImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 				}
 
-				for(Ghost ghost : game.getGhosts()) { // Move all pacman array and draw them
+				for(Ghost ghost : game.getGhosts()) { // Move on ghost values and draw them
 					p = map.coord2pixel(ghost.getPoint(), getWidth(), getHeight()); // Convert to pixels coord
 					g.drawImage(ghostImg, (int)p.x(), (int)p.y(),(int)(22*ratioW), (int)(22*ratioH), this);
 				}
@@ -471,11 +483,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			f.setCursor(null);
 		}
 
-		@Override
-		public void mousePressed(MouseEvent e) {}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {}
 
 		@Override
 		public void mouseDragged(MouseEvent e) { // Accept drag drawing, so when drag add it as character
@@ -494,6 +501,12 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 				displayCoord.setText(e.getX()+", "+e.getY());
 			}
 		}
+		
+		@Override
+		public void mousePressed(MouseEvent e) {}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {}
 
 	}
 
