@@ -76,7 +76,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		openedGame=playB=stepByStepB = false; // We start with no progress(game running animation)
 		displayCoord = new JLabel();
 		Font font = new Font("Tahoma", Font.PLAIN, 17);
-		
+
 		displayCoord.setFont(font);
 		displayCoord.setForeground(Color.WHITE);
 		add(displayCoord);
@@ -154,7 +154,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		ButtonsPanel FastOpen = new ButtonsPanel(this);
 		menuBar.add(FastOpen);
-		
+
 		setTitle("Pacman Game by Dana & Or");
 		setSize(1200, 800);
 		setLocation(300, 50);
@@ -198,12 +198,12 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			}
 			return;
 		}
-		
+
 		if(o==automatic && !autoB && game!=null) {
 			algo = new MainAlgo(this, game,panel.getWidth(), panel.getHeight(),meB);
 			if(!playS.isRuning() && meB)
 				playS.start();
-			
+
 			algo.start();
 			autoB = mouse = true;
 			return;
@@ -250,19 +250,19 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		cs.MakeElements(playS.getBoard()); // Translate a csv file into a new game
 		reUpdate();
 	}
-/**
- * whenever a key is pressed the pacman rotates
- * @param angle of the pacman in order to reach the fruit
- */
+	/**
+	 * whenever a key is pressed the pacman rotates
+	 * @param angle of the pacman in order to reach the fruit
+	 */
 	public void controlByKey(double angle) {
 		this.angle = angle;
 		if(stepByStepB || autoB) {
 			rotate();
 		}
 	}
-/**
- * rotates the pacman
- */
+	/**
+	 * rotates the pacman
+	 */
 	public void rotate() {
 		if(!playS.isRuning()) {
 			if(playB) animate.keepGoing = false;		
@@ -281,7 +281,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 		if(playB) stepByStep.doClick();
 		else play.doClick();
 	}
-	
+
 	public void setMe(Point3D p) {
 		boolean check = playS.setInitLocation(p.x(), p.y());
 		if(check) {
@@ -289,9 +289,9 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			game.getMe().setPoint(p);
 		}
 		else errorMessage();
-		
+
 		if(autoB) playS.start();
-		
+
 		repaint();
 	}
 
@@ -375,7 +375,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 			rotate = new Orien(meImg);
 			Me=Toolkit.getDefaultToolkit().createCustomCursor(meImg, new Point(0, 0), "Me");
 		}
@@ -383,9 +383,9 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			
+
 			Graphics2D g2d = (Graphics2D)g;
-			
+
 			// Draw our map as background
 			g.drawImage(map.getMap(), 0, 0, getWidth(), getHeight(), this);
 
