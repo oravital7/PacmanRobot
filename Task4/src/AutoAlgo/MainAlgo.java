@@ -36,7 +36,7 @@ public class MainAlgo extends Thread {
 		this.me = me;
 	}
 /**
- * 
+ * runs the game - as long as there are fruits or there is time left - keep calculating routes
  */
 	@Override
 	public void run() {
