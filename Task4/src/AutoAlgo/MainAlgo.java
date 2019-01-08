@@ -18,6 +18,7 @@ public class MainAlgo extends Thread {
 	private int width, height;
 	private Game game;
 	public boolean keepGoing,me;
+	
 /**
  * 
  * @param f frame

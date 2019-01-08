@@ -209,7 +209,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			return;
 		}
 
-		if(game == null|| !meB) {
+		if(game == null || !meB) {
 			errorMessage();
 			return;
 		}
