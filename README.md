@@ -32,48 +32,22 @@ The user clicks on a point and the pacman start moving towords the direction of 
 The user is in charge of the direction of the pacman. 
 The user clicks on a point and the pacman moves one step towords the direction of the click.
 ### Automatic
-The automatic algo calculates the route of the pacman, and the game is played automatic
+The automatic algo calculates the route of the pacman, and the game is played automatic.
+The player can choose weather to insert the pacman, or let the algorithm choose the start point of the pacman.
 
-Authomatic Algorithm - How does it work
---------
-The algorithm for authomatic play is based on Dijkstra's Algorithm.
-The algorithm calculates the shortest path from the pacman to each fruit on the board, and choose the closest fruit.
+The Game after choosing a map:
 
-If the fruit got eaten while the pacman was trying to reach it, the algorithm calculates another route the the current closest fruit.
+<img src="./Task4/Icon/gameBeforePlay.PNG" width="350" height="300">
 
-The algorithm is based on several classes:
+The Game when the game is over:
 
+<img src="./Task4/Icon/gameAfterPlay.PNG" width="350" height="300">
 
-##### Vertex Class
-This class represent a vertex.
-Each vertex has a name, point, and list of all his neighbors.
+Awesome features
+--------------
+The user can watch the table of his own scores vs. the scores of the rest of the users.
 
-##### CalcNeighbor Class
-This class calculates the neighbors of each vertex.
-For each vertex the algoritm checks if he can see other vertexes.
-if there is a straight line betwween them, it adds the vertex to the list of neighbors of the vertex.
-
-##### GraphBuilder
-This class builds a graph for a given source and destination,
-using the CalcNeighbor class.
-
-##### Graphlist
-This class calculates the shortest path from given graphs.
-
-##### MainAlgo
-This class implements thread.
-It calculates the shortest path from the pacman to each fruit on the board, and choose the closest fruit.
-If the fruit got eaten while the pacman was trying to reach it, the algorithm calculates another route the the current closest fruit.
-
-<img src="./Task4/Icon/autoAlgo.PNG" width="550" height="400">
-
-<img src="./Task4/Icon/1.JPG" width="550" height="400">
-
-Class Diagram
---------
-
-&nbsp;
-&nbsp;
+<img src="./Task4/Icon/DBscoreBoard.PNG" width="350" height="300">
 
 General info
 --------------
