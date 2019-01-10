@@ -157,7 +157,7 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 
 		setTitle("Pacman Game by Dana & Or");
 		setSize(1200, 800);
-		setLocation(300, 50);
+		setLocationRelativeTo(null);
 		setVisible(true);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

@@ -3,25 +3,23 @@ package dataBase;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Window;
 import java.awt.Dialog.ModalityType;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 
 /**
  * Responsible for displaying the results table and top scores 
@@ -57,7 +55,10 @@ public class Table {
 			System.out.println("Unable load graph Image!!!");
 		}
 
-		SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>(){
+		final JDialog dialog = new JDialog(f, "Hope you enjoyed :)", ModalityType.APPLICATION_MODAL);
+		
+		SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
+			
 			@Override
 			protected Void doInBackground() throws Exception {
 				MySql mq = new MySql();
@@ -68,10 +69,6 @@ public class Table {
 
 				ourScore.setAutoCreateRowSorter(true);
 				allScore.setAutoCreateRowSorter(true);
-
-				ourScore.setFont(font);
-				allScore.setFont(font);
-				allScore.setBackground(Color.LIGHT_GRAY);
 
 				scrollPane = new JScrollPane(ourScore);
 				scrollPane2 = new JScrollPane(allScore);
@@ -84,46 +81,43 @@ public class Table {
 				our = new JLabel("Our High Scores     "+ourS);
 				others = new JLabel("Others High Scores "+othersS);
 				mq.closeConnection();
-
-				ok = true;
 				return null;
 			}
-		};
 
-		final Window win = SwingUtilities.getWindowAncestor(f);
-		final JDialog dialog = new JDialog(win, "Hope you enjoyed :)", ModalityType.APPLICATION_MODAL);
-
-		mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getPropertyName().equals("state")) {
-					if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
-						dialog.dispose();
-					}
-				}
+			protected void done() {
+				ok = true;
+				dialog.dispose();
 			}
-		});
+		};
 		mySwingWorker.execute();
+
 		JProgressBar progressBar = new JProgressBar();
 		progressBar.setIndeterminate(true);
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(progressBar, BorderLayout.CENTER);
-		panel.add(new JLabel("Please wait......."), BorderLayout.PAGE_START);
-		dialog.add(panel);
-		dialog.setSize(200, 75);
-		dialog.setLocation(800, 400);
+		Border black =  BorderFactory.createEtchedBorder(EtchedBorder.RAISED); 
+		progressBar.setBorder(black);		
+		JLabel label = new JLabel("One moment.......");
+		label.setFont(new Font("Tahoma", Font.PLAIN, 18));
+
+		dialog.add(progressBar);
+		dialog.add(label,BorderLayout.PAGE_START);
+		dialog.setSize(250, 100);
+		dialog.setLocationRelativeTo(null);
 		dialog.setVisible(true);
 
 		if(ok) {
 			our.setFont(font);
 			others.setFont(font);
 			splitPane.setResizeWeight(0.5);
+			ourScore.setFont(font);
+			allScore.setFont(font);
+			allScore.setBackground(Color.LIGHT_GRAY);
 
 			f.add(our);
 			f.add(others);
 			f.add(splitPane);
-
-			f.setVisible ( true );
+			f.setLocationRelativeTo(null);
+			f.setVisible (true);
 		}
 		else f.dispose();
 
