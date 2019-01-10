@@ -22,7 +22,7 @@ public class ButtonsPanel extends JPanel implements ActionListener {
 	private JComboBox<String> JList;
 	private MyFrame frame;
 	private JButton openFile,ScoreBoard;
-	
+
 	public ButtonsPanel(MyFrame frame) {
 		this.frame = frame;
 		Border black =  BorderFactory.createEtchedBorder(EtchedBorder.RAISED); 
@@ -40,7 +40,7 @@ public class ButtonsPanel extends JPanel implements ActionListener {
 
 		openFile = new JButton("Quick opening",new ImageIcon("Icon\\disc.png"));
 		openFile.addActionListener(this);
-		
+
 		ScoreBoard = new JButton("ScoreBoard",new ImageIcon("Icon\\graph.png"));
 		ScoreBoard.addActionListener(this);
 

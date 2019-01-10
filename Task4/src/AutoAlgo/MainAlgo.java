@@ -41,7 +41,7 @@ public class MainAlgo extends Thread {
 	@Override
 	public void run() {
 		double angle;
-
+		
 		if(!me) {
 			Random generator = new Random();
 			Object[] values = game.getFruits().toArray();
@@ -76,7 +76,12 @@ public class MainAlgo extends Thread {
 			}
 		}
 	}
-
+	/**
+	 * Calculate geographic distance
+	 * @param geo - geo point
+	 * @param pixel - pixel point
+	 * @return distance between the points
+	 */
 	private double getDist(Point3D geo, Point3D pixel) {
 		Map map = Map.map();
 		geo = map.coord2pixel(geo, width, height);
@@ -84,7 +89,12 @@ public class MainAlgo extends Thread {
 		double dist = map.distanceGpsPixles(geo, pixel, width, height);
 		return dist;
 	}
-
+	/**
+	 * Calculate angle geographic point
+	 * @param geo - geo point
+	 * @param pixel pixel point
+	 * @return - angle between the points
+	 */
 	private double getAngle(Point3D geo, Point3D pixel) {
 		Map map = Map.map();
 		pixel = map.pixel2coord(pixel, width, height);

@@ -231,7 +231,6 @@ public class MyFrame extends JFrame implements ActionListener ,Serializable  {
 			animate.start();
 			mouse = playB = true;
 
-			return;
 		}
 	}
 	/**
