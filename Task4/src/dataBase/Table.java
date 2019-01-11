@@ -80,6 +80,17 @@ public class Table {
 				String othersS = mq.getScore(false, "315392852");
 				our = new JLabel("Our High Scores     "+ourS);
 				others = new JLabel("Others High Scores "+othersS);
+				our.setFont(font);
+				others.setFont(font);
+				splitPane.setResizeWeight(0.5);
+				ourScore.setFont(font);
+				allScore.setFont(font);
+				allScore.setBackground(Color.LIGHT_GRAY);
+
+				f.add(our);
+				f.add(others);
+				f.add(splitPane);
+				f.setLocationRelativeTo(null);
 				mq.closeConnection();
 				return null;
 			}
@@ -94,8 +105,8 @@ public class Table {
 
 		JProgressBar progressBar = new JProgressBar();
 		progressBar.setIndeterminate(true);
-		Border black =  BorderFactory.createEtchedBorder(EtchedBorder.RAISED); 
-		progressBar.setBorder(black);		
+		Border black =  BorderFactory.createEtchedBorder(EtchedBorder.RAISED); 		
+		progressBar.setBorder(black);
 		JLabel label = new JLabel("One moment.......");
 		label.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
@@ -105,22 +116,8 @@ public class Table {
 		dialog.setLocationRelativeTo(null);
 		dialog.setVisible(true);
 
-		if(ok) {
-			our.setFont(font);
-			others.setFont(font);
-			splitPane.setResizeWeight(0.5);
-			ourScore.setFont(font);
-			allScore.setFont(font);
-			allScore.setBackground(Color.LIGHT_GRAY);
-
-			f.add(our);
-			f.add(others);
-			f.add(splitPane);
-			f.setLocationRelativeTo(null);
-			f.setVisible (true);
-		}
+		if(ok) f.setVisible (true);
 		else f.dispose();
-
 	}
 
 }
