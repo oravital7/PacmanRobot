@@ -33,11 +33,7 @@ public class Table {
 	private boolean ok;
 
 	public Table() {
-		f = new JFrame();
-		f.setTitle("Table Scores");
-		f.setSize(1120, 800);
-		f.setLocation(400, 50);
-		f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
+		f = new JFrame("Table Scores");
 		ok = false;
 
 		start();
@@ -61,8 +57,12 @@ public class Table {
 			
 			@Override
 			protected Void doInBackground() throws Exception {
-				MySql mq = new MySql();
+				f.setSize(1120, 800);
+				f.setLocation(400, 50);
+				f.setLayout(new BoxLayout(f.getContentPane(), BoxLayout.Y_AXIS));
 
+				MySql mq = new MySql();
+								
 				////////////////////  Create Tables ////////////////////
 				ourScore = new JTable(new TableModel(mq.Query("315392852",true)));
 				allScore = new JTable(new TableModel(mq.Query("315392852",false)));
