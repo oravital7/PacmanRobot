@@ -12,7 +12,6 @@ import Geom.Point3D;
  */
 public class GraphList {
 	private Game game;
-	private Point3D[] path;
 	private int width, height, FruitId;
 /**
  * @param game the game
@@ -30,8 +29,7 @@ public class GraphList {
  * @return path to the closest fruit
  */
 	public Point3D[] getPath() {
-		GraphListBuilder();
-		return path;
+		return GraphListBuilder();
 	}
 /**
  * 
@@ -43,13 +41,14 @@ public class GraphList {
 /**
  * calculates the path for each fruit and create a path to the closest fruit
  */
-	private void GraphListBuilder() {
+	private Point3D[] GraphListBuilder() {
 		Map map = Map.map();
 		Point3D me = map.coord2pixel(game.getMe().getPoint(), width, height);
 		Vertex source,target;
 
 		double min = Integer.MAX_VALUE;
 		Point3D p;
+		Point3D[] path=null;
 		for(Fruit f : game.getFruits()) {
 			if(f.destroyed) {
 				p = map.coord2pixel(f.getPoint(), width, height);
@@ -64,6 +63,7 @@ public class GraphList {
 				}
 			}
 		}
+		return path;
 	}
 
 }
